@@ -1,28 +1,17 @@
 {
 	"description": "项目配置文件。",
 	"setting": {
-<<<<<<< HEAD
 		"urlCheck": true,
-=======
-		"urlCheck": false,
->>>>>>> 0e1e61f2bbf756bf5b35ae94a9fba268d15c263b
 		"es6": true,
 		"postcss": true,
 		"minified": true,
 		"newFeature": true
 	},
 	"compileType": "miniprogram",
-<<<<<<< HEAD
 	"libVersion": "1.9.93",
 	"appid": "wx701e733f57042f49",
 	"projectname": "JustDraw",
 	"isGameTourist": false,
-=======
-	"libVersion": "1.9.1",
-	"appid": "touristappid",
-	"projectname": "jet",
-	"isGameTourist": true,
->>>>>>> 0e1e61f2bbf756bf5b35ae94a9fba268d15c263b
 	"condition": {
 		"search": {
 			"current": -1,
