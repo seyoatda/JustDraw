@@ -1,0 +1,16 @@
+<!--pages/home/home.wxml-->
+<!-- <view class="container" > -->
+  <view class="v_title">
+  </view>
+  <view class="v_btnCtnr">
+    <button class="btn" size="{{defaultSize}}" bindtap='jump2Room'>创建房间</button>
+    <button class='btn' size="{{defaultSize}}" bindtap='jump2Ran'>随机匹配</button>
+    <button class='btn' size="{{defaultSize}}" bindtap='openMsg'>加入房间</button>
+  </view>
+  <view class='v_winCtnr' catchtap='hideWin' wx:if='{{setShow}}'>
+    <view class="v_enterRoom" >
+    </view>
+  </view>
+    
+  
+<!-- </view> -->
