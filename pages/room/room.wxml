@@ -1,0 +1,34 @@
+<!--pages/room/room.wxml-->
+<view class='v_topCtnr'>
+  <view class='v_userInfo'>
+    <image class='img_user'></image>
+    <text class='txt_user'>闻尔于达dada</text>
+  </view>
+  <view class='v_userInfo'>
+    <image class='img_user'></image>
+    <text class='txt_user'></text>
+  </view>
+  <view class='v_userInfo'>
+    <image class='img_user'></image>
+    <text class='txt_user'></text>
+  </view>
+</view>
+<view class='v_midCtnr'>
+  <button class='btn_invite'>邀请好友</button>
+  <button class='btn_start' bindtap='startGame'>开始游戏</button>
+</view>
+<view class='v_botCtnr'>
+  <view class='v_userInfo'>
+    <image class='img_user'></image>
+    <text class='txt_user'></text>
+  </view>
+  <view class='v_userInfo'>
+    <image class='img_user'></image>
+    <text class='txt_user'></text>
+  </view>
+  <view class='v_userInfo'>
+    <image class='img_user'></image>
+    <text class='txt_user'></text>
+  </view>
+</view>
+

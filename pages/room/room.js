@@ -1,31 +1,20 @@
-// pages/home/home.js
+// pages/room/room.js
 Page({
+
 
   /**
    * 页面的初始数据
    */
   data: {
-    defaultSize:600,
-    setShow:false
+  
   },
-  openMsg:function(){
-    this.setData({
-      'setShow': true
-    });
-  },
-  hideWin: function () {
-    this.setData({
-      'setShow': false
-    });
-  },
-  stop:function(){
 
-  },
-  jump2Room:function(){
-    wx.navigateTo({
-      url: '../room/room',
+  startGame:function(){
+    wx.redirectTo({
+      url: '../game/game',
     })
   },
+
   /**
    * 生命周期函数--监听页面加载
    */
@@ -37,7 +26,7 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-  
+    
   },
 
   /**
@@ -80,6 +69,5 @@ Page({
    */
   onShareAppMessage: function () {
   
-  },
-  
+  }
 })

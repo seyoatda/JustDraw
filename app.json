@@ -4,7 +4,9 @@
     "pages/index/index",
     "pages/logs/logs",
     "pages/rank/rank",
-    "pages/mine/mine"
+    "pages/mine/mine",
+    "pages/room/room",
+    "pages/game/game"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -12,5 +14,4 @@
     "navigationBarTitleText": "画哉",
     "navigationBarTextStyle": "black"
   }
-  
 }
