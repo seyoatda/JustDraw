@@ -5,14 +5,26 @@ Page({
    * 页面的初始数据
    */
   data: {
-  
+    userName:1,
+    userPic1:"",
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    var that=this;
+    wx.getUserInfo({
   
+      success: function (res) {
+        var userInfo = res.userInfo
+        that.setData({
+          userName: userInfo.nickName,
+          userPic1: userInfo.avatarUrl
+        })
+      }
+    })
+    
   },
 
   /**
@@ -21,7 +33,7 @@ Page({
   onReady: function () {
   
   },
-  
+
   /**
    * 生命周期函数--监听页面显示
    */

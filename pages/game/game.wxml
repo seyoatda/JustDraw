@@ -1,2 +1,39 @@
 <!--pages/game/game.wxml-->
-<text>pages/game/game.wxml</text>
+<view class='vw_top'>
+  <view class='vw_userInfo'>
+    <image class='img_user' src='{{userPic1}}'></image>
+    <text class='txt_user'>{{userName}}</text>
+    <text class='txt_score'></text>
+  </view>
+  <view class='vw_userInfo'>
+    <image class='img_user'></image>
+    <text class='txt_user'></text>
+    <text class='txt_score'></text>
+  </view>
+  <view class='vw_userInfo'>
+    <image class='img_user'></image>
+    <text class='txt_user'></text>
+    <text class='txt_score'></text>
+  </view>
+</view>
+
+<view class='vw_mid'>
+  
+</view>
+
+<view class='vw_bot'>
+  <view class='vw_userInfo'>
+    <image class='img_user' src=''></image>
+    <text class='txt_user'></text>
+    <text class='txt_score'></text>
+  </view>
+  <view class='vw_userInfo'>
+    <image class='img_user'></image>
+    <text class='txt_user'></text>
+    <text class='txt_score'></text>
+  </view>
+  <view class='vw_userInfo'>
+    <image class='img_user'></image>
+    <text class='txt_user'></text>
+    <text class='txt_score'></text>
+  </view></view>

@@ -19,14 +19,33 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-  
+    wx.connectSocket({
+      url: "",
+    })
+
+    //连接成功
+    wx.onSocketOpen(function () {
+      wx.sendSocketMessage({
+        data: 'stock'
+      })
+    })
+
+    //获取其他用户信息
+    wx.onSocketMessage(function (data) {
+      var obj=JSON.parse(data.data);
+    })
+
+    wx.onSocketError(function () {
+      console.log('websocket连接失败！');
+    })
+
   },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-    
+
   },
 
   /**

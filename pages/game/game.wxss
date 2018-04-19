@@ -1,1 +1,36 @@
 /* pages/game/game.wxss */
+.vw_top{
+  height: 150rpx;
+  width: 100%;
+  background: tan;
+  display: flex;
+  flex-direction: row;
+}
+
+.vw_mid{
+  height: 905rpx;
+  width: 100%;
+  background: yellow;
+  
+}
+.vw_bot{
+  position: absolute;
+  bottom: 0;
+  height: 150rpx;
+  width: 100%;
+  background: rebeccapurple;
+  display: flex;
+  flex-direction: row;
+
+}
+.vw_userInfo{
+  height: 100%;
+  width: 250rpx;
+}
+
+.vw_userInfo .img_user{
+  height: 100rpx;
+  width: 100rpx;
+  background: black;
+  border-radius: 50rpx;
+}
