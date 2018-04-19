@@ -1,4 +1,5 @@
 /* pages/game/game.wxss */
+
 .vw_top{
   height: 150rpx;
   width: 100%;

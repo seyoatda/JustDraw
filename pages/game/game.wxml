@@ -18,7 +18,11 @@
 </view>
 
 <view class='vw_mid'>
-  
+  <canvas canvas-id="myCanvas"
+  style="margin: 20rpx; border:1rpx solid #d3d3d3;height:530rpx;"
+  bindtouchstart="start"
+  bindtouchmove="move"
+  bindtouchend="end"/>
 </view>
 
 <view class='vw_bot'>
