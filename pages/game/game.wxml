@@ -18,11 +18,17 @@
 </view>
 
 <view class='vw_mid'>
-  <canvas canvas-id="myCanvas"
-  style="margin: 20rpx; border:1rpx solid #d3d3d3;height:530rpx;"
+  <canvas canvas-id="myCanvas" class="canvas_style"
   bindtouchstart="start"
   bindtouchmove="move"
-  bindtouchend="end"/>
+  bindtouchend="end">
+  <cover-view class="vw_toolkit">
+    <block wx:for="{{itemWidth}}" wx:for-index="index">
+      <cover-view class="width-item {{activeItemIndex == index ?'active-item':''}}" data-index="{{index}}" data-width="{{item}}" bindtap="setItemWidth" style="width:{{item}}rpx;height:{{item}}rpx;"></cover-view>
+    </block>
+  </cover-view>
+  </canvas>
+  
 </view>
 
 <view class='vw_bot'>

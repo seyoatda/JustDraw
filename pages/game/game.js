@@ -1,6 +1,7 @@
 // pages/game/game.js
 const ctx = wx.createCanvasContext('myCanvas')
 var x, y
+var radius
 Page({
 
   /**
@@ -8,7 +9,9 @@ Page({
    */
   data: {
     userName:1,
-    userPic1:""
+    userPic1:"",
+    itemWidth: [10, 20, 30, 40, 50, 60, 70],
+    activeItemIndex: 4
   },
 
   /**
@@ -34,7 +37,10 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-    ctx.setLineWidth(6) // 设置线宽
+    var iniIndex = this.data.activeItemIndex
+    var iniWidth = this.data.itemWidth[iniIndex]
+    ctx.setLineWidth(iniWidth/2.25) // 设置线宽
+    radius = iniWidth/4.5
     ctx.setLineCap('round') //设置线条的端点样式
     ctx.setStrokeStyle('#000000') //描边样式
     ctx.setFillStyle('#000000') //填充样式
@@ -100,9 +106,18 @@ Page({
   },
   end: function (e) {
     
-    ctx.arc(x ,y , 3, 0, 2 * Math.PI)//圆点
+    ctx.arc(x ,y , radius, 0, 2 * Math.PI)//圆点
     ctx.fill()
     ctx.draw(true)
+  },
+
+  setItemWidth: function (event) {
+    var width = event.target.dataset.width
+    ctx.setLineWidth(width/2.25)
+    radius = width/4.5
+    this.setData({
+      activeItemIndex: event.target.dataset.index
+    })
   }
 
 })
