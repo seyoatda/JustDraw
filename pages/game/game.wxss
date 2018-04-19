@@ -1,1 +1,37 @@
 /* pages/game/game.wxss */
+.v_topCtnr{
+  width: 100%;
+  height: 300rpx;
+  background: red;
+  display: flex;
+  flex-direction: row;
+}
+
+.v_botCtnr{
+  position: absolute;
+  width: 100%;
+  height: 300rpx;
+  bottom: 0;
+  background: blue;
+  display: flex;
+  flex-direction: row;
+}
+
+.v_userInfo{
+  margin-left: 50rpx;
+  display: flex;
+  flex-direction: column;
+}
+.img_user{
+  width: 150rpx;
+  height: 150rpx;
+  border-radius: 300rpx;
+  background: navy;
+}
+.txt_user{
+  width: 150rpx;
+  font-size:11pt;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}

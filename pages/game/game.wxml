@@ -1,2 +1,38 @@
-<!--pages/game/game.wxml-->
-<text>pages/game/game.wxml</text>
+<!--pages/room/room.wxml-->
+<view class='v_topCtnr'>
+  <view class='v_userInfo'>
+    <image class='img_user'></image>
+    <text class='txt_user'>闻尔于达dada</text>
+  </view>
+  <view class='v_userInfo'>
+    <image class='img_user'></image>
+    <text class='txt_user'></text>
+  </view>
+  <view class='v_userInfo'>
+    <image class='img_user'></image>
+    <text class='txt_user'></text>
+  </view>
+</view>
+<view class='v_midCtnr'>
+  <canvas canvas-id="myCanvas"
+  style="margin: 20rpx; border:1rpx solid #d3d3d3;height:530rpx;"
+  bindtouchstart="start"
+  bindtouchmove="move"
+  bindtouchend="end"/>
+  
+</view>
+<view class='v_botCtnr'>
+  <view class='v_userInfo'>
+    <image class='img_user'></image>
+    <text class='txt_user'></text>
+  </view>
+  <view class='v_userInfo'>
+    <image class='img_user'></image>
+    <text class='txt_user'></text>
+  </view>
+  <view class='v_userInfo'>
+    <image class='img_user'></image>
+    <text class='txt_user'></text>
+  </view>
+</view>
+
