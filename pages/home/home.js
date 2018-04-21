@@ -5,18 +5,45 @@ Page({
    * 页面的初始数据
    */
   data: {
-    defaultSize:600,
-    setShow:false
+    setShow:false,
+    plain:true
   },
-  openMsg:function(){
+  showWin:function(){
+    var animation = wx.createAnimation({
+      duration: 300,
+      timingFunction: "linear",
+      delay: 0
+    })
+    this.animation = animation
+    animation.opacity(0).step()
+    animation.opacity(1).step()
     this.setData({
+      animationData: animation.export(),
       'setShow': true
-    });
+    })
+      animation.translateY(0).step()
+      this.setData({
+        animationData: animation.export()
+      })
   },
   hideWin: function () {
+    var animation = wx.createAnimation({
+      duration: 300,
+      timingFunction: "linear",
+      delay: 0
+    })
+    this.animation = animation
+    animation.opacity(0).step()
     this.setData({
-      'setShow': false
-    });
+      animationData: animation.export(),
+    })
+    setTimeout(function () {
+      animation.translateY(0).step()
+      this.setData({
+        animationData: animation.export(),
+        'setShow':false
+      })
+    }.bind(this), 300)
   },
   stop:function(){
 
