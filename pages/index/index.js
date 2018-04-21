@@ -1,9 +1,11 @@
 const app = getApp()
+
 var intervals;
 Page({
   data: {
     time: 3
   },
+
   onShow:function(){
     var animation = wx.createAnimation({
       duration: 1500,
@@ -15,6 +17,7 @@ Page({
       animationData: animation.export()
     })
     var n = 1;
+
     intervals=setInterval(function () {
       n = 1-n;
       console.log(n);
@@ -28,6 +31,7 @@ Page({
     wx.navigateTo({
       url: '../home/home'
     })
+
     clearInterval(intervals);
   },
   onLoad: function () {

@@ -1,49 +1,61 @@
 <!--pages/game/game.wxml-->
-<view class='vw_top'>
-  <view class='vw_userInfo'>
-    <image class='img_user' src='{{userPic1}}'></image>
-    <text class='txt_user'>{{userName}}</text>
-    <text class='txt_score'></text>
+
+<view class='vw_ctnr'>
+  <view class='vw_top'>
+      <view class='vw_userInfo' wx:for="{{userInfo1}}" wx:key="name" wx:for-item="info">
+        <view class='vw_userCtnr'>
+          <image class='img_user' src='{{info.icon}}'></image>
+          <text class='txt_user'>{{info.name}}</text>
+        </view>
+        <text class='txt_score'>0</text>
+      </view>
   </view>
-  <view class='vw_userInfo'>
-    <image class='img_user'></image>
-    <text class='txt_user'></text>
-    <text class='txt_score'></text>
+
+  <view class='vw_mid'>
+    <view class='vw_widget'>
+      <view class='vw_countdown'>
+        <text>时间：{{time1}}</text>
+      </view>
+      <view class='vw_wordHint'>
+        提示：{{hint}}
+      </view>
+    </view>
+    <canvas canvas-id="myCanvas" class="canvas_style"
+    bindtouchstart="start"
+    bindtouchmove="move"
+    bindtouchend="end">
+    <cover-view class="vw_toolkit">
+      <block wx:for="{{itemWidth}}" wx:for-index="index" wx:key="item">
+        <cover-view class="width-item {{activeItemIndex == index ?'active-item':''}}" data-index="{{index}}" data-width="{{item}}" bindtap="setItemWidth" style="width:{{item}}rpx;height:{{item}}rpx;"></cover-view>
+      </block>
+    </cover-view>
+    </canvas>
+    
   </view>
-  <view class='vw_userInfo'>
-    <image class='img_user'></image>
-    <text class='txt_user'></text>
-    <text class='txt_score'></text>
+
+  <view class='vw_bot'>
+    <view class='vw_userInfo' wx:for="{{userInfo2}}" wx:key="name" wx:for-item="info">
+      <view class='vw_userCtnr'>
+        <image class='img_user' src='{{info.icon}}'></image>
+        <text class='txt_user'>{{info.name}}</text>
+      </view>
+      <text class='txt_score'>0</text>
+    </view>
+  </view>
+  <view id='vw_1' class='vw_winCtnr' catchtap='hideWin(1)' wx:if='{{flag_show1}}'>
+    <view class="vw_win vw_choose" catchtap='stop'>
+      <view class='vw_header'>请选择要画的词：
+      </view>
+      <text>{{time2}}</text>
+      <block wx:for="{{words}}" wx:key="word" wx:for-item="word">
+        <button id="btn_{{index}}" class="btn_choose{{index}}" bindtap='chooseWord'>{{word}}</button>
+      </block>
+    </view>
+  </view>
+  <view id="vw_2" class='vw_winCtnr' catchtap='hideWin(2)' wx:if='{{flag_show2}}'>
+    <view class='vw_win vw_answer' catchtap='stop'>
+      <text>正确答案：{{currentWord}}</text>
+      <text>本轮得分{{time2}}</text>
+    </view>
   </view>
 </view>
-
-<view class='vw_mid'>
-  <canvas canvas-id="myCanvas" class="canvas_style"
-  bindtouchstart="start"
-  bindtouchmove="move"
-  bindtouchend="end">
-  <cover-view class="vw_toolkit">
-    <block wx:for="{{itemWidth}}" wx:for-index="index">
-      <cover-view class="width-item {{activeItemIndex == index ?'active-item':''}}" data-index="{{index}}" data-width="{{item}}" bindtap="setItemWidth" style="width:{{item}}rpx;height:{{item}}rpx;"></cover-view>
-    </block>
-  </cover-view>
-  </canvas>
-  
-</view>
-
-<view class='vw_bot'>
-  <view class='vw_userInfo'>
-    <image class='img_user' src=''></image>
-    <text class='txt_user'></text>
-    <text class='txt_score'></text>
-  </view>
-  <view class='vw_userInfo'>
-    <image class='img_user'></image>
-    <text class='txt_user'></text>
-    <text class='txt_score'></text>
-  </view>
-  <view class='vw_userInfo'>
-    <image class='img_user'></image>
-    <text class='txt_user'></text>
-    <text class='txt_score'></text>
-  </view></view>

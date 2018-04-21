@@ -1,5 +1,10 @@
 /* pages/game/game.wxss */
-
+.vw_ctnr{
+  margin-left: 15rpx;
+  margin-right: 15rpx;
+  width: 720rpx;
+  height: 100%;
+}
 .vw_top{
   height: 150rpx;
   width: 100%;
@@ -9,15 +14,27 @@
 }
 
 .vw_mid{
-  height: 905rpx;
+  height: 900rpx;
   width: 100%;
-  
+}
+.vw_widget{
+  display: flex;
+  flex-direction: row;
 }
 
+.vw_bot{
+  height: 150rpx;
+  width: 720rpx;
+  background: rebeccapurple;
+  display: flex;
+  flex-direction: row;
+
+}
 .canvas_style{
-  margin: 20rpx; 
-  border:1rpx solid #d3d3d3;
   height:830rpx;
+  width: 100%;
+  border:1rpx solid #d3d3d3;
+  
 }
 
 .vw_toolkit{
@@ -43,19 +60,20 @@
   box-shadow:0 0 10rpx 5rpx #aaaaaa;
 }
 
-.vw_bot{
-  position: absolute;
-  bottom: 0;
-  height: 150rpx;
-  width: 100%;
-  background: rebeccapurple;
+
+.vw_userInfo{
+  height: 135rpx;
+  width: 250rpx;
+  margin-top:15rpx; 
   display: flex;
   flex-direction: row;
-
 }
-.vw_userInfo{
+
+.vw_userCtnr{
   height: 100%;
-  width: 250rpx;
+  width: 100rpx;
+  display: flex;
+  flex-direction: column;
 }
 
 .vw_userInfo .img_user{
@@ -63,4 +81,42 @@
   width: 100rpx;
   background: black;
   border-radius: 50rpx;
+}
+.txt_user{
+  height: 35rpx;
+  width: 100rpx;
+  overflow: hidden;
+  font-size: 10pt;
+  white-space: nowrap;
+  text-overflow:ellipsis;
+}
+.txt_score{
+  height: 35rpx;
+  width: 100rpx;
+  
+}
+.vw_winCtnr{
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top:0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+.vw_winCtnr .vw_choose{
+}
+.vw_win{
+  width: 60%;
+  height: 400rpx;
+  top: 30%;
+  left: 20%;
+  background-color: white;
+  position: absolute;
+}
+.btn_choose1{
+  background: wheat;
+}
+
+.btn_choose2{
+  background: cadetblue;
 }
