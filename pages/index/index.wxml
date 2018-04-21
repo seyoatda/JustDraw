@@ -1,3 +1,5 @@
-<view class="container">
-    <view class="start">启动界面</view> 
+<view class="whole" style='background:url("https://upload-images.jianshu.io/upload_images/9653454-ac7c61382b4202f9.jpg?imageMogr2/auto-orient/");-webkit-background-size:cover;' bindtap='linktohome'>
+  <view class='btn' animation="{{animationData}}">
+    <text class='text'>点击任意位置开始</text>
+  </view>
 </view>

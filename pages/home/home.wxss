@@ -1,11 +1,11 @@
 /* pages/home/home.wxss */
-.v_title{
+.vw_title{
   width: 100%;
   height: 300rpx;
   background: red;
   margin-top: 0rpx
 }
-.v_btnCtnr{
+.vw_btnCtnr{
   margin-top: 200rpx;
 }
 .swiper{
@@ -18,7 +18,7 @@
   margin-top: 50rpx;
   width:50%;
 }
-.v_winCtnr{
+.vw_winCtnr{
   position: fixed;
   width: 100%;
   height: 100%;
@@ -27,7 +27,7 @@
   z-index: 999;
   
 }
-.v_winCtnr .v_enterRoom{
+.vw_winCtnr .v_enterRoom{
   
   width: 60%;
   height: 400rpx;
@@ -36,7 +36,7 @@
   background-color: white;
   position: absolute;
 }
-.v_winCtnr .v_enterRoom .v_header{
+.vw_winCtnr .v_enterRoom .v_header{
   width: 100%;
   height: 100rpx;
   display: flex;
@@ -44,5 +44,5 @@
   justify-content: center;
 }
 .i_room{
-  
+
 }

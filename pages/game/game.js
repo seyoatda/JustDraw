@@ -2,16 +2,122 @@
 const ctx = wx.createCanvasContext('myCanvas')
 var x, y
 var radius
+var countdown = 1;
+
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    userName:1,
+    userId:1,
     userPic1:"",
+    currentId:1,
+    currentWord:"",
+    activeItemIndex: 4,
+    time1:'',
+    time2:'',
+    flag_show1:false,
+    flag_show2:false,
     itemWidth: [10, 20, 30, 40, 50, 60, 70],
-    activeItemIndex: 4
+    words:["a","b","c","d"],
+    userInfo1:[
+      {id:"",icon:"",name:"1111"}, 
+      {id:"",icon: "",name: "2222"}, 
+      {id:"",icon: "",name: "3333"}
+    ],
+    userInfo2: [
+      {id: "",icon: "",name: "1111"},
+      {id: "",icon: "",name: "2222"},
+      {id: "",icon: "",name: "3333"}
+    ]
+  },
+
+  /**
+   * 每轮绘画结束时调用函数，切换玩家，弹出正确答案，跳出选词窗口
+   */
+  whenFinish:function () {
+    var that=this;
+
+    //todo:设置当前画画用户id
+    //console.log("whenfinish");
+
+    //弹出正确答案界面
+    that.showWin(2);
+    that.count(that, function(){}, 3, 2);
+
+    setTimeout(function(){
+      that.hideWin(2);
+      if (that.currentId == that.userId) {
+        that.showWin(1);
+        that.count(that, function () { }, 5, 2);
+        //如果倒计时结束仍未选择词，则默认选择第一个
+        setTimeout(function () {
+          that.hideWin(1);
+          that.setData({
+            "currentWord": that.data.words[0]
+          });
+          console.log("currentWord:" + that.data.currentWord);
+        }, 3000);
+      }
+    },3000);
+    
+  },
+
+  /**
+   * 点击选词后修改当前的词，并且关闭选词窗口
+   */
+  chooseWord:function(e){
+    var id=e.target.id.substring(4,5);
+    this.setData({
+      "currentWord":this.data.words[id]
+    });
+    console.log(this.data.currentWord);
+    this.hideWin(1);
+  },
+
+  /**
+   * 设定倒计时时间
+   */
+  count: function (that, func, time,id){
+    var countdown = time;
+    that.minus1s(that,func,countdown,id);
+  },
+
+  /**
+   * 倒计时-1s,倒计时为0时执行函数
+   */
+  minus1s:function(that,func,countdown,id){
+    if (countdown == 0) {
+      func();
+      return;
+    } else {
+      that.setData({
+        ["time"+id]: countdown
+      })
+      countdown--;
+      console.log("cnt_"+id+":"+that.data.time2);
+    }
+    setTimeout(function () {
+      that.minus1s(that,func,countdown,id);
+    }
+      , 1000)
+  },
+
+  showWin:function(id){
+    this.setData({
+      ['flag_show'+id]: true
+    });
+  },
+
+  hideWin:function(id){
+    this.setData({
+      ['flag_show'+id]: false
+    });
+  },
+
+  stop:function(){
+    //把点击事件拦截，啥都不用做。
   },
 
   /**
@@ -20,16 +126,30 @@ Page({
   onLoad: function (options) {
     var that=this;
     wx.getUserInfo({
-  
       success: function (res) {
         var userInfo = res.userInfo
         that.setData({
-          userName: userInfo.nickName,
+          userId: userInfo.nickName,
           userPic1: userInfo.avatarUrl
+        })
+        that.setData({
+          ["userInfo1[0].icon"]: userInfo.avatarUrl,
+          // ["userInfo1[0].name"]: userInfo.nickName,
+          ["userInfo1[1].icon"]: userInfo.avatarUrl,
+          // ["userInfo1[1].name"]: userInfo.nickName,
+          ["userInfo1[2].icon"]: userInfo.avatarUrl,
+          // ["userInfo1[2].name"]: userInfo.nickName,
+          ["userInfo2[0].icon"]: userInfo.avatarUrl,
+          // ["userInfo2[0].name"]: userInfo.nickName,
+          ["userInfo2[1].icon"]: userInfo.avatarUrl,
+          // ["userInfo2[1].name"]: userInfo.nickName,
+          ["userInfo2[2].icon"]: userInfo.avatarUrl,
+          // ["userInfo2[2].name"]: userInfo.nickName,
+
         })
       }
     })
-
+    that.count(that,function(){that.whenFinish();},3,1);
     
   },
 
@@ -44,6 +164,7 @@ Page({
     ctx.setLineCap('round') //设置线条的端点样式
     ctx.setStrokeStyle('#000000') //描边样式
     ctx.setFillStyle('#000000') //填充样式
+    
   },
 
   /**

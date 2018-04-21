@@ -1,15 +1,15 @@
 <!--pages/home/home.wxml-->
 <!-- <view class="container" > -->
-  <view class="v_title">
+  <view class="vw_title">
   </view>
-  <view class="v_btnCtnr">
+  <view class="vw_btnCtnr">
     <button class="btn" size="{{defaultSize}}" bindtap='jump2Room'>创建房间</button>
     <button class='btn' size="{{defaultSize}}" bindtap='jump2Ran'>随机匹配</button>
     <button class='btn' size="{{defaultSize}}" bindtap='openMsg'>加入房间</button>
   </view>
-  <view class='v_winCtnr' catchtap='hideWin' wx:if='{{setShow}}'>
-    <view class="v_enterRoom" catchtap='stop'>
-      <view class='v_header'>请输入房间号
+  <view class='vw_winCtnr' catchtap='hideWin' wx:if='{{setShow}}'>
+    <view class="vw_enterRoom" catchtap='stop'>
+      <view class='vw_header'>请输入房间号
       </view>
       <input class='i_room' type='number' focus='true' confirm-type='go' maxlength='3' bindconfirm='checkJump'>
       </input>
