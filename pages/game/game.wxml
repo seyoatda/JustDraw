@@ -1,5 +1,5 @@
 <!--pages/game/game.wxml-->
-
+<!--顶部组件，放置用户信息-->
 <view class='vw_ctnr'>
   <view class='vw_top'>
       <view class='vw_userInfo' wx:for="{{userInfo1}}" wx:key="name" wx:for-item="info">
@@ -11,6 +11,7 @@
       </view>
   </view>
 
+  <!--中间组件，放置画板，计时器，提示-->
   <view class='vw_mid'>
     <view class='vw_widget'>
       <view class='vw_countdown'>

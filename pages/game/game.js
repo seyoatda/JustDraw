@@ -1,8 +1,10 @@
 // pages/game/game.js
+const app = getApp();
 const ctx = wx.createCanvasContext('myCanvas')
 var x, y
 var radius
 var countdown = 1;
+var currentIndex = 0; 
 
 Page({
 
@@ -10,147 +12,50 @@ Page({
    * 页面的初始数据
    */
   data: {
-    userId:1,
-    userPic1:"",
     currentId:1,
     currentWord:"",
     activeItemIndex: 4,
+
     time1:'',
     time2:'',
     flag_show1:false,
     flag_show2:false,
+
     itemWidth: [10, 20, 30, 40, 50, 60, 70],
     words:["a","b","c","d"],
+    users:null,
+    test:[{hi:"yes"}],
     userInfo1:[
-      {id:"",icon:"",name:"1111"}, 
-      {id:"",icon: "",name: "2222"}, 
-      {id:"",icon: "",name: "3333"}
+      { id: "", icon: "", name: "" }, 
+      { id: "", icon: "", name: "" },  
+      { id: "", icon: "", name: "" }, 
     ],
     userInfo2: [
-      {id: "",icon: "",name: "1111"},
-      {id: "",icon: "",name: "2222"},
-      {id: "",icon: "",name: "3333"}
+      { id: "", icon: "", name: "" }, 
+      { id: "", icon: "", name: "" }, 
+      { id: "", icon: "", name: "" }, 
     ]
   },
 
-  /**
-   * 每轮绘画结束时调用函数，切换玩家，弹出正确答案，跳出选词窗口
-   */
-  whenFinish:function () {
-    var that=this;
-
-    //todo:设置当前画画用户id
-    //console.log("whenfinish");
-
-    //弹出正确答案界面
-    that.showWin(2);
-    that.count(that, function(){}, 3, 2);
-
-    setTimeout(function(){
-      that.hideWin(2);
-      if (that.currentId == that.userId) {
-        that.showWin(1);
-        that.count(that, function () { }, 5, 2);
-        //如果倒计时结束仍未选择词，则默认选择第一个
-        setTimeout(function () {
-          that.hideWin(1);
-          that.setData({
-            "currentWord": that.data.words[0]
-          });
-          console.log("currentWord:" + that.data.currentWord);
-        }, 3000);
-      }
-    },3000);
-    
-  },
-
-  /**
-   * 点击选词后修改当前的词，并且关闭选词窗口
-   */
-  chooseWord:function(e){
-    var id=e.target.id.substring(4,5);
-    this.setData({
-      "currentWord":this.data.words[id]
-    });
-    console.log(this.data.currentWord);
-    this.hideWin(1);
-  },
-
-  /**
-   * 设定倒计时时间
-   */
-  count: function (that, func, time,id){
-    var countdown = time;
-    that.minus1s(that,func,countdown,id);
-  },
-
-  /**
-   * 倒计时-1s,倒计时为0时执行函数
-   */
-  minus1s:function(that,func,countdown,id){
-    if (countdown == 0) {
-      func();
-      return;
-    } else {
-      that.setData({
-        ["time"+id]: countdown
-      })
-      countdown--;
-      console.log("cnt_"+id+":"+that.data.time2);
-    }
-    setTimeout(function () {
-      that.minus1s(that,func,countdown,id);
-    }
-      , 1000)
-  },
-
-  showWin:function(id){
-    this.setData({
-      ['flag_show'+id]: true
-    });
-  },
-
-  hideWin:function(id){
-    this.setData({
-      ['flag_show'+id]: false
-    });
-  },
-
-  stop:function(){
-    //把点击事件拦截，啥都不用做。
-  },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
     var that=this;
-    wx.getUserInfo({
-      success: function (res) {
-        var userInfo = res.userInfo
+    that.setData({
+      users: JSON.parse(options.users)
+    });
+    console.log(this.data.users);
+    for(var i=0;i<2;i++){
+      for(var j=0;j<3;j++){
         that.setData({
-          userId: userInfo.nickName,
-          userPic1: userInfo.avatarUrl
-        })
-        that.setData({
-          ["userInfo1[0].icon"]: userInfo.avatarUrl,
-          // ["userInfo1[0].name"]: userInfo.nickName,
-          ["userInfo1[1].icon"]: userInfo.avatarUrl,
-          // ["userInfo1[1].name"]: userInfo.nickName,
-          ["userInfo1[2].icon"]: userInfo.avatarUrl,
-          // ["userInfo1[2].name"]: userInfo.nickName,
-          ["userInfo2[0].icon"]: userInfo.avatarUrl,
-          // ["userInfo2[0].name"]: userInfo.nickName,
-          ["userInfo2[1].icon"]: userInfo.avatarUrl,
-          // ["userInfo2[1].name"]: userInfo.nickName,
-          ["userInfo2[2].icon"]: userInfo.avatarUrl,
-          // ["userInfo2[2].name"]: userInfo.nickName,
-
+          ["userInfo" + (i+1) + "[" + j + "].icon"]: that.data.users[i * 3 + j].icon,
+          ["userInfo" + (i+1) + "[" + j + "].name"]: that.data.users[i * 3 + j].name
         })
       }
-    })
-    that.count(that,function(){that.whenFinish();},3,1);
-    
+    }  
+      that.count(that,function(){that.whenFinish();},3,1);  
   },
 
   /**
@@ -189,24 +94,99 @@ Page({
   },
 
   /**
-   * 页面相关事件处理函数--监听用户下拉动作
+   * 每轮绘画结束时调用函数，切换玩家，弹出正确答案，跳出选词窗口
    */
-  onPullDownRefresh: function () {
-  
+  whenFinish: function () {
+    var that = this;
+    console.log("currentIndex:" + currentIndex);
+    if (currentIndex >= 11) {
+      return;
+    }
+    //todo:设置当前画画用户id
+    currentIndex++;
+    that.setData({
+      currentId: that.data.users[currentIndex % 6]
+    })
+
+    //弹出正确答案界面，3s后关闭
+    that.showWin(2);
+    that.count(that, function () { that.hideWin(2); }, 3, 2);
+
+    setTimeout(function () {
+      if (that.currentId == that.userId) {
+        that.showWin(1);
+        that.count(that, function () { }, 3, 2);
+        //如果倒计时结束仍未选择词，则默认选择第一个
+        setTimeout(function () {
+          that.hideWin(1);
+          that.setData({
+            "currentWord": that.data.words[0]
+          });
+          console.log("currentWord:" + that.data.currentWord);
+        }, 3000);
+      }
+    }, 3000);
+
+    //继续下一轮绘画，延迟执行
+    setTimeout(function () {
+      that.count(that, function () { that.whenFinish(); }, 3, 1);
+    }, 6000);
   },
 
   /**
-   * 页面上拉触底事件的处理函数
+   * 点击选词后修改当前的词，并且关闭选词窗口
    */
-  onReachBottom: function () {
-  
+  chooseWord: function (e) {
+    var id = e.target.id.substring(4, 5);
+    this.setData({
+      "currentWord": this.data.words[id]
+    });
+    console.log(this.data.currentWord);
+    this.hideWin(1);
   },
 
   /**
-   * 用户点击右上角分享
+   * 设定倒计时时间
    */
-  onShareAppMessage: function () {
-  
+  count: function (that, func, time, id) {
+    var countdown = time;
+    that.minus1s(that, func, countdown, id);
+  },
+
+  /**
+   * 倒计时-1s,倒计时为0时执行函数
+   */
+  minus1s: function (that, func, countdown, id) {
+    if (countdown == 0) {
+      func();
+      return;
+    } else {
+      that.setData({
+        ["time" + id]: countdown
+      })
+      countdown--;
+
+    }
+    setTimeout(function () {
+      that.minus1s(that, func, countdown, id);
+    }
+      , 1000)
+  },
+
+  showWin: function (id) {
+    this.setData({
+      ['flag_show' + id]: true
+    });
+  },
+
+  hideWin: function (id) {
+    this.setData({
+      ['flag_show' + id]: false
+    });
+  },
+
+  stop: function () {
+    //把点击事件拦截，啥都不用做。
   },
 
   //坐标

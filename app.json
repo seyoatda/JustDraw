@@ -1,12 +1,13 @@
 {
   "pages": [
+    "pages/index/index",
+    "pages/room/room",
     "pages/game/game",
     "pages/home/home",
-    "pages/index/index",
     "pages/logs/logs",
     "pages/rank/rank",
-    "pages/mine/mine",
-    "pages/room/room"
+    "pages/mine/mine"
+
     
   ],
   "window": {
