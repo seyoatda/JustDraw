@@ -1,9 +1,12 @@
 const app = getApp()
+
+var intervals;
 Page({
   data: {
     time: 3
   },
-  onShow: function () {
+
+  onShow:function(){
     var animation = wx.createAnimation({
       duration: 1500,
       timingFunction: 'linear',
@@ -14,8 +17,9 @@ Page({
       animationData: animation.export()
     })
     var n = 1;
-    setInterval(function () {
-      n = 1 - n;
+
+    intervals=setInterval(function () {
+      n = 1-n;
       console.log(n);
       this.animation.opacity(n).step()
       this.setData({
@@ -27,6 +31,8 @@ Page({
     wx.navigateTo({
       url: '../home/home'
     })
+
+    clearInterval(intervals);
   },
   onLoad: function () {
     var count = setInterval(() => {
