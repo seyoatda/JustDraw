@@ -12,26 +12,26 @@ App({
         // 发送 res.code 到后台换取 openId, sessionKey
         if (res.code) {
           //获取openId
-          wx.request({
-            //自己的服务器API
-            url: '',
-            data: {
-              js_code: res.code
-            },
-            success: function (res) {
-              // 判断openId是否获取成功
-              if (res.data.openid != null & res.data.openid != undefined) {
-                console.info("登录成功返回的openId：" + res.data.openid);
-                this.globalData.id = res.data.openid;
-              } else {
-                console.info("获取用户openId失败");
-              }
-            },
-            fail: function (error) {
-              console.info("获取用户openId失败");
-              console.info(error);
-            }
-          })
+          // wx.request({
+          //   //自己的服务器API
+          //   url: '',
+          //   data: {
+          //     js_code: res.code
+          //   },
+          //   success: function (res) {
+          //     // 判断openId是否获取成功
+          //     if (res.data.openid != null & res.data.openid != undefined) {
+          //       console.info("登录成功返回的openId：" + res.data.openid);
+          //       this.globalData.id = res.data.openid;
+          //     } else {
+          //       console.info("获取用户openId失败");
+          //     }
+          //   },
+          //   fail: function (error) {
+          //     console.info("获取用户openId失败");
+          //     console.info(error);
+          //   }
+          // })
         }
       }
     })
@@ -46,7 +46,6 @@ App({
               this.globalData.userInfo = res.userInfo
               this.globalData.icon = res.userInfo.avatarUrl
               this.globalData.name = res.userInfo.nickName
-
               // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
               // 所以此处加入 callback 以防止这种情况
               if (this.userInfoReadyCallback) {
@@ -61,7 +60,7 @@ App({
   },
   globalData: {
     userInfo: null,
-    id:"",
+    id:1,
     icon:"",
     name:""
   }

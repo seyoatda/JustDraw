@@ -54,15 +54,8 @@ Page({
     wx.onSocketError(function () {
       console.log('websocket连接失败！');
     })
-    console.log(app.globalData.icon);
-    for (var i = 0; i < 6; i++) {
-      this.setData({
-        ["users[" + i + "].id"]: i,
-        ["users[" + i + "].icon"]: app.globalData.icon,
-        ["users[" + i + "].name"]: app.globalData.name
-      })
-    }
-    console.log(this.data.users);
+
+    this.setUsersInfo();
   },
 
   /**
