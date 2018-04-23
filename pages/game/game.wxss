@@ -41,12 +41,16 @@
 
 .vw_toolkit{
   width:100%;
-  height: 10%;
-  background-color: #fff;
-  color: #1aad19;
-  flex-direction: row;
+  height: 20%;
+  background-color: #ffffcc;
   border-bottom:1rpx solid #d3d3d3;
+}
+
+.vw_toolkit_wrp{
+  width:100%;
+  height: 50%;
   display:flex;
+  flex-direction: row;
   align-items: center;
 }
 
@@ -55,6 +59,14 @@
   background:#000;
   border:1rpx solid #000;
   border-radius:50rpx;
+}
+
+.color-item{
+  margin:10rpx;
+  border-radius:50rpx;
+  width:40rpx;
+  height:40rpx;
+  border:1rpx solid #000;
 }
 
 .active-item{
