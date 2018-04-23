@@ -1,4 +1,10 @@
 /* pages/game/game.wxss */
+page{
+  width: 100%;
+  height: 100%;
+  background-color: #ffffcc;
+  border-radius: 20rpx;
+}
 .vw_ctnr{
   margin-left: 15rpx;
   margin-right: 15rpx;
@@ -6,46 +12,61 @@
   height: 100%;
 }
 .vw_top{
-  height: 150rpx;
+  height: 15%;
   width: 100%;
   background: tan;
   display: flex;
   flex-direction: row;
+  box-shadow: 2px 2px 2px 2px gray;
+  border-radius: 20rpx;
 }
 
 .vw_mid{
-  height: 900rpx;
+  height: 65%;
   width: 100%;
+  margin-top: 1%;
+  margin-bottom: 2%;
 }
 .vw_widget{
+  width: 100%;
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.vw_countdown{
+  margin-left: 2%;
+}
+.vw_wordHint{
+  margin-right: 20%;
 }
 
 .vw_bot{
-  height: 150rpx;
-  width: 720rpx;
-  background: rebeccapurple;
+  height: 15%;
+  width: 100%;
+  background: lightsteelblue;
   display: flex;
   flex-direction: row;
-
+  box-shadow: 2px 2px 2px 2px gray;
+  border-radius: 20rpx;
 }
 .canvas_style{
-  height:830rpx;
+  height:92%;
   width: 100%;
-  border:1rpx solid #d3d3d3;
-  
+  border:2rpx solid #d3d3d3;
+  border-radius: 20rpx;
+  box-shadow: 2px 2px 2px 2px gainsboro;
 }
 
 .vw_toolkit{
   width:100%;
   height: 10%;
-  background-color: #fff;
   color: #1aad19;
   flex-direction: row;
   border-bottom:1rpx solid #d3d3d3;
   display:flex;
   align-items: center;
+  border-radius: 20rpx;
 }
 
 .width-item{
@@ -74,6 +95,7 @@
   width: 100rpx;
   display: flex;
   flex-direction: column;
+  margin-left:20%;
 }
 
 .vw_userInfo .img_user{
@@ -83,7 +105,7 @@
   border-radius: 50rpx;
 }
 .txt_user{
-  height: 35rpx;
+  height: 40rpx;
   width: 100rpx;
   overflow: hidden;
   font-size: 10pt;
@@ -91,9 +113,13 @@
   text-overflow:ellipsis;
 }
 .txt_score{
-  height: 35rpx;
+  height: 50rpx;
+  line-height: 50rpx;
   width: 100rpx;
-  
+  text-align: center;
+  text-shadow: 1px 1px 1px 1px black;
+  font-size: 50rpx;
+  font-style: inherit;
 }
 .vw_winCtnr{
   position: fixed;
@@ -103,20 +129,90 @@
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 999;
 }
-.vw_winCtnr .vw_choose{
-}
-.vw_win{
+.vw_answer {
   width: 60%;
-  height: 400rpx;
+  height: 150rpx;
+  top: 40%;
+  left: 20%;
+  background-color: white;
+  border-radius: 20rpx;
+  position: absolute; 
+  display: flex;
+  flex-direction: column;
+  justify-content:center;
+}
+.txt_rightAnsIs{
+  width: 100%;
+  background-color: rgb(205, 205, 201);
+  border-top-left-radius: 20rpx;
+  border-top-right-radius: 20rpx;
+  text-align: center;
+}
+.txt_rightAns{
+  width: 100%;
+  text-align: center;
+  background-color: black;
+  color: white;
+  font-size: 80rpx;
+}
+.txt_getScore{
+  width: 100%;
+  background-color: rgb(205, 205, 201);
+  border-bottom-left-radius: 20rpx;
+  border-bottom-right-radius: 20rpx;
+  text-align: center;
+}
+.txt_header{
+  text-align: center;
+}
+.txt_timer{
+  text-align: center;
+  font-weight: bold;
+  margin-top: 10rpx;
+}
+.vw_choose{
+  width: 60%;
+  height: 500rpx;
   top: 30%;
   left: 20%;
   background-color: white;
-  position: absolute;
+  opacity: 0.8;
+  border-radius: 20rpx;
+  position: absolute; 
+  display: flex;
+  flex-direction: column;
+  justify-content:center;
+}
+.btn_choose0{
+  margin-top: 20rpx;
+  background: gainsboro;
+  width: 85%;
+  height: 100rpx;
+  text-align: center;
+  box-shadow: 6rpx 6rpx 6rpx 6rpx gray;
 }
 .btn_choose1{
+  margin-top: 20rpx;
   background: wheat;
+  width: 85%;
+  height: 100rpx;
+  text-align: center;
+  box-shadow: 6rpx 6rpx 6rpx 6rpx gray;
 }
-
 .btn_choose2{
+  margin-top: 20rpx;
   background: cadetblue;
+  width: 85%;
+  height: 100rpx;
+  text-align: center;
+  box-shadow: 6rpx 6rpx 6rpx 6rpx gray;
+}
+.btn_choose3{
+  margin-top: 20rpx;
+  background: wheat;
+  width: 85%;
+  height: 100rpx;
+  text-align: center;
+  box-shadow: 6rpx 6rpx 6rpx 6rpx gray;
+  margin-bottom: 30rpx;
 }

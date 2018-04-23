@@ -28,7 +28,7 @@ Page({
     }.bind(this), 1500)
   },
   linktohome: function () {
-    wx.navigateTo({
+    wx.redirectTo({
       url: '../home/home'
     })
 

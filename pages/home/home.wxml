@@ -1,22 +1,21 @@
 <!--pages/home/home.wxml-->
 <!-- <view class="container" > -->
-<view class="whole" style='background:url("https://upload-images.jianshu.io/upload_images/9653454-18e6491d0c98a767.jpg?imageMogr2/auto-orient/");-webkit-background-size:cover;'>
+<view class="whole" style='background:url("{{background_base}}");-webkit-background-size:cover;'>
   <view class="v_btnCtnr">
     <view class='btn_flex'>
-      <view class="btntoroom"><image class="btn" src='../images/btn1.png' bindtap='jump2Room'></image></view>
-      <view class="btntoroom"><image class="btn" src='../images/btn2.png' bindtap='jump2Ran'></image></view>
-      <view class='btntoroom'><image class='btn' src='../images/btn3.png' bindtap='showWin'></image></view>
+      <view class="btntoroom"><image animation="{{btnAnimationCre}}" class="btn" src='{{btn1_base}}' bindtap='jump2Room'></image></view>
+      <view class="btntoroom"><image animaiton="{{btnAnimationRan}}" class="btn" src='{{btn2_base}}' bindtap='jump2Ran'></image></view>
+      <view class='btntoroom'><image animaiton="{{btnAnimatioJoi}}" class='btn' src='{{btn3_base}}' bindtap='showWin'></image></view>
     </view>
   </view>
   <view class='v_roll' catchtap='showWin'></view>
-  <view class='v_winCtnr' catchtap='hideWin' wx:if='{{setShow}}'>
-    <view animation="{{animationData}}" class="v_enterRoom" catchtap='stop' wx:if='{{setShow}}'>
-      <view class='v_header'>请输入房间号
+  <view class='vw_winCtnr' catchtap='hideWin' wx:if='{{setShow}}'>
+    <view animation="{{animationData}}" class="v_enterRoom" catchtap='stop' wx:if='{{setShow}}' style='background:url("https://upload-images.jianshu.io/upload_images/9653454-7a47a8af260f9a59.png?imageMogr2/auto-orient/");-webkit-background-size:cover;'>
+      <input class='i_room' type='number' focus='true' confirm-type='go' maxlength='6' bindconfirm='checkJump' placeholder-style="font-size:15px" placeholder="请输入房间号" auto-focus></input>
+      <view class='btn_ctn'>
+        <text class='btn_yes' bindtap='checkJump' plain='true'>确认</text>
+        <text class='btn_no' bindtap='hideWin' plain='false'>取消</text>
       </view>
-      <input class='i_room' type='number' focus='true' confirm-type='go' maxlength='3' bindconfirm='checkJump'>
-      </input>
-      <button class='btn_no' bindtap='hideWin'>取消</button>
-      <button class='btn_yes' bindtap='checkJump'>确认</button>
     </view>
   </view>
 </view>
