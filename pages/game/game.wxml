@@ -1,5 +1,5 @@
 <!--pages/game/game.wxml-->
-
+<!--顶部组件，放置用户信息-->
 <view class='vw_ctnr'>
   <view class='vw_top'>
       <view class='vw_userInfo' wx:for="{{userInfo1}}" wx:key="name" wx:for-item="info">
@@ -11,6 +11,7 @@
       </view>
   </view>
 
+  <!--中间组件，放置画板，计时器，提示-->
   <view class='vw_mid'>
     <view class='vw_widget'>
       <view class='vw_countdown'>
@@ -25,9 +26,17 @@
     bindtouchmove="move"
     bindtouchend="end">
     <cover-view class="vw_toolkit">
+      <cover-view class="vw_toolkit_wrp">
       <block wx:for="{{itemWidth}}" wx:for-index="index" wx:key="item">
-        <cover-view class="width-item {{activeItemIndex == index ?'active-item':''}}" data-index="{{index}}" data-width="{{item}}" bindtap="setItemWidth" style="width:{{item}}rpx;height:{{item}}rpx;"></cover-view>
+        <cover-view class="width-item {{activeWidthIndex == index ?'active-item':''}}" data-index="{{index}}" data-width="{{item}}" bindtap="setItemWidth" style="width:{{item}}rpx;height:{{item}}rpx;"></cover-view>
       </block>
+      
+      </cover-view>
+      <cover-view class="vw_toolkit_wrp">
+      <block wx:for="{{itemColor}}" wx:for-index="index" wx:key="item">
+        <cover-view class="color-item {{activeColorIndex == index ?'active-item':''}}" data-index="{{index}}" data-color="{{item}}" bindtap="setItemColor" style="background:{{item}};"></cover-view>
+      </block>
+      </cover-view>
     </cover-view>
     </canvas>
     
@@ -47,7 +56,7 @@
       <text class='txt_header'>请选择要画的词：</text>
       <text class='txt_timer'>(剩余 {{time2}} 秒)</text>
       <block wx:for="{{words}}" wx:key="word" wx:for-item="word">
-        <button id="btn_{{index}}" class="btn_choose{{index}}" bindtap='chooseWord'>{{word}}</button>
+        <button id="btn_{{index}}" class="btn_choose{{index}}" bindtap='btnCWClicked'>{{word}}</button>
       </block>
     </view>
   </view>
@@ -58,4 +67,8 @@
       <text class='txt_getScore'>本轮得分：{{time2}}</text>
     </view>
   </view>
+  <!--输入答案控件-->
+    <button class="btn_answer" wx:if="{{flag_show3}}" bindtap='btnAnsClicked'>回答</button>
+    <input class='ipt_answer' wx:if="{{flag_show4}}"></input>
+
 </view>

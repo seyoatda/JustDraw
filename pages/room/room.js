@@ -1,27 +1,43 @@
 // pages/room/room.js
+const app = getApp();
+
 Page({
-
-
   /**
    * 页面的初始数据
    */
   data: {
-  
+    users:[
+      { id: "", icon: "", name: "" },
+      { id: "", icon: "", name: "" },
+      { id: "", icon: "", name: "" },
+      { id: "", icon: "", name: "" },
+      { id: "", icon: "", name: "" },
+      { id: "", icon: "", name: "" },]
   },
 
   startGame:function(){
     wx.redirectTo({
-      url: '../game/game',
+      url: '../game/game?users='+JSON.stringify(this.data.users)
     })
+  },
+
+  setUsersInfo:function(){
+    console.log(app.globalData);
+    for(var i=0;i<6;i++){
+      this.setData({
+        ["users[" + i + "].id"]: i,
+        ["users[" + i + "].icon"]: app.globalData.icon,
+        ["users[" + i + "].name"]: app.globalData.name
+      })
+    }
+    console.log(this.data.users);
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    wx.connectSocket({
-      url: "",
-    })
+    
 
     //连接成功
     wx.onSocketOpen(function () {
@@ -39,13 +55,14 @@ Page({
       console.log('websocket连接失败！');
     })
 
+    this.setUsersInfo();
   },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-
+    console.log(getApp().globalData);
   },
 
   /**
