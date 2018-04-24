@@ -7,6 +7,7 @@ var radius
 var countdown = 1;
 var currentIndex = 0; 
 var moved = 0
+var canvasSocket
 
 Page({
 
@@ -62,7 +63,28 @@ Page({
         })
       }
     }  
-    that.count(3, 1,function(){that.whenStart();});  
+    that.count(3, 1,function(){that.whenStart();});   
+
+    //画布socket
+    canvasSocket = wx.connectSocket({
+      url: 'ws://120.78.200.1:8080/JustDrawServer/canvas'
+    })
+    canvasSocket.onOpen(function (res) {
+      console.log('WebSocket连接已打开！')
+    })
+    canvasSocket.onError(function (res) {
+      console.log('WebSocket连接打开失败，请检查！')
+    })
+    canvasSocket.onMessage(function (res) {
+      console.log('收到服务器内容：' + res.data)
+      var xy = res.data.split(",");
+      if (xy.length == 4) {
+        ctx.moveTo(xy[0], xy[1]) // 设置路径起点坐标
+        ctx.lineTo(xy[2], xy[3]) // 绘制一条直线
+        ctx.stroke()
+        ctx.draw(true)
+      }
+    })
   },
 
   /**
@@ -231,13 +253,11 @@ Page({
     moved = 0
   },
   move: function (e) {
-
-    ctx.moveTo(x, y) // 设置路径起点坐标
+    var msg = x + "," + y
     x = e.touches[0].x
     y = e.touches[0].y
-    ctx.lineTo(x, y) // 绘制一条直线
-    ctx.stroke()
-    ctx.draw(true)
+    msg += "," + x + "," + y
+    canvasSocket.send({ data: msg })
     moved = 1
   },
   end: function (e) {
