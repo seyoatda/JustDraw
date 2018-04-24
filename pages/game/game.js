@@ -6,6 +6,7 @@ var x, y
 var radius
 var countdown = 1;
 var currentIndex = 0; 
+var moved = 0
 
 Page({
 
@@ -15,7 +16,8 @@ Page({
   data: {
     currentId:0,
     currentWord:"",
-    activeItemIndex: 4,
+    activeWidthIndex: 3,
+    activeColorIndex: 0,
 
     time1:'',
     time2:'',
@@ -26,6 +28,7 @@ Page({
     flag_show4: false,
 
     itemWidth: [10, 20, 30, 40, 50, 60, 70],
+    itemColor: ['#000000', '#ff0000', '#00ff00', '#0000ff', '#00ffff', '#ff00ff', '#ffff00','#C0C0C0','#ffffff'],
     words:["a","b","c","d"],
     users:null,
     test:[{hi:"yes"}],
@@ -66,9 +69,9 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-    var iniIndex = this.data.activeItemIndex
+    var iniIndex = this.data.activeWidthIndex
     var iniWidth = this.data.itemWidth[iniIndex]
-    ctx.setLineWidth(iniWidth/2.25) // 设置线宽
+    ctx.setLineWidth(iniWidth/2.5) // 设置线宽
     radius = iniWidth/4.5
     ctx.setLineCap('round') //设置线条的端点样式
     ctx.setStrokeStyle('#000000') //描边样式
@@ -225,7 +228,7 @@ Page({
   start: function (e) {
     x = e.touches[0].x
     y = e.touches[0].y
-    
+    moved = 0
   },
   move: function (e) {
 
@@ -235,21 +238,31 @@ Page({
     ctx.lineTo(x, y) // 绘制一条直线
     ctx.stroke()
     ctx.draw(true)
-
+    moved = 1
   },
   end: function (e) {
-    
-    ctx.arc(x ,y , radius, 0, 2 * Math.PI)//圆点
-    ctx.fill()
-    ctx.draw(true)
+    if(moved == 0){
+      ctx.arc(x, y, radius, 0, 2 * Math.PI)//圆点
+      ctx.fill()
+      ctx.draw(true)
+    }
   },
 
   setItemWidth: function (event) {
     var width = event.target.dataset.width
-    ctx.setLineWidth(width/2.25)
+    ctx.setLineWidth(width/2.5)
     radius = width/4.5
     this.setData({
-      activeItemIndex: event.target.dataset.index
+      activeWidthIndex: event.target.dataset.index
+    })
+  },
+
+  setItemColor: function (event) {
+    var color = event.target.dataset.color
+    ctx.setFillStyle(color)
+    ctx.setStrokeStyle(color)
+    this.setData({
+      activeColorIndex: event.target.dataset.index
     })
   }
 
