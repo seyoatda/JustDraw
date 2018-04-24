@@ -28,7 +28,7 @@ Page({
     flag_show3: false,
     flag_show4: false,
 
-    itemWidth: [10, 20, 30, 40, 50, 60],
+    itemWidth: [15, 20, 25, 30, 35, 40, 45 ],
     itemColor: ['#000000', '#ff0000', '#00ff00', '#0000ff', '#00ffff', '#ff00ff', '#ffff00','#C0C0C0','#ffffff'],
     words:["a","b","c","d"],
     users:null,

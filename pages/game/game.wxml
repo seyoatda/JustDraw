@@ -30,8 +30,9 @@
       <block wx:for="{{itemWidth}}" wx:for-index="index" wx:key="item">
         <cover-view class="width-item {{activeWidthIndex == index ?'active-item':''}}" data-index="{{index}}" bindtap="setItemWidth" style="width:{{item}}rpx;height:{{item}}rpx;"></cover-view>
       </block>
-      <cover-view class="eraser-item" bindtap="erase">eraser</cover-view>
-      <cover-view class="clear-item" bindtap="clearAll">clear</cover-view>
+      
+      <cover-image class="eraser-item" bindtap="erase" src="../images/eraser.png"></cover-image>
+      <cover-image class="clear-item" bindtap="clearAll" src="../images/clear.png"></cover-image>
       </cover-view>
       <cover-view class="vw_toolkit_wrp">
       <block wx:for="{{itemColor}}" wx:for-index="index" wx:key="item">

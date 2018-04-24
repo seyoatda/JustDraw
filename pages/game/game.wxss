@@ -94,24 +94,16 @@ page{
 .eraser-item{
   margin-left:150rpx;
   margin-right: 10rpx;
-  border-radius:50rpx;
-  width:100rpx;
-  height:50rpx;
-  border:2rpx solid #000;
-  color:#CC9933;
-  font-size:85%;
-  align-items: center;
+  width:60rpx;
+  height:60rpx;
+  
 
 }
 .clear-item{
   margin:10rpx;
-  border-radius:50rpx;
-  width:80rpx;
+  width:50rpx;
   height:50rpx;
-  border:2rpx solid #000;
-  color:#CC9933;
-  font-size:85%;
-  align-items: center;
+ 
 }
 
 .active-item{
