@@ -12,7 +12,7 @@ page{
   height: 100%;
 }
 .vw_top{
-  height: 15%;
+  height: 13%;
   width: 100%;
   background: tan;
   display: flex;
@@ -22,10 +22,9 @@ page{
 }
 
 .vw_mid{
-  height: 65%;
+  height: 72%;
   width: 100%;
   margin-top: 1%;
-  margin-bottom: 2%;
 }
 .vw_widget{
   height: 50rpx;
@@ -43,7 +42,7 @@ page{
 }
 
 .vw_bot{
-  height: 15%;
+  height: 13%;
   width: 100%;
   background: lightsteelblue;
   display: flex;
