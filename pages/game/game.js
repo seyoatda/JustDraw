@@ -77,12 +77,53 @@ Page({
     })
     canvasSocket.onMessage(function (res) {
       console.log('收到服务器内容：' + res.data)
-      var xy = res.data.split(",");
-      if (xy.length == 4) {
-        ctx.moveTo(xy[0], xy[1]) // 设置路径起点坐标
-        ctx.lineTo(xy[2], xy[3]) // 绘制一条直线
-        ctx.stroke()
+      var nums = res.data.split(",");
+      if (nums.length == 4) {
+        if(nums[0]==nums[2]&&nums[1]==nums[3]){
+          x = nums[0]
+          y = nums[1]
+          ctx.moveTo(x,y) //圆心
+          ctx.arc(x, y, radius, 0, 2 * Math.PI)//圆点
+          ctx.fill()
+        }
+        else{
+          ctx.moveTo(nums[0], nums[1]) // 设置路径起点坐标
+          ctx.lineTo(nums[2], nums[3]) // 绘制一条直线
+          ctx.stroke()
+        }
         ctx.draw(true)
+      }
+      else if(nums.length == 2){
+        //nums[0]=1,2,3；分别进行线宽、颜色、清空操作
+        if(nums[0] == 1){
+          var width = that.data.itemWidth[nums[1]]
+          ctx.setLineWidth(width / 2.5)
+          radius = width / 4.5
+          that.setData({
+            activeWidthIndex: nums[1]
+          })
+        }
+        else if(nums[0] == 2){
+          var color = that.data.itemColor[nums[1]]
+          ctx.setFillStyle(color)
+          ctx.setStrokeStyle(color)
+          that.setData({
+            activeColorIndex: nums[1]
+          })
+        }
+        else if(nums[0] == 3){
+          /*wx.showModal({
+            title: '提示',
+            content: '确认清除画板所有内容',
+            success: function (res) {
+              if (res.confirm) {
+                console.log('用户点击确定');
+                ctx.draw();
+              }
+            }
+          })*/
+          ctx.draw();
+        }
       }
     })
   },
@@ -253,7 +294,8 @@ Page({
     moved = 0
   },
   move: function (e) {
-    var msg = x + "," + y
+    var msg = "canvas:"
+    msg += x + "," + y
     x = e.touches[0].x
     y = e.touches[0].y
     msg += "," + x + "," + y
@@ -262,50 +304,31 @@ Page({
   },
   end: function (e) {
     if(moved == 0){
-      ctx.arc(x, y, radius, 0, 2 * Math.PI)//圆点
-      ctx.fill()
-      ctx.draw(true)
+      var msg = "canvas:"
+      msg += x+","+y+","+x+","+y
+      canvasSocket.send({ data: msg })
     }
   },
 
   setItemWidth: function (event) {
-    var width = event.target.dataset.width
-    ctx.setLineWidth(width/2.5)
-    radius = width/4.5
-    this.setData({
-      activeWidthIndex: event.target.dataset.index
-    })
+    var msg = "canvas:1," + event.target.dataset.index
+    canvasSocket.send({ data: msg })
   },
 
   setItemColor: function (event) {
-    var color = event.target.dataset.color
-    ctx.setFillStyle(color)
-    ctx.setStrokeStyle(color)
-    this.setData({
-      activeColorIndex: event.target.dataset.index
-    })
+    var msg = "canvas:2," + event.target.dataset.index
+    canvasSocket.send({ data: msg })
   },
 
   erase:function(event){
-    ctx.setFillStyle("#fff")
-    ctx.setStrokeStyle("#fff")
-    this.setData({
-      activeColorIndex: 8
-    })
+    var msg = "canvas:2,8"
+    canvasSocket.send({ data: msg })
   },
 
   clearAll: function () {
-    var that = this;
-    wx.showModal({
-      title: '提示',
-      content: '确认清除画板所有内容',
-      success: function (res) {
-        if (res.confirm) {
-          console.log('用户点击确定');
-          ctx.draw();
-        }
-      }
-    })
+    var msg = "canvas:3,"
+    canvasSocket.send({ data: msg })
+    
   }
 
 })
