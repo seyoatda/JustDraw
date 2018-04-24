@@ -1,4 +1,31 @@
 // pages/home/home.js
+var util = require('../../utils/util.js');
+var Stomp = require('../../utils/stomp.js').Stomp;
+
+var socketOpen = false
+var socketMsgQueue = []
+function sendSocketMessage(msg) {
+  console.log('send msg:')
+  console.log(msg);
+  if (socketOpen) {
+    wx.sendSocketMessage({
+      data: msg
+    })
+  } else {
+    socketMsgQueue.push(msg)
+  }
+}
+
+var ws = {
+  send: sendSocketMessage,
+  onopen: null,
+  onmessage: null
+}
+Stomp.setInterval = function () { }
+Stomp.clearInterval = function () { }
+var client = Stomp.over(ws);
+
+var gData=getApp().globalData;
 Page({
 
   /**
@@ -49,10 +76,86 @@ Page({
 
   },
   jump2Room:function(){
-    wx.navigateTo({
-      url: '../room/room',
+    
+    //房主向后台申请创建房间
+    
+    //
+    wx:wx.request({
+      url: 'http://101.200.62.252:8080/room/create',
+      data: {
+        userId:gData.id,
+        roomName:"test",
+        maxSize:6,
+        level:1,
+        picProvided:false,
+        diyEnable:false,
+        appendEnable:false
+      },
+      header: { "content-Type": "application/json"},
+      method: 'POST',
+      dataType: 'json',
+      responseType: 'text',
+      success: function(res) {
+        console.log("create room success")
+        console.log(res);
+
+        wx.connectSocket({
+          url: 'ws://101.200.62.252:8080/websocket',
+          success: function (res) {
+            console.log("socketsuccess")
+            console.log(res);
+          },
+          fail: function (res) {
+            console.log(res);
+          }
+        })
+
+        var destination = '/topic/room'+res.data.info;
+        client.connect('user', 'pass', function (sessionId) {
+          console.log('sessionId', sessionId)
+          client.subscribe(destination, function (body, headers) {
+            console.log('From MQ:', body);
+          });
+          client.send(destination, { priority: 9 }, 'hello workyun.com !');
+        })
+        
+        //成功之后进行跳转页面，注明房主身份
+        wx.navigateTo({
+          url: '../room/room?isOwner=true&user='+JSON.stringify(gData.user),
+        })
+      },
+      fail: function(res) {
+        console.log("fail");
+        console.log(res);
+      },
+      complete: function(res) {
+        console.log("complete");
+      },
     })
   },
+  //加入房间访问后台
+  enterRoom:function(e){
+    var no = e.detail.roomNumber;
+    wx:wx.request({
+      url: 'http://101.200.62.252:8080//room/enter',
+      data: {
+        roomId:no,
+        userId: gData.id
+      },
+      header: { "content-Type": "application/json"},
+      method: 'POST',
+      dataType: 'json',
+      responseType: 'json',
+      success: function(res) {
+        wx.navigateTo({
+          url: '../room/room?isOwner=false & user=' + JSON.stringify(gData.user),
+        })
+      },
+      fail: function(res) {},
+      complete: function(res) {},
+    })
+  },
+
   /**
    * 生命周期函数--监听页面加载
    */

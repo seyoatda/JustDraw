@@ -13,10 +13,12 @@
     <view animation="{{animationData}}" class="v_enterRoom" catchtap='stop' wx:if='{{setShow}}'>
       <view class='v_header'>请输入房间号
       </view>
-      <input class='i_room' type='number' focus='true' confirm-type='go' maxlength='3' bindconfirm='checkJump'>
-      </input>
-      <button class='btn_no' bindtap='hideWin'>取消</button>
-      <button class='btn_yes' bindtap='checkJump'>确认</button>
+      <form bindsubmit='enterRoom'>
+        <input class='i_room' name="roomNumber" type='number' focus='true' confirm-type='go' maxlength='3' bindconfirm='enterRoom'></input>
+        <button class='btn_no' bindtap='hideWin'>取消</button>
+        <button class='btn_yes' form-type='submit'>确认</button>
+      </form>
+      
     </view>
   </view>
 </view>

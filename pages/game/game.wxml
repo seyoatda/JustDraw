@@ -30,6 +30,13 @@
         <cover-view class="width-item {{activeItemIndex == index ?'active-item':''}}" data-index="{{index}}" data-width="{{item}}" bindtap="setItemWidth" style="width:{{item}}rpx;height:{{item}}rpx;"></cover-view>
       </block>
     </cover-view>
+    <!--绘画结束，正确回答界面-->
+  <cover-view id="vw_2" class='vw_winCtnr'  wx:if='{{flag_show2}}'>
+    <cover-view class='vw_win vw_answer'>
+      <cover-view>正确答案：{{currentWord}}</cover-view>
+      <cover-view>本轮得分{{time2}}</cover-view>
+    </cover-view>
+  </cover-view>
     </canvas>
     
   </view>
@@ -54,13 +61,7 @@
       </block>
     </view>
   </view>
-  <!--绘画结束，正确回答界面-->
-  <view id="vw_2" class='vw_winCtnr'  wx:if='{{flag_show2}}'>
-    <view class='vw_win vw_answer'>
-      <text>正确答案：{{currentWord}}</text>
-      <text>本轮得分{{time2}}</text>
-    </view>
-  </view>
+  
   <!--输入答案控件-->
     <button class="btn_answer" wx:if="{{flag_show3}}" bindtap='btnAnsClicked'>回答</button>
     <input class='ipt_answer' wx:if="{{flag_show4}}"></input>

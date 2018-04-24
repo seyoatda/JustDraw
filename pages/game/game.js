@@ -1,4 +1,5 @@
 // pages/game/game.js
+var util = require('../../utils/util.js');
 const app = getApp();
 const ctx = wx.createCanvasContext('myCanvas')
 var x, y

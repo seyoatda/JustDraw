@@ -1,16 +1,16 @@
 <!--pages/room/room.wxml-->
 <view class='v_topCtnr'>
   <view class='v_userInfo'>
-    <image class='img_user'></image>
-    <text class='txt_user'>闻尔于达dada</text>
+    <image class='img_user' src='{{users[0].icon}}'></image>
+    <text class='txt_user'>{{users[0].name}}</text>
   </view>
   <view class='v_userInfo'>
-    <image class='img_user'></image>
-    <text class='txt_user'></text>
+    <image class='img_user' src='{{users[1].icon}}'></image>
+    <text class='txt_user'>{{users[1].name}}</text>
   </view>
   <view class='v_userInfo'>
-    <image class='img_user'></image>
-    <text class='txt_user'></text>
+    <image class='img_user' src='{{users[2].icon}}'></image>
+    <text class='txt_user'>{{users[2].name}}</text>
   </view>
 </view>
 <view class='v_midCtnr'>
@@ -19,16 +19,16 @@
 </view>
 <view class='v_botCtnr'>
   <view class='v_userInfo'>
-    <image class='img_user'></image>
-    <text class='txt_user'></text>
+    <image class='img_user' src='{{users[3].icon}}'></image>
+    <text class='txt_user'>{{users[3].name}}</text>
   </view>
   <view class='v_userInfo'>
-    <image class='img_user'></image>
-    <text class='txt_user'></text>
+    <image class='img_user' src='{{users[4].icon}}'></image>
+    <text class='txt_user'>{{users[4].name}}</text>
   </view>
   <view class='v_userInfo'>
-    <image class='img_user'></image>
-    <text class='txt_user'></text>
+    <image class='img_user' src='{{users[5].icon}}'></image>
+    <text class='txt_user'>{{users[5].name}}</text>
   </view>
 </view>
 

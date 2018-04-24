@@ -1,18 +1,24 @@
 // pages/room/room.js
-const app = getApp();
+var util = require('../../utils/util.js');
+const gData = getApp().globalData;
+var ownerId=0;
+var userNum=0;
+
 
 Page({
   /**
    * 页面的初始数据
    */
   data: {
+    
     users:[
-      { id: "", icon: "", name: "" },
-      { id: "", icon: "", name: "" },
-      { id: "", icon: "", name: "" },
-      { id: "", icon: "", name: "" },
-      { id: "", icon: "", name: "" },
-      { id: "", icon: "", name: "" },]
+      new util.user(0, "空位", ""),
+      new util.user(0, "空位", ""),
+      new util.user(0, "空位", ""),
+      new util.user(0, "空位", ""),
+      new util.user(0, "空位", ""),
+      new util.user(0, "空位", ""),
+    ]
   },
 
   startGame:function(){
@@ -21,48 +27,104 @@ Page({
     })
   },
 
-  setUsersInfo:function(){
-    console.log(app.globalData);
+  addUser:function(user){
+    var u = this.data.users;
     for(var i=0;i<6;i++){
-      this.setData({
-        ["users[" + i + "].id"]: i,
-        ["users[" + i + "].icon"]: app.globalData.icon,
-        ["users[" + i + "].name"]: app.globalData.name
+      if(u[i].id == 0){
+        this.setData({
+          ["users[" + i + "]"]: user
+        });
+        break;
+      }
+    }
+    userNum++;
+    console.log(this.data.users);
+  },
+
+  delUser:function(id){
+    var that=this;
+    //删除玩家
+    wx:wx.request({
+      url: '',
+      data: '',
+      header: {},
+      method: 'GET',
+      dataType: 'json',
+      responseType: 'text',
+      success: function(res) {
+
+        //成功后将玩家信息从前端清除
+        var u = that.data.users;
+        for (var i = 0; i < 6; i++) {
+          if (u[i].id == id) {
+            that.setData({
+              ["users[" + i + "]"]: new util.user(0, "空位", "")
+            });
+          }
+        }
+        userNum--;
+        if (userNum == 1) {
+          var u = this.data.users;
+          for (var i = 0; i < 6; i++) {
+            if (u[i].id != 0) {
+              ownerId = u[i].id;
+            }
+          }
+        }
+      },
+      fail: function(res) {},
+      complete: function(res) {},
+    })
+
+    //如果玩家数量为0，删除房间
+    if(userNum == 0){
+      wx:wx.request({
+        url: '',
+        data: '',
+        header: {},
+        method: 'GET',
+        dataType: 'json',
+        responseType: 'text',
+        success: function(res) {},
+        fail: function(res) {},
+        complete: function(res) {},
       })
     }
-    console.log(this.data.users);
+  },
+  findId:function(id){
+    for (var i = 0; i < 6; i++) {
+      if (u.id == id) {
+        return i;
+      }
+    }
+  },
+
+  //进入房间后初始化数据，包括房间内的各种信息
+  initData:function(){
+    
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    var that=this;
+    var user = JSON.parse(options.user);
+    if(options.isOwner=true){
+      ownerId = user.id;
+    }
+    console.log(ownerId);
+    that.addUser(user);
     
-
-    //连接成功
-    wx.onSocketOpen(function () {
-      wx.sendSocketMessage({
-        data: 'stock'
-      })
-    })
-
-    //获取其他用户信息
-    wx.onSocketMessage(function (data) {
-      var obj=JSON.parse(data.data);
-    })
-
-    wx.onSocketError(function () {
-      console.log('websocket连接失败！');
-    })
-
-    this.setUsersInfo();
+    console.log(gData);
+    
   },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-    console.log(getApp().globalData);
+
   },
 
   /**
