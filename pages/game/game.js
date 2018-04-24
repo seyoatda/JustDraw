@@ -28,7 +28,7 @@ Page({
     flag_show3: false,
     flag_show4: false,
 
-    itemWidth: [10, 20, 30, 40, 50, 60, 70],
+    itemWidth: [10, 20, 30, 40, 50, 60],
     itemColor: ['#000000', '#ff0000', '#00ff00', '#0000ff', '#00ffff', '#ff00ff', '#ffff00','#C0C0C0','#ffffff'],
     words:["a","b","c","d"],
     users:null,
@@ -63,7 +63,7 @@ Page({
         })
       }
     }  
-    that.count(3, 1,function(){that.whenStart();});   
+    that.count(60, 1,function(){that.whenStart();});   
 
     //画布socket
     canvasSocket = wx.connectSocket({
@@ -283,6 +283,28 @@ Page({
     ctx.setStrokeStyle(color)
     this.setData({
       activeColorIndex: event.target.dataset.index
+    })
+  },
+
+  erase:function(event){
+    ctx.setFillStyle("#fff")
+    ctx.setStrokeStyle("#fff")
+    this.setData({
+      activeColorIndex: 8
+    })
+  },
+
+  clearAll: function () {
+    var that = this;
+    wx.showModal({
+      title: '提示',
+      content: '确认清除画板所有内容',
+      success: function (res) {
+        if (res.confirm) {
+          console.log('用户点击确定');
+          ctx.draw();
+        }
+      }
     })
   }
 
