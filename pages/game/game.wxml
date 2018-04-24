@@ -38,6 +38,13 @@
       </block>
       </cover-view>
     </cover-view>
+    <!--绘画结束，正确回答界面-->
+  <cover-view id="vw_2" class='vw_winCtnr'  wx:if='{{flag_show2}}'>
+    <cover-view class='vw_win vw_answer'>
+      <cover-view>正确答案：{{currentWord}}</cover-view>
+      <cover-view>本轮得分{{time2}}</cover-view>
+    </cover-view>
+  </cover-view>
     </canvas>
     
   </view>
@@ -60,6 +67,7 @@
       </block>
     </view>
   </view>
+
   <view id="vw_2" class='vw_winCtnr' catchtap='hideWin(2)' wx:if='{{flag_show2}}'>
     <view class='vw_win vw_answer' catchtap='stop'>
       <text class='txt_rightAnsIs'>正确答案：{{currentWord}}</text>

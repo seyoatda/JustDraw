@@ -14,6 +14,14 @@ const formatNumber = n => {
   return n[1] ? n : '0' + n
 }
 
-module.exports = {
-  formatTime: formatTime
+function user(id, name, icon) {
+  this.id = id;
+  this.name = name;
+  this.icon = icon;
 }
+
+module.exports = {
+  formatTime: formatTime,
+  user:user
+}
+
