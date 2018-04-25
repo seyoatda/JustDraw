@@ -15,6 +15,7 @@ page{
   background: gray;
   display: flex;
   flex-direction: row;
+  justify-content: center;
 }
 .v_botCtnr{
   position: absolute;
@@ -24,6 +25,7 @@ page{
   background: gray;
   display: flex;
   flex-direction: row;
+  justify-content: center;
 }
 .v_midCtnr{
   display: flex;
@@ -65,4 +67,5 @@ page{
   overflow:hidden;
   text-overflow:ellipsis;
   white-space:nowrap;
+  text-align: center;
 }

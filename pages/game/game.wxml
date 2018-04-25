@@ -39,13 +39,15 @@
     <cover-view class="vw_toolkit">
       <cover-view class="vw_toolkit_wrp">
       <block wx:for="{{itemWidth}}" wx:for-index="index" wx:key="item">
-        <cover-view class="width-item {{activeWidthIndex == index ?'active-item':''}}" data-index="{{index}}" data-width="{{item}}" bindtap="setItemWidth" style="width:{{item}}rpx;height:{{item}}rpx;"></cover-view>
+        <cover-view class="width-item {{activeWidthIndex == index ?'active-item':''}}" data-index="{{index}}" bindtap="setItemWidth" style="width:{{item}}rpx;height:{{item}}rpx;"></cover-view>
       </block>
       
+      <cover-image class="eraser-item" bindtap="erase" src="../images/eraser.png"></cover-image>
+      <cover-image class="clear-item" bindtap="clearAll" src="../images/clear.png"></cover-image>
       </cover-view>
       <cover-view class="vw_toolkit_wrp">
       <block wx:for="{{itemColor}}" wx:for-index="index" wx:key="item">
-        <cover-view class="color-item {{activeColorIndex == index ?'active-item':''}}" data-index="{{index}}" data-color="{{item}}" bindtap="setItemColor" style="background:{{item}};"></cover-view>
+        <cover-view class="color-item {{activeColorIndex == index ?'active-item':''}}" data-index="{{index}}" bindtap="setItemColor" style="background:{{item}};"></cover-view>
       </block>
       </cover-view>
     </cover-view>

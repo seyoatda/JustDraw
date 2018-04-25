@@ -7,6 +7,7 @@ var radius
 var countdown = 1;
 var currentIndex = 0; 
 var moved = 0
+var canvasSocket
 
 Page({
 
@@ -27,7 +28,7 @@ Page({
     flag_show3: false,
     flag_show4: false,
 
-    itemWidth: [10, 20, 30, 40, 50, 60, 70],
+    itemWidth: [15, 20, 25, 30, 35, 40, 45 ],
     itemColor: ['#000000', '#ff0000', '#00ff00', '#0000ff', '#00ffff', '#ff00ff', '#ffff00','#C0C0C0','#ffffff'],
     words:["a","b","c","d"],
     users:null,
@@ -45,9 +46,73 @@ Page({
       users: u,
       currentId:u[0].id
     });
-    console.log(u);
-   
-    that.count(3, 1,function(){that.whenStart();});  
+
+    that.count(60, 1,function(){that.whenStart();});   
+
+    //画布socket
+    canvasSocket = wx.connectSocket({
+      url: 'ws://120.78.200.1:8080/JustDrawServer/canvas'
+    })
+    canvasSocket.onOpen(function (res) {
+      console.log('WebSocket连接已打开！')
+    })
+    canvasSocket.onError(function (res) {
+      console.log('WebSocket连接打开失败，请检查！')
+    })
+    canvasSocket.onMessage(function (res) {
+      console.log('收到服务器内容：' + res.data)
+      if (res.data.length < 8 || res.data.substring(0, 7) != "canvas:"){
+        return false
+      }
+      var nums = res.data.substring(7).split(",");
+      if (nums.length == 4) {
+        if(nums[0]==nums[2]&&nums[1]==nums[3]){
+          x = nums[0]
+          y = nums[1]
+          ctx.moveTo(x,y) //圆心
+          ctx.arc(x, y, radius, 0, 2 * Math.PI)//圆点
+          ctx.fill()
+        }
+        else{
+          ctx.moveTo(nums[0], nums[1]) // 设置路径起点坐标
+          ctx.lineTo(nums[2], nums[3]) // 绘制一条直线
+          ctx.stroke()
+        }
+        ctx.draw(true)
+      }
+      else if(nums.length == 2){
+        //nums[0]=1,2,3；分别进行线宽、颜色、清空操作
+        if(nums[0] == 1){
+          var width = that.data.itemWidth[nums[1]]
+          ctx.setLineWidth(width / 2.5)
+          radius = width / 4.5
+          that.setData({
+            activeWidthIndex: nums[1]
+          })
+        }
+        else if(nums[0] == 2){
+          var color = that.data.itemColor[nums[1]]
+          ctx.setFillStyle(color)
+          ctx.setStrokeStyle(color)
+          that.setData({
+            activeColorIndex: nums[1]
+          })
+        }
+        else if(nums[0] == 3){
+          /*wx.showModal({
+            title: '提示',
+            content: '确认清除画板所有内容',
+            success: function (res) {
+              if (res.confirm) {
+                console.log('用户点击确定');
+                ctx.draw();
+              }
+            }
+          })*/
+          ctx.draw();
+        }
+      }
+    })
   },
 
   /**
@@ -216,39 +281,68 @@ Page({
     moved = 0
   },
   move: function (e) {
-
     ctx.moveTo(x, y) // 设置路径起点坐标
+    var msg = "canvas:"
+    msg += x + "," + y
     x = e.touches[0].x
     y = e.touches[0].y
     ctx.lineTo(x, y) // 绘制一条直线
     ctx.stroke()
     ctx.draw(true)
     moved = 1
+    msg += "," + x + "," + y
+    canvasSocket.send({ data: msg })
   },
   end: function (e) {
     if(moved == 0){
+      ctx.moveTo(x, y) //圆心
       ctx.arc(x, y, radius, 0, 2 * Math.PI)//圆点
       ctx.fill()
       ctx.draw(true)
+      var msg = "canvas:"
+      msg += x+","+y+","+x+","+y
+      canvasSocket.send({ data: msg })
     }
   },
 
   setItemWidth: function (event) {
-    var width = event.target.dataset.width
-    ctx.setLineWidth(width/2.5)
-    radius = width/4.5
+    var width = this.data.itemWidth[event.target.dataset.index]
+    ctx.setLineWidth(width / 2.5)
+    radius = width / 4.5
     this.setData({
       activeWidthIndex: event.target.dataset.index
     })
+    var msg = "canvas:1," + event.target.dataset.index
+    canvasSocket.send({ data: msg })
   },
 
   setItemColor: function (event) {
-    var color = event.target.dataset.color
+    var color = this.data.itemColor[event.target.dataset.index]
     ctx.setFillStyle(color)
     ctx.setStrokeStyle(color)
     this.setData({
       activeColorIndex: event.target.dataset.index
     })
+    var msg = "canvas:2," + event.target.dataset.index
+    canvasSocket.send({ data: msg })
+  },
+
+  erase:function(event){
+    //白色
+    var color = this.data.itemColor[8]
+    ctx.setFillStyle(color)
+    ctx.setStrokeStyle(color)
+    this.setData({
+      activeColorIndex: 8
+    })
+    var msg = "canvas:2,8"
+    canvasSocket.send({ data: msg })
+  },
+
+  clearAll: function () {
+    ctx.draw();
+    var msg = "canvas:3,"
+    canvasSocket.send({ data: msg })
   }
 
 })
