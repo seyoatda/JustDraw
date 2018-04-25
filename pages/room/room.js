@@ -47,7 +47,7 @@ Page({
 
   startGame:function(){
     wx.redirectTo({
-      url: '../game/game?users='+JSON.stringify(this.data.users)
+      url: '../game/game?roomId='+roomId+'&users='+JSON.stringify(this.data.users)
     })
   },
 
