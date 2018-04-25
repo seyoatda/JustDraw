@@ -7,17 +7,17 @@
           <image class='img_user' src='{{users[0].icon}}'></image>
           <text class='txt_user'>{{users[0].name}}</text>
         </view>
-        <text class='txt_score'>0</text>
+        <text class='txt_score'>{{score[0]}}</text>
         <view class='vw_userCtnr'>
           <image class='img_user' src='{{users[1].icon}}'></image>
           <text class='txt_user'>{{users[1].name}}</text>
         </view>
-        <text class='txt_score'>0</text>
+        <text class='txt_score'>{{score[1]}}</text>
         <view class='vw_userCtnr'>
           <image class='img_user' src='{{users[2].icon}}'></image>
           <text class='txt_user'>{{users[2].name}}</text>
         </view>
-        <text class='txt_score'>0</text>
+        <text class='txt_score'>{{score[2]}}</text>
         
       </view>
   </view>
@@ -68,17 +68,17 @@
           <image class='img_user' src='{{users[3].icon}}'></image>
           <text class='txt_user'>{{users[3].name}}</text>
         </view>
-        <text class='txt_score'>0</text>
+        <text class='txt_score'>{{score[3]}}</text>
         <view class='vw_userCtnr'>
           <image class='img_user' src='{{users[4].icon}}'></image>
           <text class='txt_user'>{{users[4].name}}</text>
         </view>
-        <text class='txt_score'>0</text>
+        <text class='txt_score'>{{score[4]}}</text>
         <view class='vw_userCtnr'>
           <image class='img_user' src='{{users[5].icon}}'></image>
           <text class='txt_user'>{{users[5].name}}</text>
         </view>
-        <text class='txt_score'>0</text>
+        <text class='txt_score'>{{score[5]}}</text>
     </view>
   </view>
   <view id='vw_1' class='vw_winCtnr' catchtap='hideWin(1)' wx:if='{{flag_show1}}'>
@@ -105,7 +105,7 @@
   </view>
   <!--输入答案控件-->
     <button class="btn_answer" wx:if="{{flag_show3}}" bindtap='btnAnsClicked'>回答</button>
-    <input class='ipt_answer' wx:if="{{flag_show4}}"></input>
+    <input class='ipt_answer' wx:if="{{flag_show4}}" bindinput="listenerTxtInput"></input>
 
 
 </view>

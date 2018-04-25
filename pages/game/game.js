@@ -34,7 +34,9 @@ Page({
     itemColor: ['#000000', '#ff0000', '#00ff00', '#0000ff', '#00ffff', '#ff00ff', '#ffff00','#C0C0C0','#ffffff'],
     words:["a","b","c","d"],
     users:null,
-    test:[{hi:"yes"}]
+    test:[{hi:"yes"}],
+    txt:"",
+    score:[0,0,0,0,0,0]
   },
 
 
@@ -122,6 +124,14 @@ Page({
           that.setData({
             "currentWord": that.data.words[nums[1]]
           });
+        }
+        //5,回答正确
+        else if(nums[0] == 5){
+          var i = parseInt(nums[1])
+          this.data.score[i] += 2
+          this.setData({
+            score: this.data.score
+          })
         }
       }
     })
@@ -229,6 +239,23 @@ Page({
 
   btnAnsClicked:function(){
     if(this.data.flag_show4){
+      if (this.data.currentWord == this.data.txt) {
+        var i = 0;
+        while (i < 6) {
+          if (this.data.users[i].id == app.globalData.id) {
+            //this.data.score[i] = this.data.score[i] + 2
+            this.data.score[i] += 2
+            this.setData({
+              score: this.data.score
+            })
+            console.log("score:" + this.data.score[i])
+            break;
+          }
+          i++;
+        }
+        var msg = "canvas:5," + i
+        canvasSocket.send({ data: msg })
+      }
       this.setData({
         "flag_show4": false
       });
@@ -385,6 +412,13 @@ Page({
     ctx.draw();
     var msg = "canvas:3,"
     canvasSocket.send({ data: msg })
+  },
+
+  listenerTxtInput: function (e) {
+    this.setData({
+      txt:e.detail.value
+    })
+
   }
 
 })
