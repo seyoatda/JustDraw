@@ -5,9 +5,9 @@ const ctx = wx.createCanvasContext('myCanvas')
 var x, y
 var radius
 var countdown = 1;
-var currentIndex = 0; 
 var moved = 0
 var canvasSocket
+var roomId
 
 Page({
 
@@ -16,9 +16,11 @@ Page({
    */
   data: {
     currentId:0,
+    currentIndex: 0,
     currentWord:"",
     activeWidthIndex: 3,
     activeColorIndex: 0,
+    globalData: app.globalData,
 
     time1:'',
     time2:'',
@@ -32,17 +34,7 @@ Page({
     itemColor: ['#000000', '#ff0000', '#00ff00', '#0000ff', '#00ffff', '#ff00ff', '#ffff00','#C0C0C0','#ffffff'],
     words:["a","b","c","d"],
     users:null,
-    test:[{hi:"yes"}],
-    userInfo1:[
-      { id: "", icon: "", name: "" }, 
-      { id: "", icon: "", name: "" },  
-      { id: "", icon: "", name: "" }, 
-    ],
-    userInfo2: [
-      { id: "", icon: "", name: "" }, 
-      { id: "", icon: "", name: "" }, 
-      { id: "", icon: "", name: "" }, 
-    ]
+    test:[{hi:"yes"}]
   },
 
 
@@ -51,23 +43,20 @@ Page({
    */
   onLoad: function (options) {
     var that=this;
+    var u = JSON.parse(options.users);
+    //roomId = options.roomId
+    roomId = "006"
+    
     that.setData({
-      users: JSON.parse(options.users)
+      users: u,
+      currentId:u[0].id
     });
-    console.log(this.data.users);
-    for(var i=0;i<2;i++){
-      for(var j=0;j<3;j++){
-        that.setData({
-          ["userInfo" + (i+1) + "[" + j + "].icon"]: that.data.users[i * 3 + j].icon,
-          ["userInfo" + (i+1) + "[" + j + "].name"]: that.data.users[i * 3 + j].name
-        })
-      }
-    }  
-    that.count(60, 1,function(){that.whenStart();});   
+
+    that.whenStart();   
 
     //画布socket
     canvasSocket = wx.connectSocket({
-      url: 'ws://120.78.200.1:8080/JustDrawServer/canvas'
+      url: 'ws://120.78.200.1:8080/JustDrawServer/canvas/'+roomId
     })
     canvasSocket.onOpen(function (res) {
       console.log('WebSocket连接已打开！')
@@ -77,7 +66,11 @@ Page({
     })
     canvasSocket.onMessage(function (res) {
       console.log('收到服务器内容：' + res.data)
-      var nums = res.data.split(",");
+      if (res.data.length < 8 || res.data.substring(0, 7) != "canvas:"){
+        return false
+      }
+      var msg = res.data.substring(7)
+      var nums = msg.split(",")
       if (nums.length == 4) {
         if(nums[0]==nums[2]&&nums[1]==nums[3]){
           x = nums[0]
@@ -124,6 +117,12 @@ Page({
           })*/
           ctx.draw();
         }
+        //4，选词信息
+        else if(nums[0] == 4){
+          that.setData({
+            "currentWord": that.data.words[nums[1]]
+          });
+        }
       }
     })
   },
@@ -148,8 +147,18 @@ Page({
   whenFinish: function () {
     var that = this;
     that.clearWin();
+    that.setData({
+      currentIndex: that.data.currentIndex + 1
+    })
 
-    if (currentIndex >= 11) {
+    //只循环一轮
+    if (that.data.currentIndex >= 6) {
+      wx.redirectTo({
+      url: '../home/home',
+      success: function (res) { },
+       fail: function (res) { },
+       complete: function (res) { },
+    })
       return;
     }
     
@@ -164,47 +173,44 @@ Page({
   whenStart: function () {
     var that=this;
     
-    console.log("currentIndex:" + currentIndex);
-    console.log("currentId:" + this.data.currentId);
+    console.log("currentIndex:" + that.data.currentIndex);
+    console.log("currentId:" + that.data.currentId);
     console.log("userId:" + app.globalData.id);
 
     //设置当前画画用户id
     that.setData({
-      currentId: that.data.users[currentIndex % 6].id
+      currentId: that.data.users[that.data.currentIndex % 6].id,
     })
-    currentIndex++;
 
+    //重置画布
+    ctx.draw()
+
+    //选词默认选择第一项
+    that.setData({
+      "currentWord": that.data.words[0]
+    });
+
+    that.showWin(1);
     //判断当前用户为绘画用户或回答用户
-    if (that.data.currentId == app.globalData.id) {
-      that.showWin(1);
-      that.hideWin(3);
-
-      //如果倒计时结束仍未选择词，则默认选择第一个
-      that.count(3,2,function () {
-        that.hideWin(1);
-        that.setData({
-          "currentWord": that.data.words[0]
-        });
-        console.log("currentWord:" + that.data.currentWord);
-
-        that.count(3, 1,function(){
-          that.whenFinish();
-          });
-      },function(){
-        console.log(that.data.flag_show1);
-        
-        if(that.data.flag_show1==false){
-          return true;
-        }
-      });
-    }
-    else {
-      that.hideWin(1);
+    if (that.data.currentId != app.globalData.id) {
       that.showWin(3);
+    }
+
+    //如果倒计时结束仍未选择词，则默认选择第一个
+    that.count(3, 2, function () {
+      that.hideWin(1);
+
+      console.log("currentWord:" + that.data.currentWord);
+
       that.count(3, 1, function () {
         that.whenFinish();
       });
-    }
+    }, function () {
+      console.log(that.data.flag_show1);
+      if (that.data.flag_show1 == false) {
+        return true;
+      }
+    });
   },
 
   /**
@@ -215,6 +221,8 @@ Page({
     this.setData({
       "currentWord": this.data.words[id]
     });
+    var msg = "canvas:4,"+id
+    canvasSocket.send({ data: msg })
     console.log(this.data.currentWord);
     this.hideWin(1);
   },
@@ -289,21 +297,38 @@ Page({
 
 //坐标
   start: function (e) {
+    if (this.data.currentId != app.globalData.id) {
+      return false
+    }
     x = e.touches[0].x
     y = e.touches[0].y
     moved = 0
   },
   move: function (e) {
+    if (this.data.currentId != app.globalData.id) {
+      return false
+    }
+    ctx.moveTo(x, y) // 设置路径起点坐标
     var msg = "canvas:"
     msg += x + "," + y
     x = e.touches[0].x
     y = e.touches[0].y
+    ctx.lineTo(x, y) // 绘制一条直线
+    ctx.stroke()
+    ctx.draw(true)
+    moved = 1
     msg += "," + x + "," + y
     canvasSocket.send({ data: msg })
-    moved = 1
   },
   end: function (e) {
+    if (this.data.currentId != app.globalData.id) {
+      return false
+    }
     if(moved == 0){
+      ctx.moveTo(x, y) //圆心
+      ctx.arc(x, y, radius, 0, 2 * Math.PI)//圆点
+      ctx.fill()
+      ctx.draw(true)
       var msg = "canvas:"
       msg += x+","+y+","+x+","+y
       canvasSocket.send({ data: msg })
@@ -311,24 +336,55 @@ Page({
   },
 
   setItemWidth: function (event) {
+    if (this.data.currentId != app.globalData.id) {
+      return false
+    }
+    var width = this.data.itemWidth[event.target.dataset.index]
+    ctx.setLineWidth(width / 2.5)
+    radius = width / 4.5
+    this.setData({
+      activeWidthIndex: event.target.dataset.index
+    })
     var msg = "canvas:1," + event.target.dataset.index
     canvasSocket.send({ data: msg })
   },
 
   setItemColor: function (event) {
+    if (this.data.currentId != app.globalData.id) {
+      return false
+    }
+    var color = this.data.itemColor[event.target.dataset.index]
+    ctx.setFillStyle(color)
+    ctx.setStrokeStyle(color)
+    this.setData({
+      activeColorIndex: event.target.dataset.index
+    })
     var msg = "canvas:2," + event.target.dataset.index
     canvasSocket.send({ data: msg })
   },
 
   erase:function(event){
+    if (this.data.currentId != app.globalData.id) {
+      return false
+    }
+    //白色
+    var color = this.data.itemColor[8]
+    ctx.setFillStyle(color)
+    ctx.setStrokeStyle(color)
+    this.setData({
+      activeColorIndex: 8
+    })
     var msg = "canvas:2,8"
     canvasSocket.send({ data: msg })
   },
 
   clearAll: function () {
+    if (this.data.currentId != app.globalData.id){
+      return false
+    }
+    ctx.draw();
     var msg = "canvas:3,"
     canvasSocket.send({ data: msg })
-    
   }
 
 })

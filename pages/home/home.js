@@ -1,29 +1,6 @@
 // pages/home/home.js
 var util = require('../../utils/util.js');
-var Stomp = require('../../utils/stomp.js').Stomp;
 
-var socketOpen = false
-var socketMsgQueue = []
-function sendSocketMessage(msg) {
-  console.log('send msg:')
-  console.log(msg);
-  if (socketOpen) {
-    wx.sendSocketMessage({
-      data: msg
-    })
-  } else {
-    socketMsgQueue.push(msg)
-  }
-}
-
-var ws = {
-  send: sendSocketMessage,
-  onopen: null,
-  onmessage: null
-}
-Stomp.setInterval = function () { }
-Stomp.clearInterval = function () { }
-var client = Stomp.over(ws);
 
 var gData=getApp().globalData;
 Page({
@@ -88,6 +65,23 @@ Page({
   },
   jump2Room:function(){   
     var that=this;
+    wx: wx.request({
+      url: 'http://101.200.62.252:8080/room/dismiss',
+      data: {
+        roomId: gData.id,
+        userId: gData.id
+      },
+      header: { "content-Type": "application/x-www-form-urlencoded" },
+      method: 'POST',
+      dataType: 'json',
+      responseType: 'text',
+      success: function (res) {
+        console.log("POST--room/dismiss",res);
+      },
+      fail: function (res) { },
+      complete: function (res) { },
+    })
+
     //房主向后台申请创建房间
     wx:wx.request({
       url: 'http://101.200.62.252:8080/room/create',
@@ -108,26 +102,6 @@ Page({
         console.log("create room success")
         console.log(res);
 
-        wx.connectSocket({
-          url: 'ws://101.200.62.252:8080/websocket',
-          success: function (res) {
-            console.log("socketsuccess")
-            console.log(res);
-          },
-          fail: function (res) {
-            console.log(res);
-          }
-        })
-
-        var destination = '/topic/room'+res.data.info;
-        client.connect('user', 'pass', function (sessionId) {
-          console.log('sessionId', sessionId)
-          client.subscribe(destination, function (body, headers) {
-            console.log('From MQ:', body);
-          });
-          client.send(destination, { priority: 9 }, 'hello workyun.com !');
-        })
-        
         //成功之后进行跳转页面，注明房主身份
         var animation = wx.createAnimation({
           duration: 100,
@@ -140,7 +114,7 @@ Page({
           btnAnimationCre: animation.export(),
         })
         wx.navigateTo({
-          url: '../room/room?isOwner=true&user='+JSON.stringify(gData.user),
+          url: '../room/room?isOwner=true&roomId='+res.data.info+'&user='+JSON.stringify(gData.user),
         })
       },
       fail: function(res) {
@@ -156,19 +130,21 @@ Page({
   //加入房间访问后台
   enterRoom:function(e){
     var no = e.detail.roomNumber;
+    console.log("nononononno:",no)
     wx:wx.request({
-      url: 'http://101.200.62.252:8080//room/enter',
+      url: 'http://101.200.62.252:8080/room/enter',
       data: {
         roomId:no,
         userId: gData.id
       },
-      header: { "content-Type": "application/json"},
+      header: { "content-Type": "application/x-www-form-urlencoded"},
       method: 'POST',
       dataType: 'json',
-      responseType: 'json',
+      responseType: 'text',
       success: function(res) {
+        console.log("POST--room/enter:",res);
         wx.navigateTo({
-          url: '../room/room?isOwner=false & user=' + JSON.stringify(gData.user),
+          url: '../room/room?isOwner=false&user=' + JSON.stringify(gData.user),
         })
       },
       fail: function(res) {},

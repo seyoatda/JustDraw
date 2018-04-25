@@ -2,12 +2,23 @@
 <!--顶部组件，放置用户信息-->
 <view class='vw_ctnr'>
   <view class='vw_top'>
-      <view class='vw_userInfo' wx:for="{{userInfo1}}" wx:key="name" wx:for-item="info">
+      <view class='vw_userInfo'>
         <view class='vw_userCtnr'>
-          <image class='img_user' src='{{info.icon}}'></image>
-          <text class='txt_user'>{{info.name}}</text>
+          <image class='img_user' src='{{users[0].icon}}'></image>
+          <text class='txt_user'>{{users[0].name}}</text>
         </view>
         <text class='txt_score'>0</text>
+        <view class='vw_userCtnr'>
+          <image class='img_user' src='{{users[1].icon}}'></image>
+          <text class='txt_user'>{{users[1].name}}</text>
+        </view>
+        <text class='txt_score'>0</text>
+        <view class='vw_userCtnr'>
+          <image class='img_user' src='{{users[2].icon}}'></image>
+          <text class='txt_user'>{{users[2].name}}</text>
+        </view>
+        <text class='txt_score'>0</text>
+        
       </view>
   </view>
 
@@ -52,33 +63,49 @@
   </view>
 
   <view class='vw_bot'>
-    <view class='vw_userInfo' wx:for="{{userInfo2}}" wx:key="name" wx:for-item="info">
-      <view class='vw_userCtnr'>
-        <image class='img_user' src='{{info.icon}}'></image>
-        <text class='txt_user'>{{info.name}}</text>
-      </view>
-      <text class='txt_score'>0</text>
+    <view class='vw_userInfo'>
+        <view class='vw_userCtnr'>
+          <image class='img_user' src='{{users[3].icon}}'></image>
+          <text class='txt_user'>{{users[3].name}}</text>
+        </view>
+        <text class='txt_score'>0</text>
+        <view class='vw_userCtnr'>
+          <image class='img_user' src='{{users[4].icon}}'></image>
+          <text class='txt_user'>{{users[4].name}}</text>
+        </view>
+        <text class='txt_score'>0</text>
+        <view class='vw_userCtnr'>
+          <image class='img_user' src='{{users[5].icon}}'></image>
+          <text class='txt_user'>{{users[5].name}}</text>
+        </view>
+        <text class='txt_score'>0</text>
     </view>
   </view>
   <view id='vw_1' class='vw_winCtnr' catchtap='hideWin(1)' wx:if='{{flag_show1}}'>
-    <view class="vw_win vw_choose" catchtap='stop'>
+    <view class="vw_win vw_choose" catchtap='stop' wx:if='{{currentId == globalData.id}}'>
       <text class='txt_header'>请选择要画的词：</text>
       <text class='txt_timer'>(剩余 {{time2}} 秒)</text>
       <block wx:for="{{words}}" wx:key="word" wx:for-item="word">
         <button id="btn_{{index}}" class="btn_choose{{index}}" bindtap='btnCWClicked'>{{word}}</button>
       </block>
     </view>
+    <view class="vw_win vw_answer" catchtap='stop' wx:if='{{currentId != globalData.id}}'>
+      <text class='txt_rightAnsIs'>提示：</text>
+      <text class='txt_rightAns'>{{users[currentIndex % 6].name}}选词中......</text>
+      <text class='txt_getScore'>剩余时间： {{time2}} 秒</text>
+    </view>
   </view>
 
   <view id="vw_2" class='vw_winCtnr' catchtap='hideWin(2)' wx:if='{{flag_show2}}'>
     <view class='vw_win vw_answer' catchtap='stop'>
-      <text class='txt_rightAnsIs'>正确答案：{{currentWord}}</text>
-      <text class='txt_rightAns'>苹果</text>
-      <text class='txt_getScore'>本轮得分：{{time2}}</text>
+      <text class='txt_rightAnsIs'>正确答案：</text>
+      <text class='txt_rightAns'>{{currentWord}}</text>
+      <text class='txt_getScore'>剩余时间：{{time2}}</text>
     </view>
   </view>
   <!--输入答案控件-->
     <button class="btn_answer" wx:if="{{flag_show3}}" bindtap='btnAnsClicked'>回答</button>
     <input class='ipt_answer' wx:if="{{flag_show4}}"></input>
+
 
 </view>

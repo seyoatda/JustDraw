@@ -3,8 +3,8 @@
 
     "pages/index/index",
     "pages/home/home",
-    "pages/game/game",
     "pages/room/room",
+    "pages/game/game",
     "pages/logs/logs",
     "pages/rank/rank",
     "pages/mine/mine"
