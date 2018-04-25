@@ -249,25 +249,31 @@ page{
 }
 
 .btn_answer{
-  height: 80rpx;
-  width: 80rpx;
+  height: 90rpx;
+  width: 90rpx;
   border-radius: 80rpx;
   padding-left:20rpx;
   padding-right:20rpx;
-  background: yellowgreen;
+  background: gainsboro;
   position: absolute;
   right:10rpx;
-  top:450rpx;
+  top:70%;
   font-size:30rpx;
   line-height:40rpx;
+  margin-right: 20rpx;
+  box-shadow: 5rpx 5rpx 5rpx 5rpx gray;
+  opacity: 0.8;
+  font-weight: bold;
 }
 .ipt_answer{
-  height: 80rpx;
+  height: 90rpx;
   width: 200rpx;
   border-radius: 10rpx;
   border-bottom: 1rpx solid #000;
-  background: yellowgreen;
+  background: gainsboro;
   position: absolute;
   right:150rpx;
-  top:450rpx;
+  top:70%;
+  box-shadow: 2rpx 2rpx 2rpx 2rpx grey;
+  opacity: 0.8;
 }
