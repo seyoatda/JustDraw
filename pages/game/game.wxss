@@ -249,18 +249,23 @@ page{
 }
 
 .btn_answer{
-  height: 100rpx;
-  width: 100rpx;
-  border-radius: 100rpx;
+  height: 80rpx;
+  width: 80rpx;
+  border-radius: 80rpx;
+  padding-left:20rpx;
+  padding-right:20rpx;
   background: yellowgreen;
   position: absolute;
   right:10rpx;
   top:450rpx;
+  font-size:30rpx;
+  line-height:40rpx;
 }
 .ipt_answer{
-  height: 100rpx;
+  height: 80rpx;
   width: 200rpx;
   border-radius: 10rpx;
+  border-bottom: 1rpx solid #000;
   background: yellowgreen;
   position: absolute;
   right:150rpx;
