@@ -46,8 +46,7 @@ Page({
   onLoad: function (options) {
     var that=this;
     var u = JSON.parse(options.users);
-    //roomId = options.roomId
-    roomId = "006"
+    roomId = options.roomId
     
     that.setData({
       users: u,
@@ -128,9 +127,9 @@ Page({
         //5,回答正确
         else if(nums[0] == 5){
           var i = parseInt(nums[1])
-          this.data.score[i] += 2
-          this.setData({
-            score: this.data.score
+          that.data.score[i] += 2
+          that.setData({
+            score: that.data.score
           })
         }
       }
@@ -160,24 +159,36 @@ Page({
     that.setData({
       currentIndex: that.data.currentIndex + 1
     })
-
-    //只循环一轮
-    if (that.data.currentIndex >= 6) {
-      wx.redirectTo({
-      url: '../home/home',
-      success: function (res) { },
-       fail: function (res) { },
-       complete: function (res) { },
-    })
-      return;
+    while (that.data.users[that.data.currentIndex % 6].id == 0) {
+      that.setData({
+        currentIndex: that.data.currentIndex + 1
+      })
     }
     
+
     //弹出正确答案界面，3s后关闭
     that.showWin(2);
-    that.count(3, 2,function () { 
+    that.count(3, 2, function () {
       that.hideWin(2);
-      that.whenStart();
-     });
+      
+      //只循环一轮
+      if (that.data.currentIndex >= 6) {
+        canvasSocket.close();
+        wx.redirectTo({
+          url: '../home/home',
+          success: function (res) { },
+          fail: function (res) { },
+          complete: function (res) { },
+        })
+      }
+      else{
+        that.whenStart();
+      }
+    });
+
+    
+    
+    
   },
 
   whenStart: function () {
@@ -187,7 +198,7 @@ Page({
     console.log("currentId:" + that.data.currentId);
     console.log("userId:" + app.globalData.id);
 
-    //设置当前画画用户id
+    //设置当前画画用户id,设置index
     that.setData({
       currentId: that.data.users[that.data.currentIndex % 6].id,
     })
@@ -207,12 +218,12 @@ Page({
     }
 
     //如果倒计时结束仍未选择词，则默认选择第一个
-    that.count(3, 2, function () {
+    that.count(10, 2, function () {
       that.hideWin(1);
 
       console.log("currentWord:" + that.data.currentWord);
 
-      that.count(3, 1, function () {
+      that.count(30, 1, function () {
         that.whenFinish();
       });
     }, function () {
