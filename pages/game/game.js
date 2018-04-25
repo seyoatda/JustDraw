@@ -137,6 +137,12 @@ Page({
     that.clearWin();
 
     if (currentIndex >= 11) {
+      wx.redirectTo({
+        url: '../home/home',
+        success: function(res) {},
+        fail: function(res) {},
+        complete: function(res) {},
+      })
       return;
     }
     

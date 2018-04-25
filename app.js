@@ -36,11 +36,14 @@ App({
             
                   console.log(data);
                   if (data.data.status == 1) {
-                    var userInfo_ = data.data.userInfo;
-                    console.log(that.globalData);
-                    var id=userInfo_.openId;
-                    that.globalData.user = new util.user(id,userInfo_.nickName,userInfo_.avatarUrl);
-                    that.globalData.id=id;
+                    var u = data.data.userInfo;
+                    
+                    that.globalData.user = new util.user(u.openId,u.nickName,u.avatarUrl);
+                    that.globalData.id = u.openId;
+
+                    if (!that.isRegistered()) {
+                      that.register();
+                    }
                   } else {
                     console.log('解密失败');
                   }
@@ -61,6 +64,10 @@ App({
     // 获取用户信息
     wx.getSetting({
       success: res => {
+        //判断用户是否注册，若未注册先注册用户
+        
+       
+
         if (res.authSetting['scope.userInfo']) {
           // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
           wx.getUserInfo({
@@ -79,6 +86,53 @@ App({
         }
       }
       
+    })
+  },
+
+  isRegistered:function(){
+    console.log("globalData.id:", this.globalData.id)
+    var that=this;
+    wx.request({
+      url: 'http://101.200.62.252:8080/user/isRegistered',
+      data: {
+        userId:that.globalData.id
+      },
+      method: "GET",
+      header: {
+        'content-type': 'application/json'
+      },
+      dataType: 'json',
+      responseType: 'text',
+      success: function (data) {
+        console.log("GET--userId:",data);
+        if(data.data.info=="YES"){
+          return true;
+        }else{
+          return false;
+        }
+      }
+    }) 
+  },
+
+  register:function(){
+    var that = this;
+    wx.request({
+      url: 'http://101.200.62.252:8080/user/register',
+      data: {
+        userId: that.globalData.id,
+        nickName:that.globalData.name,
+        photo: that.globalData.icon
+      },
+      method: "POST",
+      header: {
+        'content-type': 'application/x-www-form-urlencoded'
+      },
+      dataType: 'json',
+      responseType: 'text',
+      success: function (data) {
+        console.log("POST--register:", data);
+        
+      }
     })
   },
 

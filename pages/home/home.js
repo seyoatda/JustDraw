@@ -69,6 +69,23 @@ Page({
   },
   jump2Room:function(){   
     var that=this;
+    wx: wx.request({
+      url: 'http://101.200.62.252:8080/room/dismiss',
+      data: {
+        roomId: gData.id,
+        userId: gData.id
+      },
+      header: { "content-Type": "application/x-www-form-urlencoded" },
+      method: 'POST',
+      dataType: 'json',
+      responseType: 'text',
+      success: function (res) {
+        console.log("POST--room/dismiss",res);
+      },
+      fail: function (res) { },
+      complete: function (res) { },
+    })
+
     //房主向后台申请创建房间
     wx:wx.request({
       url: 'http://101.200.62.252:8080/room/create',
@@ -117,19 +134,21 @@ Page({
   //加入房间访问后台
   enterRoom:function(e){
     var no = e.detail.roomNumber;
+    console.log("nononononno:",no)
     wx:wx.request({
       url: 'http://101.200.62.252:8080/room/enter',
       data: {
         roomId:no,
         userId: gData.id
       },
-      header: { "content-Type": "application/json"},
+      header: { "content-Type": "application/x-www-form-urlencoded"},
       method: 'POST',
       dataType: 'json',
       responseType: 'text',
       success: function(res) {
+        console.log("POST--room/enter:",res);
         wx.navigateTo({
-          url: '../room/room?isOwner=false & user=' + JSON.stringify(gData.user),
+          url: '../room/room?isOwner=false&user=' + JSON.stringify(gData.user),
         })
       },
       fail: function(res) {},

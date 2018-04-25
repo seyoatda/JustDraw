@@ -12,9 +12,9 @@
   <view class='vw_winCtnr' catchtap='hideWin' wx:if='{{setShow}}'>
     <view animation="{{animationData}}" class="v_enterRoom" catchtap='stop' wx:if='{{setShow}}' style='background:url("https://upload-images.jianshu.io/upload_images/9653454-7a47a8af260f9a59.png?imageMogr2/auto-orient/");-webkit-background-size:cover;'>
       <form bindsubmit='enterRoom'>
-        <input class='i_room' type='number' focus='true' confirm-type='go' maxlength='6' bindconfirm='enterRoom' placeholder-style="font-size:15px" placeholder="请输入房间号" auto-focus></input>
+        <input class='i_room' name="roomNumber" type='number' focus='true' confirm-type='go' maxlength='30' bindconfirm='enterRoom' placeholder-style="font-size:15px" placeholder="请输入房间号" auto-focus></input>
         <view class='btn_ctn'>
-          <text class='btn_yes' bindtap='submit' plain='true'>确认</text>
+          <text class='btn_yes' form-type="submit" plain='true'>确认</text>
           <text class='btn_no' bindtap='hideWin' plain='false'>取消</text>
         </view>
       </form>
