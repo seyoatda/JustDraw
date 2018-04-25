@@ -77,7 +77,10 @@ Page({
     })
     canvasSocket.onMessage(function (res) {
       console.log('收到服务器内容：' + res.data)
-      var nums = res.data.split(",");
+      if (res.data.length < 8 || res.data.substring(0, 7) != "canvas:"){
+        return false
+      }
+      var nums = res.data.substring(7).split(",");
       if (nums.length == 4) {
         if(nums[0]==nums[2]&&nums[1]==nums[3]){
           x = nums[0]
@@ -294,16 +297,24 @@ Page({
     moved = 0
   },
   move: function (e) {
+    ctx.moveTo(x, y) // 设置路径起点坐标
     var msg = "canvas:"
     msg += x + "," + y
     x = e.touches[0].x
     y = e.touches[0].y
+    ctx.lineTo(x, y) // 绘制一条直线
+    ctx.stroke()
+    ctx.draw(true)
+    moved = 1
     msg += "," + x + "," + y
     canvasSocket.send({ data: msg })
-    moved = 1
   },
   end: function (e) {
     if(moved == 0){
+      ctx.moveTo(x, y) //圆心
+      ctx.arc(x, y, radius, 0, 2 * Math.PI)//圆点
+      ctx.fill()
+      ctx.draw(true)
       var msg = "canvas:"
       msg += x+","+y+","+x+","+y
       canvasSocket.send({ data: msg })
@@ -311,24 +322,43 @@ Page({
   },
 
   setItemWidth: function (event) {
+    var width = this.data.itemWidth[event.target.dataset.index]
+    ctx.setLineWidth(width / 2.5)
+    radius = width / 4.5
+    this.setData({
+      activeWidthIndex: event.target.dataset.index
+    })
     var msg = "canvas:1," + event.target.dataset.index
     canvasSocket.send({ data: msg })
   },
 
   setItemColor: function (event) {
+    var color = this.data.itemColor[event.target.dataset.index]
+    ctx.setFillStyle(color)
+    ctx.setStrokeStyle(color)
+    this.setData({
+      activeColorIndex: event.target.dataset.index
+    })
     var msg = "canvas:2," + event.target.dataset.index
     canvasSocket.send({ data: msg })
   },
 
   erase:function(event){
+    //白色
+    var color = this.data.itemColor[8]
+    ctx.setFillStyle(color)
+    ctx.setStrokeStyle(color)
+    this.setData({
+      activeColorIndex: 8
+    })
     var msg = "canvas:2,8"
     canvasSocket.send({ data: msg })
   },
 
   clearAll: function () {
+    ctx.draw();
     var msg = "canvas:3,"
     canvasSocket.send({ data: msg })
-    
   }
 
 })
