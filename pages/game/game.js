@@ -8,6 +8,7 @@ var countdown = 1;
 var currentIndex = 0; 
 var moved = 0
 var canvasSocket
+var roomId
 
 Page({
 
@@ -42,16 +43,17 @@ Page({
   onLoad: function (options) {
     var that=this;
     var u = JSON.parse(options.users);
+    roomId = options.roomId
     that.setData({
       users: u,
       currentId:u[0].id
     });
 
-    that.count(60, 1,function(){that.whenStart();});   
+    that.whenStart();   
 
     //画布socket
     canvasSocket = wx.connectSocket({
-      url: 'ws://120.78.200.1:8080/JustDrawServer/canvas'
+      url: 'ws://120.78.200.1:8080/JustDrawServer/canvas/'+roomId
     })
     canvasSocket.onOpen(function (res) {
       console.log('WebSocket连接已打开！')
@@ -160,6 +162,9 @@ Page({
       currentId: that.data.users[currentIndex % 6].id
     })
     currentIndex++;
+
+    //重置画布
+    ctx.draw()
 
     //判断当前用户为绘画用户或回答用户
     if (that.data.currentId == app.globalData.id) {
@@ -276,11 +281,17 @@ Page({
 
 //坐标
   start: function (e) {
+    if (this.data.currentId != app.globalData.id) {
+      return false
+    }
     x = e.touches[0].x
     y = e.touches[0].y
     moved = 0
   },
   move: function (e) {
+    if (this.data.currentId != app.globalData.id) {
+      return false
+    }
     ctx.moveTo(x, y) // 设置路径起点坐标
     var msg = "canvas:"
     msg += x + "," + y
@@ -294,6 +305,9 @@ Page({
     canvasSocket.send({ data: msg })
   },
   end: function (e) {
+    if (this.data.currentId != app.globalData.id) {
+      return false
+    }
     if(moved == 0){
       ctx.moveTo(x, y) //圆心
       ctx.arc(x, y, radius, 0, 2 * Math.PI)//圆点
@@ -306,6 +320,9 @@ Page({
   },
 
   setItemWidth: function (event) {
+    if (this.data.currentId != app.globalData.id) {
+      return false
+    }
     var width = this.data.itemWidth[event.target.dataset.index]
     ctx.setLineWidth(width / 2.5)
     radius = width / 4.5
@@ -317,6 +334,9 @@ Page({
   },
 
   setItemColor: function (event) {
+    if (this.data.currentId != app.globalData.id) {
+      return false
+    }
     var color = this.data.itemColor[event.target.dataset.index]
     ctx.setFillStyle(color)
     ctx.setStrokeStyle(color)
@@ -328,6 +348,9 @@ Page({
   },
 
   erase:function(event){
+    if (this.data.currentId != app.globalData.id) {
+      return false
+    }
     //白色
     var color = this.data.itemColor[8]
     ctx.setFillStyle(color)
@@ -340,6 +363,9 @@ Page({
   },
 
   clearAll: function () {
+    if (this.data.currentId != app.globalData.id){
+      return false
+    }
     ctx.draw();
     var msg = "canvas:3,"
     canvasSocket.send({ data: msg })
