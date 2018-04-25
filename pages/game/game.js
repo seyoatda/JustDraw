@@ -5,7 +5,6 @@ const ctx = wx.createCanvasContext('myCanvas')
 var x, y
 var radius
 var countdown = 1;
-var currentIndex = 0; 
 var moved = 0
 var canvasSocket
 var roomId
@@ -17,9 +16,11 @@ Page({
    */
   data: {
     currentId:0,
+    currentIndex: 0,
     currentWord:"",
     activeWidthIndex: 3,
     activeColorIndex: 0,
+    globalData: app.globalData,
 
     time1:'',
     time2:'',
@@ -43,7 +44,9 @@ Page({
   onLoad: function (options) {
     var that=this;
     var u = JSON.parse(options.users);
-    roomId = options.roomId
+    //roomId = options.roomId
+    roomId = "006"
+    
     that.setData({
       users: u,
       currentId:u[0].id
@@ -66,7 +69,8 @@ Page({
       if (res.data.length < 8 || res.data.substring(0, 7) != "canvas:"){
         return false
       }
-      var nums = res.data.substring(7).split(",");
+      var msg = res.data.substring(7)
+      var nums = msg.split(",")
       if (nums.length == 4) {
         if(nums[0]==nums[2]&&nums[1]==nums[3]){
           x = nums[0]
@@ -113,6 +117,12 @@ Page({
           })*/
           ctx.draw();
         }
+        //4，选词信息
+        else if(nums[0] == 4){
+          that.setData({
+            "currentWord": that.data.words[nums[1]]
+          });
+        }
       }
     })
   },
@@ -137,14 +147,18 @@ Page({
   whenFinish: function () {
     var that = this;
     that.clearWin();
+    that.setData({
+      currentIndex: that.data.currentIndex + 1
+    })
 
-    if (currentIndex >= 11) {
+    //只循环一轮
+    if (that.data.currentIndex >= 6) {
       wx.redirectTo({
-        url: '../home/home',
-        success: function(res) {},
-        fail: function(res) {},
-        complete: function(res) {},
-      })
+      url: '../home/home',
+      success: function (res) { },
+       fail: function (res) { },
+       complete: function (res) { },
+    })
       return;
     }
     
@@ -159,50 +173,44 @@ Page({
   whenStart: function () {
     var that=this;
     
-    console.log("currentIndex:" + currentIndex);
-    console.log("currentId:" + this.data.currentId);
+    console.log("currentIndex:" + that.data.currentIndex);
+    console.log("currentId:" + that.data.currentId);
     console.log("userId:" + app.globalData.id);
 
     //设置当前画画用户id
     that.setData({
-      currentId: that.data.users[currentIndex % 6].id
+      currentId: that.data.users[that.data.currentIndex % 6].id,
     })
-    currentIndex++;
 
     //重置画布
     ctx.draw()
 
+    //选词默认选择第一项
+    that.setData({
+      "currentWord": that.data.words[0]
+    });
+
+    that.showWin(1);
     //判断当前用户为绘画用户或回答用户
-    if (that.data.currentId == app.globalData.id) {
-      that.showWin(1);
-      that.hideWin(3);
-
-      //如果倒计时结束仍未选择词，则默认选择第一个
-      that.count(3,2,function () {
-        that.hideWin(1);
-        that.setData({
-          "currentWord": that.data.words[0]
-        });
-        console.log("currentWord:" + that.data.currentWord);
-
-        that.count(3, 1,function(){
-          that.whenFinish();
-          });
-      },function(){
-        console.log(that.data.flag_show1);
-        
-        if(that.data.flag_show1==false){
-          return true;
-        }
-      });
-    }
-    else {
-      that.hideWin(1);
+    if (that.data.currentId != app.globalData.id) {
       that.showWin(3);
+    }
+
+    //如果倒计时结束仍未选择词，则默认选择第一个
+    that.count(3, 2, function () {
+      that.hideWin(1);
+
+      console.log("currentWord:" + that.data.currentWord);
+
       that.count(3, 1, function () {
         that.whenFinish();
       });
-    }
+    }, function () {
+      console.log(that.data.flag_show1);
+      if (that.data.flag_show1 == false) {
+        return true;
+      }
+    });
   },
 
   /**
@@ -213,6 +221,8 @@ Page({
     this.setData({
       "currentWord": this.data.words[id]
     });
+    var msg = "canvas:4,"+id
+    canvasSocket.send({ data: msg })
     console.log(this.data.currentWord);
     this.hideWin(1);
   },
