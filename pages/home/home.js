@@ -130,6 +130,10 @@ Page({
       responseType: 'text',
       success: function(res) {
         console.log("POST--room/enter:",res);
+        if(res.data.status=="ERROR"){
+          console.log("用户无法进入房间！错误代码：",res.data.info);
+          return;
+        }
         wx.navigateTo({
           url: '../room/room?isOwner=false&roomId='+no+'&user=' + JSON.stringify(gData.user),
         })

@@ -177,26 +177,29 @@ Page({
       console.log('收到onmessage事件:', )
       ws.onmessage && ws.onmessage(res)
         // 接收广播并将加入房间的新用户初始化
-      console.log("body:", JSON.parse(res));
-      
-      
-      wx.request({
-        url: 'http://101.200.62.252:8080/user/find',
-        data: {
-          userIds: users
-        },
-        header: { "content-Type": "application/x-www-form-urlencoded" },
-        method: 'GET',
-        dataType: 'json',
-        responseType: 'text',
-        success: function (res) {
-          console.log("GET--user/find:", res);
-          var users = res.data;
-          for (var i = 0; i < users.length; i++) {
-            that.addUser(new user(users[i].userId, users[i].nickName, users[i].photo))
-          }
+      console.log("body:", res.data.version);
+        if(res.type=="ROOM_MESSAGE"){
+          wx.request({
+            url: 'http://101.200.62.252:8080/user/find',
+            data: {
+              userIds: users
+            },
+            header: { "content-Type": "application/x-www-form-urlencoded" },
+            method: 'GET',
+            dataType: 'json',
+            responseType: 'text',
+            success: function (res) {
+              console.log("GET--user/find:", res);
+              var users = res.data;
+              for (var i = 0; i < users.length; i++) {
+                that.addUser(new user(users[i].userId, users[i].nickName, users[i].photo))
+              }
+            }
+          });
         }
-      });
+      
+      
+  
     })
     
     var destination = '/topic/roomId/' + roomId;
@@ -278,39 +281,48 @@ Page({
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
-    console.log("roomId:::::::::",roomId)
-    var that = this;
-    wx: wx.request({
-      url: 'http://101.200.62.252:8080/room/dismiss',
-      data: {
-        roomId: roomId,
-        userId: gData.id
-      },
-      header: { "content-Type": "application/x-www-form-urlencoded" },
-      method: 'POST',
-      dataType: 'json',
-      responseType: 'text',
-      success: function (res) {
-        console.log("POST--room/dismiss", res);
-      },
-      fail: function (res) { },
-      complete: function (res) { },
-    })
-
+   
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-  
+      wx:wx.closeSocket({
+        code: 0,
+        reason: 'leave room',
+        success: function(res) {
+          console.log("closeSocket:",res);
+        },
+        fail: function(res) {},
+        complete: function(res) {},
+      })
+      console.log("unload");
+      console.log("roomId:::::::::", roomId)
+      var that = this;
+      wx: wx.request({
+        url: 'http://101.200.62.252:8080/room/dismiss',
+        data: {
+          roomId: roomId,
+          userId: gData.id
+        },
+        header: { "content-Type": "application/x-www-form-urlencoded" },
+        method: 'POST',
+        dataType: 'json',
+        responseType: 'text',
+        success: function (res) {
+          console.log("POST--room/dismiss", res);
+        },
+        fail: function (res) { },
+        complete: function (res) { },
+      })
   },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
-  
+
   },
 
   /**
@@ -319,7 +331,7 @@ Page({
   onReachBottom: function () {
   
   },
-
+ 
   /**
    * 用户点击右上角分享
    */
