@@ -31,17 +31,7 @@ Page({
     itemColor: ['#000000', '#ff0000', '#00ff00', '#0000ff', '#00ffff', '#ff00ff', '#ffff00','#C0C0C0','#ffffff'],
     words:["a","b","c","d"],
     users:null,
-    test:[{hi:"yes"}],
-    userInfo1:[
-      { id: "", icon: "", name: "" }, 
-      { id: "", icon: "", name: "" },  
-      { id: "", icon: "", name: "" }, 
-    ],
-    userInfo2: [
-      { id: "", icon: "", name: "" }, 
-      { id: "", icon: "", name: "" }, 
-      { id: "", icon: "", name: "" }, 
-    ]
+    test:[{hi:"yes"}]
   },
 
 
@@ -50,18 +40,13 @@ Page({
    */
   onLoad: function (options) {
     var that=this;
+    var u = JSON.parse(options.users);
     that.setData({
-      users: JSON.parse(options.users)
+      users: u,
+      currentId:u[0].id
     });
-    console.log(this.data.users);
-    for(var i=0;i<2;i++){
-      for(var j=0;j<3;j++){
-        that.setData({
-          ["userInfo" + (i+1) + "[" + j + "].icon"]: that.data.users[i * 3 + j].icon,
-          ["userInfo" + (i+1) + "[" + j + "].name"]: that.data.users[i * 3 + j].name
-        })
-      }
-    }  
+    console.log(u);
+   
     that.count(3, 1,function(){that.whenStart();});  
   },
 

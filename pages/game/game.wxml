@@ -2,12 +2,23 @@
 <!--顶部组件，放置用户信息-->
 <view class='vw_ctnr'>
   <view class='vw_top'>
-      <view class='vw_userInfo' wx:for="{{userInfo1}}" wx:key="name" wx:for-item="info">
+      <view class='vw_userInfo'>
         <view class='vw_userCtnr'>
-          <image class='img_user' src='{{info.icon}}'></image>
-          <text class='txt_user'>{{info.name}}</text>
+          <image class='img_user' src='{{users[0].icon}}'></image>
+          <text class='txt_user'>{{users[0].name}}</text>
         </view>
         <text class='txt_score'>0</text>
+        <view class='vw_userCtnr'>
+          <image class='img_user' src='{{users[1].icon}}'></image>
+          <text class='txt_user'>{{users[1].name}}</text>
+        </view>
+        <text class='txt_score'>0</text>
+        <view class='vw_userCtnr'>
+          <image class='img_user' src='{{users[2].icon}}'></image>
+          <text class='txt_user'>{{users[2].name}}</text>
+        </view>
+        <text class='txt_score'>0</text>
+        
       </view>
   </view>
 
@@ -50,12 +61,22 @@
   </view>
 
   <view class='vw_bot'>
-    <view class='vw_userInfo' wx:for="{{userInfo2}}" wx:key="name" wx:for-item="info">
-      <view class='vw_userCtnr'>
-        <image class='img_user' src='{{info.icon}}'></image>
-        <text class='txt_user'>{{info.name}}</text>
-      </view>
-      <text class='txt_score'>0</text>
+    <view class='vw_userInfo'>
+        <view class='vw_userCtnr'>
+          <image class='img_user' src='{{users[3].icon}}'></image>
+          <text class='txt_user'>{{users[3].name}}</text>
+        </view>
+        <text class='txt_score'>0</text>
+        <view class='vw_userCtnr'>
+          <image class='img_user' src='{{users[4].icon}}'></image>
+          <text class='txt_user'>{{users[4].name}}</text>
+        </view>
+        <text class='txt_score'>0</text>
+        <view class='vw_userCtnr'>
+          <image class='img_user' src='{{users[5].icon}}'></image>
+          <text class='txt_user'>{{users[5].name}}</text>
+        </view>
+        <text class='txt_score'>0</text>
     </view>
   </view>
   <view id='vw_1' class='vw_winCtnr' catchtap='hideWin(1)' wx:if='{{flag_show1}}'>

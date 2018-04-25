@@ -1,9 +1,33 @@
 // pages/room/room.js
 var util = require('../../utils/util.js');
 const gData = getApp().globalData;
+var roomId=0;
 var ownerId=0;
 var userNum=0;
 
+var Stomp = require('../../utils/stomp.js').Stomp;
+var socketOpen = false
+var socketMsgQueue = []
+function sendSocketMessage(msg) {
+  console.log('send msg:')
+  console.log(msg);
+  if (socketOpen) {
+    wx.sendSocketMessage({
+      data: msg
+    })
+  } else {
+    socketMsgQueue.push(msg)
+  }
+}
+
+var ws = {
+  send: sendSocketMessage,
+  onopen: null,
+  onmessage: null
+}
+Stomp.setInterval = function () { }
+Stomp.clearInterval = function () { }
+var client = Stomp.over(ws);
 
 Page({
   /**
@@ -110,13 +134,91 @@ Page({
   onLoad: function (options) {
     var that=this;
     var user = JSON.parse(options.user);
-    if(options.isOwner=true){
+    if (options.isOwner = true) {
       ownerId = user.id;
+      roomId = options.roomId;
+    } else {
+
     }
-    console.log(ownerId);
+
+    console.log("roomId:",roomId);
     that.addUser(user);
-    
+
     console.log(gData);
+
+
+    //连接websocket
+    wx.connectSocket({
+      url: 'ws://101.200.62.252:8080/webSocket',
+      success: function (res) {
+        console.log(res);
+      },
+      fail: function (res) {
+        console.log(res);
+      }
+    })
+
+    wx.onSocketOpen(function (res) {
+      console.log('WebSocket连接已打开！')
+      socketOpen = true
+      for (var i = 0; i < socketMsgQueue.length; i++) {
+        sendSocketMessage(socketMsgQueue[i])
+      }
+      socketMsgQueue = []
+      ws.onopen && ws.onopen()
+    })
+
+    wx.onSocketMessage(function (res) {
+      console.log('收到onmessage事件:',  )
+      ws.onmessage && ws.onmessage(res)
+    })
+
+    var destination = '/topic/roomId/' + roomId;
+    client.connect('user', 'pass', function (sessionId) {
+      console.log('sessionId', sessionId)
+      client.subscribe(destination, function (body, headers) {
+        
+        console.log('From MQ:', JSON.parse(body.body));
+      });
+      client.send(destination, { priority: 9 }, JSON.stringify(that.data.users));
+    })
+
+    wx.request({
+      url: 'http://101.200.62.252:8080/room/find',
+      data:{
+        roomId:roomId
+      },
+      header: { "content-Type": "application/x-www-form-urlencoded" },
+      method: 'POST',
+      dataType: 'json',
+      responseType: 'text',
+      success: function (res) {
+        var hostId=res.data.info.userId;
+        var players=res.data.info.players;
+        players.push(hostId);
+        console.log("players:",players);
+        //查询获取用户信息
+        wx.request({
+          url: 'http://101.200.62.252:8080/user/find',
+          data: {
+            userIds:players
+          },
+          header: { "content-Type": "application/x-www-form-urlencoded" },
+          method: 'POST',
+          dataType: 'json',
+          responseType: 'text',
+          success: function (res) {
+            console.log("userinfos:",res);
+          }
+        })
+      },
+      fail: function (res) { },
+      complete: function (res) { }
+    })
+
+    
+
+
     
   },
 

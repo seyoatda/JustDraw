@@ -81,6 +81,7 @@ App({
       
     })
   },
+
   globalData: {
     user: null,
     id:1,
