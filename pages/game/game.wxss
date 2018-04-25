@@ -262,7 +262,7 @@ page{
   line-height:40rpx;
   margin-right: 20rpx;
   box-shadow: 5rpx 5rpx 5rpx 5rpx gray;
-  opacity: 0.6;
+  opacity: 0.8;
   font-weight: bold;
 }
 .ipt_answer{
