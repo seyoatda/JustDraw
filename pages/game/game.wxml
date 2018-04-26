@@ -11,6 +11,9 @@
         <view class='vw_userCtnr'>
           <image class='img_user' src='{{users[1].icon}}'></image>
           <text class='txt_user'>{{users[1].name}}</text>
+          <view class='vw_popover'>
+            苹果桃
+          </view>
         </view>
         <text class='txt_score'>{{score[1]}}</text>
         <view class='vw_userCtnr'>

@@ -277,3 +277,29 @@ page{
   box-shadow: 2rpx 2rpx 2rpx 2rpx grey;
   opacity: 0.8;
 }
+
+.vw_popover{
+  z-index: 2000;
+  word-wrap:break-word;
+  width: 150rpx; 
+  background: #eee;
+  position: absolute;
+  top:135rpx;
+  -moz-border-radius:    10rpx; 
+  -webkit-border-radius: 10rpx; 
+  border-radius:         10rpx;
+  border:1rpx solid #d3d3d3;
+  display:none;
+}
+
+.vw_popover::before {
+   content:"";
+   position: absolute;
+   left:26rpx;
+   bottom: 100%;
+   width: 0;
+   height: 0;
+   border-left: 13rpx solid transparent;
+   border-right: 13rpx solid transparent;
+   border-bottom: 26rpx solid #eee;
+}
