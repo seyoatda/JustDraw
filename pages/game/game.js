@@ -53,17 +53,18 @@ Page({
       currentId:u[0].id
     });
 
-    that.whenStart();   
-
     //画布socket
     canvasSocket = wx.connectSocket({
       url: 'ws://120.78.200.1:8080/JustDrawServer/canvas/'+roomId
     })
     canvasSocket.onOpen(function (res) {
-      console.log('WebSocket连接已打开！')
+      console.log('canvasSocket连接已打开！')
+    })
+    canvasSocket.onClose(function (res) {
+      console.log('canvasSocket连接已关闭！')
     })
     canvasSocket.onError(function (res) {
-      console.log('WebSocket连接打开失败，请检查！')
+      console.log('canvasSocket连接出错，请检查！')
     })
     canvasSocket.onMessage(function (res) {
       console.log('收到服务器内容：' + res.data)
@@ -138,6 +139,16 @@ Page({
         }
       }
     })
+
+    that.whenStart();
+  },
+
+  /**
+   * 生命周期函数--监听页面卸载
+   */
+  onUnload: function () {
+    console.log("离开绘画页面！")
+    canvasSocket.close();//关闭canvasSocket
   },
 
   /**
@@ -177,7 +188,7 @@ Page({
       
       //只循环一轮
       if (that.data.currentIndex >= 6) {
-        canvasSocket.close();
+        //canvasSocket.close();
         wx.redirectTo({
           url: '../home/home',
           success: function (res) { },

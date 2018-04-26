@@ -177,38 +177,58 @@ Page({
       console.log('收到onmessage事件:', )
       ws.onmessage && ws.onmessage(res)
         // 接收广播并将加入房间的新用户初始化
-      console.log("body:", res.data.version);
-        if(res.type=="ROOM_MESSAGE"){
-          wx.request({
-            url: 'http://101.200.62.252:8080/user/find',
-            data: {
-              userIds: users
-            },
-            header: { "content-Type": "application/x-www-form-urlencoded" },
-            method: 'GET',
-            dataType: 'json',
-            responseType: 'text',
-            success: function (res) {
-              console.log("GET--user/find:", res);
-              var users = res.data;
-              for (var i = 0; i < users.length; i++) {
-                that.addUser(new user(users[i].userId, users[i].nickName, users[i].photo))
-              }
-            }
-          });
-        }
-      
-      
-  
-    })
+      console.log( res);
+    });
     
     var destination = '/topic/roomId/' + roomId;
     client.connect('user', 'pass', function (sessionId) {
       console.log('sessionId', sessionId)
       client.subscribe(destination, function (body, headers) {
-        
-        
+        console.log("subscribe:",body);
+        var data=JSON.parse(body.body);
+        if(data.type=="ROOM_MESSAGE"){
+
+        }else if(data.type=="USER"){
+            wx.request({
+              url: 'http://101.200.62.252:8080/room/find',
+              data:{
+                roomId:roomId
+              },
+              header: { "content-Type": "application/x-wwww-formencoded" },
+              method: 'GET',
+              dataType: 'json',
+              responseType: 'text',
+              success: function (res) {
+                var players = res.data.info.players;
+                var userIds = [];
+                userIds.push(res.data.info.userId);
+                for (var i = 0; i < players.length; i++) {
+                  userIds.push(players[i].userId);
+                }
+                wx.request({
+                  url: 'http://101.200.62.252:8080/user/find',
+                  data:
+                  userIds
+                  ,
+                  header: { "content-Type": "application/json" },
+                  method: 'POST',
+                  dataType: 'json',
+                  responseType: 'text',
+                  success: function (res) {
+                    console.log("GET--user/find:", res);
+                    var users = res.data;
+                    for (var i = 0; i < users.length; i++) {
+                      that.addUser(new util.user(users[i].userId, users[i].nickName, users[i].photo))
+                    }
+                  }
+                });
+              }
+            })
+          
+        }
       });
+
+      client.send(destination,{priority:9},JSON.stringify({type:"USER",content:gData.id}));
     })
 
     
@@ -281,7 +301,6 @@ Page({
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
-   
   },
 
   /**
