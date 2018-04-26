@@ -264,6 +264,7 @@ page{
   box-shadow: 5rpx 5rpx 5rpx 5rpx gray;
   opacity: 0.8;
   font-weight: bold;
+  text-align: center;
 }
 .ipt_answer{
   height: 90rpx;

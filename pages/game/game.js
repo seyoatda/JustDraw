@@ -29,6 +29,7 @@ Page({
     flag_show2:false,
     flag_show3: false,
     flag_show4: false,
+    account_show: false,
 
     itemWidth: [15, 20, 25, 30, 35, 40, 45 ],
     itemColor: ['#000000', '#ff0000', '#00ff00', '#0000ff', '#00ffff', '#ff00ff', '#ffff00','#C0C0C0','#ffffff'],

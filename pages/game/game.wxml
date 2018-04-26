@@ -103,6 +103,9 @@
       <text class='txt_getScore'>剩余时间：{{time2}}</text>
     </view>
   </view>
+  <view id="vw_account" class='vw_account' wx:if='{{account_show}}'>
+    
+  </view>
   <!--输入答案控件-->
     <button class="btn_answer" wx:if="{{flag_show3}}" bindtap='btnAnsClicked'>回答</button>
     <input class='ipt_answer' wx:if="{{flag_show4}}" bindinput="listenerTxtInput"></input>
