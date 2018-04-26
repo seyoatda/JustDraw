@@ -20,7 +20,6 @@ Page({
 
     intervals=setInterval(function () {
       n = 1-n;
-      console.log(n);
       this.animation.opacity(n).step()
       this.setData({
         animationData: this.animation.export()
