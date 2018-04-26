@@ -28,8 +28,7 @@ Page({
   },
   linktohome: function () {
     wx.redirectTo({
-      //url: '../home/home'
-      url: '../room/room?isOwner=false&roomId=006&user=' + JSON.stringify(app.globalData.user)
+      url: '../home/home'
     })
 
     clearInterval(intervals);
