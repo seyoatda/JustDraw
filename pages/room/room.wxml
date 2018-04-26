@@ -1,0 +1,35 @@
+<!--pages/room/room.wxml-->
+<view class='whole'>
+<view class='v_topCtnr' style='opacity:0.4'>
+  <view class='v_userInfo'>
+    <image class='img_user' src='{{users[0].icon}}'></image>
+    <text class='txt_user'>{{users[0].name}}</text>
+  </view>
+  <view class='v_userInfo'>
+    <image class='img_user' src='{{users[1].icon}}'></image>
+    <text class='txt_user'>{{users[1].name}}</text>
+  </view>
+  <view class='v_userInfo'>
+    <image class='img_user' src='{{users[2].icon}}'></image>
+    <text class='txt_user'>{{users[2].name}}</text>
+  </view>
+</view>
+<view class='v_midCtnr'>
+  <button class='btn_invite' bindtap='dismiss'>邀请好友</button>
+  <button class='btn_start' bindtap='startGame'>开始游戏</button>
+</view>
+<view class='v_botCtnr' style='opacity:0.4'>
+  <view class='v_userInfo'>
+    <image class='img_user' src='{{users[3].icon}}'></image>
+    <text class='txt_user'>{{users[3].name}}</text>
+  </view>
+  <view class='v_userInfo'>
+    <image class='img_user' src='{{users[4].icon}}'></image>
+    <text class='txt_user'>{{users[4].name}}</text>
+  </view>
+  <view class='v_userInfo'>
+    <image class='img_user' src='{{users[5].icon}}'></image>
+    <text class='txt_user'>{{users[5].name}}</text>
+  </view>
+</view>
+</view>

@@ -1,12 +1,21 @@
 {
-  "pages":[
+  "pages": [
+
     "pages/index/index",
-    "pages/logs/logs"
+    "pages/home/home",
+    "pages/room/room",
+    "pages/game/game",
+    "pages/logs/logs",
+    "pages/rank/rank",
+    "pages/mine/mine"
+  
+
+    
   ],
-  "window":{
-    "backgroundTextStyle":"light",
+  "window": {
+    "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "WeChat",
-    "navigationBarTextStyle":"black"
+    "navigationBarTitleText": "画哉",
+    "navigationBarTextStyle": "black"
   }
 }

@@ -1,0 +1,279 @@
+/* pages/game/game.wxss */
+page{
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff;
+  border-radius: 20rpx;
+}
+.vw_ctnr{
+  margin-left: 15rpx;
+  margin-right: 15rpx;
+  width: 720rpx;
+  height: 100%;
+}
+.vw_top{
+  height: 13%;
+  width: 100%;
+  background: tan;
+  display: flex;
+  flex-direction: row;
+  box-shadow: 2px 2px 2px 2px gray;
+  border-radius: 20rpx;
+}
+
+.vw_mid{
+  height: 72%;
+  width: 100%;
+  margin-top: 1%;
+}
+.vw_widget{
+  height: 50rpx;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.vw_countdown{
+  margin-left: 2%;
+}
+.vw_wordHint{
+  margin-right: 20%;
+}
+
+.vw_bot{
+  height: 13%;
+  width: 100%;
+  background: lightsteelblue;
+  display: flex;
+  flex-direction: row;
+  box-shadow: 2px 2px 2px 2px gray;
+  border-radius: 20rpx;
+}
+.canvas_style{
+  height:92%;
+  width: 100%;
+  border:2rpx solid #d3d3d3;
+  border-radius: 20rpx;
+  box-shadow: 2px 2px 2px 2px gainsboro;
+}
+
+.vw_toolkit{
+  width:100%;
+  color: #1aad19;
+  flex-direction: row;
+  height: 20%;
+  background-color: #ffffcc;
+  border-bottom:1rpx solid #d3d3d3;
+}
+
+.vw_toolkit_wrp{
+  width:100%;
+  height: 50%;
+  display:flex;
+  flex-direction: row;
+  align-items: center;
+  border-radius: 20rpx;
+}
+
+.width-item{
+  margin:10rpx;
+  background:#000;
+  border:1rpx solid #000;
+  border-radius:50rpx;
+}
+
+.color-item{
+  margin:10rpx;
+  border-radius:50rpx;
+  width:40rpx;
+  height:40rpx;
+  border:1rpx solid #000;
+}
+
+.eraser-item{
+  margin-left:150rpx;
+  margin-right: 10rpx;
+  width:60rpx;
+  height:60rpx;
+  
+
+}
+.clear-item{
+  margin:10rpx;
+  width:50rpx;
+  height:50rpx;
+ 
+}
+
+.active-item{
+  border:5rpx solid #ff9966;
+  box-shadow:0 0 10rpx 10rpx #aaaaaa;
+}
+
+
+.vw_userInfo{
+  height: 135rpx;
+  width: 250rpx;
+  margin-top:15rpx; 
+  display: flex;
+  flex-direction: row;
+}
+
+.vw_userCtnr{
+  height: 100%;
+  width: 100rpx;
+  display: flex;
+  flex-direction: column;
+  margin-left:20%;
+}
+
+.vw_userInfo .img_user{
+  height: 100rpx;
+  width: 100rpx;
+  background: black;
+  border-radius: 50rpx;
+}
+.txt_user{
+  height: 40rpx;
+  width: 100rpx;
+  overflow: hidden;
+  font-size: 10pt;
+  white-space: nowrap;
+  text-overflow:ellipsis;
+}
+.txt_score{
+  height: 50rpx;
+  line-height: 50rpx;
+  width: 100rpx;
+  text-align: center;
+  text-shadow: 1px 1px 1px 1px black;
+  font-size: 50rpx;
+  font-style: inherit;
+}
+.vw_winCtnr{
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top:0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+.vw_answer {
+  width: 60%;
+  height: 150rpx;
+  top: 40%;
+  left: 20%;
+  background-color: white;
+  border-radius: 20rpx;
+  position: absolute; 
+  display: flex;
+  flex-direction: column;
+  justify-content:center;
+}
+.txt_rightAnsIs{
+  width: 100%;
+  background-color: rgb(205, 205, 201);
+  border-top-left-radius: 20rpx;
+  border-top-right-radius: 20rpx;
+  text-align: center;
+}
+.txt_rightAns{
+  width: 100%;
+  text-align: center;
+  background-color: black;
+  color: white;
+  font-size: 80rpx;
+}
+.txt_getScore{
+  width: 100%;
+  background-color: rgb(205, 205, 201);
+  border-bottom-left-radius: 20rpx;
+  border-bottom-right-radius: 20rpx;
+  text-align: center;
+}
+.txt_header{
+  text-align: center;
+}
+.txt_timer{
+  text-align: center;
+  font-weight: bold;
+  margin-top: 10rpx;
+}
+.vw_choose{
+  width: 60%;
+  height: 500rpx;
+  top: 30%;
+  left: 20%;
+  background-color: white;
+  opacity: 0.8;
+  border-radius: 20rpx;
+  position: absolute; 
+  display: flex;
+  flex-direction: column;
+  justify-content:center;
+}
+.btn_choose0{
+  margin-top: 20rpx;
+  background: gainsboro;
+  width: 85%;
+  height: 100rpx;
+  text-align: center;
+  box-shadow: 6rpx 6rpx 6rpx 6rpx gray;
+  z-index: 999;
+}
+.btn_choose1{
+  margin-top: 20rpx;
+  background: wheat;
+  width: 85%;
+  height: 100rpx;
+  text-align: center;
+  box-shadow: 6rpx 6rpx 6rpx 6rpx gray;
+}
+.btn_choose2{
+  margin-top: 20rpx;
+  background: cadetblue;
+  width: 85%;
+  height: 100rpx;
+  text-align: center;
+  box-shadow: 6rpx 6rpx 6rpx 6rpx gray;
+}
+.btn_choose3{
+  margin-top: 20rpx;
+  background: wheat;
+  width: 85%;
+  height: 100rpx;
+  text-align: center;
+  box-shadow: 6rpx 6rpx 6rpx 6rpx gray;
+  margin-bottom: 30rpx;
+}
+
+.btn_answer{
+  height: 90rpx;
+  width: 90rpx;
+  border-radius: 80rpx;
+  padding-left:20rpx;
+  padding-right:20rpx;
+  background: gainsboro;
+  position: absolute;
+  right:10rpx;
+  top:70%;
+  font-size:30rpx;
+  line-height:40rpx;
+  margin-right: 20rpx;
+  box-shadow: 5rpx 5rpx 5rpx 5rpx gray;
+  opacity: 0.8;
+  font-weight: bold;
+}
+.ipt_answer{
+  height: 90rpx;
+  width: 200rpx;
+  border-radius: 10rpx;
+  border-bottom: 1rpx solid #000;
+  background: gainsboro;
+  position: absolute;
+  right:150rpx;
+  top:70%;
+  box-shadow: 2rpx 2rpx 2rpx 2rpx grey;
+  opacity: 0.8;
+}
