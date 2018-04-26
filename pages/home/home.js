@@ -109,7 +109,7 @@ Page({
 
   //加入房间访问后台
   enterRoom:function(e){
-    var no = e.detail.value;
+    var no = e.detail.value.roomNumber;
 
     console.log("nononononno:",e.detail)
     wx:wx.request({
@@ -126,7 +126,6 @@ Page({
         console.log("POST--room/enter:",res);
         if(res.data.status=="ERROR"){
           console.log("用户无法进入房间！错误代码：",res.data.info);
-
           return;
         }
         wx.navigateTo({
