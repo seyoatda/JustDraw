@@ -8,6 +8,8 @@ var countdown = 1;
 var moved = 0
 var canvasSocket
 var roomId
+var userIndex = 0
+var popoverTime = 5
 
 Page({
 
@@ -34,8 +36,16 @@ Page({
     itemColor: ['#000000', '#ff0000', '#00ff00', '#0000ff', '#00ffff', '#ff00ff', '#ffff00','#C0C0C0','#ffffff'],
     words:["a","b","c","d"],
     users:null,
+    popovers: [
+      { show: false, timer: 0 , msg: "" },
+      { show: false, timer: 0 , msg: "" },
+      { show: false, timer: 0 , msg: "" },
+      { show: false, timer: 0 , msg: "" },
+      { show: false, timer: 0 , msg: "" },
+      { show: false, timer: 0 , msg: "" }
+    ],
     test:[{hi:"yes"}],
-    txt:"",
+    inputVal:"",
     score:[0,0,0,0,0,0]
   },
 
@@ -45,8 +55,25 @@ Page({
    */
   onLoad: function (options) {
     var that=this;
+    
     var u = JSON.parse(options.users);
-    roomId = options.roomId
+    roomId = options.roomId;
+
+    //设置本机玩家的index
+    while(userIndex < 6){
+      if(app.globalData.id == u[userIndex].id){
+        break;
+      }
+      userIndex++;
+    }
+    if(userIndex == 6){
+      wx.showToast({
+        title: '本机玩家数据出错',
+        duration: 2000
+      })
+      return;
+    }
+    
     
     that.setData({
       users: u,
@@ -54,91 +81,7 @@ Page({
     });
 
     //画布socket
-    canvasSocket = wx.connectSocket({
-      url: 'ws://120.78.200.1:8080/JustDrawServer/canvas/'+roomId
-    })
-    canvasSocket.onOpen(function (res) {
-      console.log('canvasSocket连接已打开！')
-    })
-    canvasSocket.onClose(function (res) {
-      console.log('canvasSocket连接已关闭！')
-    })
-    canvasSocket.onError(function (res) {
-      console.log('canvasSocket连接出错，请检查！')
-    })
-    canvasSocket.onMessage(function (res) {
-      console.log('收到服务器内容：' + res.data)
-      if (res.data.length < 8 || res.data.substring(0, 7) != "canvas:"){
-        return false
-      }
-      var msg = res.data.substring(7)
-      var nums = msg.split(",")
-      if (nums.length == 4) {
-        if(nums[0]==nums[2]&&nums[1]==nums[3]){
-          x = nums[0]
-          y = nums[1]
-          ctx.moveTo(x,y) //圆心
-          ctx.arc(x, y, radius, 0, 2 * Math.PI)//圆点
-          ctx.fill()
-        }
-        else{
-          ctx.moveTo(nums[0], nums[1]) // 设置路径起点坐标
-          ctx.lineTo(nums[2], nums[3]) // 绘制一条直线
-          ctx.stroke()
-        }
-        ctx.draw(true)
-      }
-      else if(nums.length == 2){
-        //nums[0]=1,2,3；分别进行线宽、颜色、清空操作
-        if(nums[0] == 1){
-          var width = that.data.itemWidth[nums[1]]
-          ctx.setLineWidth(width / 2.5)
-          radius = width / 4.5
-          that.setData({
-            activeWidthIndex: nums[1]
-          })
-        }
-        else if(nums[0] == 2){
-          var color = that.data.itemColor[nums[1]]
-          ctx.setFillStyle(color)
-          ctx.setStrokeStyle(color)
-          that.setData({
-            activeColorIndex: nums[1]
-          })
-        }
-        else if(nums[0] == 3){
-          /*wx.showModal({
-            title: '提示',
-            content: '确认清除画板所有内容',
-            success: function (res) {
-              if (res.confirm) {
-                console.log('用户点击确定');
-                ctx.draw();
-              }
-            }
-          })*/
-          ctx.draw();
-        }
-        //4，选词信息
-        else if(nums[0] == 4){
-          that.setData({
-            "currentWord": that.data.words[nums[1]]
-          });
-        }
-        //5,回答正确
-        else if(nums[0] == 5){
-          var i = parseInt(nums[1])
-          that.data.score[i] += 2
-          that.setData({
-            score: that.data.score
-          })
-          that.hideWin(1);
-          that.count(30, 1, function () {
-            that.whenFinish();
-          });
-        }
-      }
-    })
+    that.connectCanvasSocket();
 
     that.whenStart();
   },
@@ -268,23 +211,23 @@ Page({
 
   btnAnsClicked:function(){
     if(this.data.flag_show4){
-      if (this.data.currentWord == this.data.txt) {
-        var i = 0;
-        while (i < 6) {
-          if (this.data.users[i].id == app.globalData.id) {
-            //this.data.score[i] = this.data.score[i] + 2
-            this.data.score[i] += 2
-            this.setData({
-              score: this.data.score
-            })
-            console.log("score:" + this.data.score[i])
-            break;
-          }
-          i++;
-        }
-        var msg = "canvas:5," + i
+      //回答正确
+      if (this.data.currentWord == this.data.inputVal) {
+        this.data.score[userIndex] += 2
+        this.setData({
+          score: this.data.score
+        })
+        var msg = "canvas:5," + userIndex
         canvasSocket.send({ data: msg })
       }
+      //回答错误
+      else if (this.data.inputVal != ""){
+        var msg = "canvas:6," + userIndex + ":" + this.data.inputVal
+        canvasSocket.send({ data: msg })
+        that.setPopoverMsg(userIndex, this.data.inputVal)
+        that.setPopoverTimer(userIndex, popoverTime)
+      }
+
       this.setData({
         "flag_show4": false
       });
@@ -443,11 +386,154 @@ Page({
     canvasSocket.send({ data: msg })
   },
 
-  listenerTxtInput: function (e) {
+  listenerInputVal: function (e) {
     this.setData({
-      txt:e.detail.value
+      inputVal:e.detail.value
     })
+  },
 
+
+  /*
+  *以下是聊天弹出框的一些函数接口
+  *popovers[]的index对应用户index
+  */
+  //设置弹出框内容，参数：i是popovers[]的index索引，msg是聊天内容
+  setPopoverMsg: function (i, msg) {
+    this.setData({
+      ["popovers[" + i + "].msg"]: msg
+    })
+  },
+
+  //设置弹出框Timer时间和显示弹出框，并开始倒计时，参数：i是popovers[]的index索引，time是倒计时时间
+  setPopoverTimer:function(i ,time){
+    this.setData({
+      ["popovers[" + i + "].timer"]: time
+    })
+    if(this.data.popovers[i].show == false){
+      this.setData({
+        ["popovers[" + i + "].show"]: true
+      })
+      this.startPopoverTimer(i);
+    }
+  },
+
+  //popover计时器开始，参数i表示popovers[]的index
+  startPopoverTimer:function(i){
+    var that = this;
+    that.setData({
+      ["popovers[" + i + "].timer"]: that.data.popovers[i].timer - 1
+    })
+    if(that.data.popovers[i].timer <= 0){
+      that.setData({
+        ["popovers[" + i + "].show"]: false
+      })
+    }
+    else{
+      setTimeout(function () {
+        that.startPopoverTimer(i);
+      }
+      ,1000)
+    }
+  },
+
+
+  /*
+  *以下是game数据同步的socket设置
+  *
+  */
+  connectCanvasSocket:function(){
+    canvasSocket = wx.connectSocket({
+      url: 'ws://120.78.200.1:8080/JustDrawServer/canvas/' + roomId
+    })
+    canvasSocket.onOpen(function (res) {
+      console.log('canvasSocket连接已打开！')
+    })
+    canvasSocket.onClose(function (res) {
+      console.log('canvasSocket连接已关闭！')
+    })
+    canvasSocket.onError(function (res) {
+      console.log('canvasSocket连接出错，请检查！')
+    })
+    canvasSocket.onMessage(function (res) {
+      console.log('收到服务器内容：' + res.data)
+      if (res.data.length < 8 || res.data.substring(0, 7) != "canvas:") {
+        return false
+      }
+      var msg = res.data.substring(7)
+      var nums = msg.split(",")
+      if (nums.length == 4) {
+        if (nums[0] == nums[2] && nums[1] == nums[3]) {
+          x = nums[0]
+          y = nums[1]
+          ctx.moveTo(x, y) //圆心
+          ctx.arc(x, y, radius, 0, 2 * Math.PI)//圆点
+          ctx.fill()
+        }
+        else {
+          ctx.moveTo(nums[0], nums[1]) // 设置路径起点坐标
+          ctx.lineTo(nums[2], nums[3]) // 绘制一条直线
+          ctx.stroke()
+        }
+        ctx.draw(true)
+      }
+      else if (nums.length == 2) {
+        //nums[0]=1,2,3；分别进行线宽、颜色、清空操作
+        if (nums[0] == 1) {
+          var width = that.data.itemWidth[nums[1]]
+          ctx.setLineWidth(width / 2.5)
+          radius = width / 4.5
+          that.setData({
+            activeWidthIndex: nums[1]
+          })
+        }
+        else if (nums[0] == 2) {
+          var color = that.data.itemColor[nums[1]]
+          ctx.setFillStyle(color)
+          ctx.setStrokeStyle(color)
+          that.setData({
+            activeColorIndex: nums[1]
+          })
+        }
+        else if (nums[0] == 3) {
+          /*wx.showModal({
+            title: '提示',
+            content: '确认清除画板所有内容',
+            success: function (res) {
+              if (res.confirm) {
+                console.log('用户点击确定');
+                ctx.draw();
+              }
+            }
+          })*/
+          ctx.draw();
+        }
+        //4，选词信息
+        else if (nums[0] == 4) {
+          that.setData({
+            "currentWord": that.data.words[nums[1]]
+          });
+          that.hideWin(1);
+          that.count(30, 1, function () {
+            that.whenFinish();
+          });
+        }
+        //5,回答正确
+        else if (nums[0] == 5) {
+          var i = parseInt(nums[1])
+          that.data.score[i] += 2
+          that.setData({
+            score: that.data.score
+          })
+        }
+        //6,回答错误
+        else if (nums[0] == 6) {
+          var index_msg = nums[1].split(":")
+          var i = parseInt(index_msg[0])
+          that.setPopoverMsg(i, index_msg[1])
+          that.setPopoverTimer(i, popoverTime)
+        }
+      }
+    })
   }
 
 })
