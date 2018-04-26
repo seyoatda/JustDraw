@@ -34,7 +34,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-    
+    flag_show1:true,
+    flag_show2:false,
     users:[
       new util.user(0, "空位", ""),
       new util.user(0, "空位", ""),
@@ -46,7 +47,8 @@ Page({
   },
 
   startGame:function(){
-    wx.redirectTo({
+    client.send()
+    wx.navigateTo({
       url: '../game/game?roomId='+roomId+'&users='+JSON.stringify(this.data.users)
     })
   },
@@ -65,43 +67,35 @@ Page({
       }
     }
     userNum++;
-    console.log(this.data.users);
+    if(userNum>=2){
+      this.setData({
+        flag_show2:true
+      })
+    }
+    console.log("当前房间内用户：",this.data.users);
   },
 
   delUser:function(id){
     var that=this;
     //删除玩家
-    wx:wx.request({
-      url: '',
-      data: '',
-      header: {},
-      method: 'GET',
-      dataType: 'json',
-      responseType: 'text',
-      success: function(res) {
-
-        //成功后将玩家信息从前端清除
-        var u = that.data.users;
-        for (var i = 0; i < 6; i++) {
-          if (u[i].id == id) {
-            that.setData({
-              ["users[" + i + "]"]: new util.user(0, "空位", "")
-            });
-          }
+    //成功后将玩家信息从前端清除
+    var u = that.data.users;
+    for (var i = 0; i < 6; i++) {
+      if (u[i].id == id) {
+        that.setData({
+          ["users[" + i + "]"]: new util.user(0, "空位", "")
+        });
+      }
+    }
+    userNum--;
+    if (userNum == 1) {  
+      var u = this.data.users;
+      for (var i = 0; i < 6; i++) {
+        if (u[i].id != 0) {
+          ownerId = u[i].id;
         }
-        userNum--;
-        if (userNum == 1) {
-          var u = this.data.users;
-          for (var i = 0; i < 6; i++) {
-            if (u[i].id != 0) {
-              ownerId = u[i].id;
-            }
-          }
-        }
-      },
-      fail: function(res) {},
-      complete: function(res) {},
-    })
+      }
+    }
 
     //如果玩家数量为0，删除房间
     if(userNum == 0){
@@ -131,27 +125,6 @@ Page({
   //进入房间后初始化数据，包括房间内的各种信息
   initData:function(){
     var that=this;
-    // //进入房间时，先获取房间内所有用户的信息，进行初始化
-    // wx.request({
-    //   url: 'http://101.200.62.252:8080/room/find',
-    //   data: {
-    //     roomId: roomId
-    //   },
-    //   header: { "content-Type": "application/x-www-form-urlencoded" },
-    //   method: 'POST',
-    //   dataType: 'json',
-    //   responseType: 'text',
-    //   success: function (res) {
-    //     console.log("hPOST--room/find:", res);
-
-    //     var players = res.data.info.players;
-    //     players.push(res.data.info.userId);
-    //     console.log("players:", players);
-        
-    //   },
-    //   fail: function (res) { },
-    //   complete: function (res) { }
-    // })
     //连接websocket
     wx.connectSocket({
       url: 'ws://101.200.62.252:8080/webSocket',
@@ -227,30 +200,12 @@ Page({
           
         }
       });
-
       client.send(destination,{priority:9},JSON.stringify({type:"USER",content:gData.id}));
     })
 
     
   },
-  dismiss:function(){
-    wx: wx.request({
-      url: 'http://101.200.62.252:8080/room/dismiss',
-      data: {
-        roomId: roomId,
-        userId: gData.id
-      },
-      header: { "content-Type": "application/x-www-form-urlencoded" },
-      method: 'POST',
-      dataType: 'json',
-      responseType: 'text',
-      success: function (res) {
-        console.log("POST--room/dismiss", res);
-      },
-      fail: function (res) { },
-      complete: function (res) { },
-    })
-  },
+
   /**
    * 生命周期函数--监听页面加载
    */
@@ -266,8 +221,12 @@ Page({
       that.initData();
       that.addUser(user);
     } else {
-      that.initData();
+      //如果不是房主，隐藏开始游戏按钮
+      that.setData({
+        flag_show1:false
+      })
     }
+    that.initData();
     
 
     console.log("roomId:",roomId);
@@ -301,12 +260,14 @@ Page({
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
+
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
+    var that = this;
       wx:wx.closeSocket({
         code: 0,
         reason: 'leave room',
@@ -317,24 +278,43 @@ Page({
         complete: function(res) {},
       })
       console.log("unload");
-      console.log("roomId:::::::::", roomId)
-      var that = this;
-      wx: wx.request({
-        url: 'http://101.200.62.252:8080/room/dismiss',
-        data: {
-          roomId: roomId,
-          userId: gData.id
-        },
-        header: { "content-Type": "application/x-www-form-urlencoded" },
-        method: 'POST',
-        dataType: 'json',
-        responseType: 'text',
-        success: function (res) {
-          console.log("POST--room/dismiss", res);
-        },
-        fail: function (res) { },
-        complete: function (res) { },
+      console.log("roomId:::::::::", roomId);
+      //如果用户是房主，则退出时，解散房间，否则调用退出接口
+      if(ownerId!=0){
+        wx: wx.request({
+          url: 'http://101.200.62.252:8080/room/dismiss',
+          data: {
+            roomId: roomId,
+            userId: gData.id
+          },
+          header: { "content-Type": "application/x-www-form-urlencoded" },
+          method: 'POST',
+          dataType: 'json',
+          responseType: 'text',
+          success: function (res) {
+            console.log("POST--room/dismiss", res);
+          },
+          fail: function (res) { },
+          complete: function (res) { },
+        })
+      }else{
+        wx: wx.request({
+          url: 'http://101.200.62.252:8080/room/quit',
+          data: {
+            roomId: roomId,
+            userId: gData.id
+          },
+          header: { "content-Type": "application/x-www-form-urlencoded" },
+          method: 'POST',
+          dataType: 'json',
+          responseType: 'text',
+          success: function (res) {
+            console.log("POST--room/dismiss", res);
+          }
       })
+    }
+
+      
   },
 
   /**

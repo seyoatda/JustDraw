@@ -16,7 +16,7 @@
 </view>
 <view class='v_midCtnr'>
   <button class='btn_invite' bindtap='dismiss'>邀请好友</button>
-  <button class='btn_start' bindtap='startGame'>开始游戏</button>
+  <button class='btn_start' bindtap='startGame' wx:if="{{flag_show1}}" disabled='{{flag_show2}}'>开始游戏</button>
 </view>
 <view class='v_botCtnr' style='opacity:0.4'>
   <view class='v_userInfo'>

@@ -83,9 +83,9 @@ Page({
       dataType: 'json',
       responseType: 'text',
       success: function(res) {
-        console.log("create room success")
-        console.log(res);
+        console.log("POST--room/create",res);
         if(res.data.status=="ERROR"){
+          console.log("用户无法创建房间,错误代码：",res.data.info);
           return;
         }
         //成功之后进行跳转页面，注明房主身份
@@ -102,14 +102,8 @@ Page({
         wx.navigateTo({
           url: '../room/room?isOwner=true&roomId='+res.data.info+'&user='+JSON.stringify(gData.user),
         })
-      },
-      fail: function(res) {
-        console.log("fail");
-        console.log(res);
-      },
-      complete: function(res) {
-        console.log("complete");
-      },
+      }
+
     })
   },
 
