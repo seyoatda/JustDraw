@@ -127,48 +127,31 @@ Page({
     }
     return -1;
   },
-
+  
   //进入房间后初始化数据，包括房间内的各种信息
   initData:function(){
     var that=this;
-    //进入房间时，先获取房间内所有用户的信息，进行初始化
-    wx.request({
-      url: 'http://101.200.62.252:8080/room/find',
-      data: {
-        roomId: roomId
-      },
-      header: { "content-Type": "application/x-www-form-urlencoded" },
-      method: 'POST',
-      dataType: 'json',
-      responseType: 'text',
-      success: function (res) {
-        console.log("hPOST--room/find:", res);
+    // //进入房间时，先获取房间内所有用户的信息，进行初始化
+    // wx.request({
+    //   url: 'http://101.200.62.252:8080/room/find',
+    //   data: {
+    //     roomId: roomId
+    //   },
+    //   header: { "content-Type": "application/x-www-form-urlencoded" },
+    //   method: 'POST',
+    //   dataType: 'json',
+    //   responseType: 'text',
+    //   success: function (res) {
+    //     console.log("hPOST--room/find:", res);
 
-        var players = res.data.info.players;
-        players.push(res.data.info.userId);
-        console.log("players:", players);
-        //查询获取用户信息
-        wx.request({
-          url: 'http://101.200.62.252:8080/user/find',
-          data: {
-            userIds: players
-          },
-          header: { "content-Type": "application/x-www-form-urlencoded" },
-          method: 'POST',
-          dataType: 'json',
-          responseType: 'text',
-          success: function (res) {
-            console.log("POST--user/find:", res);
-            var players = res.data;
-            for (var i = 0; i < players.length; i++) {
-              that.addUser(new util.user(players[i].userId, players[i].nickName, players[i].photo));
-            }
-          }
-        })
-      },
-      fail: function (res) { },
-      complete: function (res) { }
-    })
+    //     var players = res.data.info.players;
+    //     players.push(res.data.info.userId);
+    //     console.log("players:", players);
+        
+    //   },
+    //   fail: function (res) { },
+    //   complete: function (res) { }
+    // })
     //连接websocket
     wx.connectSocket({
       url: 'ws://101.200.62.252:8080/webSocket',
@@ -193,34 +176,126 @@ Page({
     wx.onSocketMessage(function (res) {
       console.log('收到onmessage事件:', )
       ws.onmessage && ws.onmessage(res)
+        // 接收广播并将加入房间的新用户初始化
+
+      console.log("body:", res);
+      
+      
+      
     })
-    //将自己的信息广播给其他已经进入房间的用户
+    
     var destination = '/topic/roomId/' + roomId;
     client.connect('user', 'pass', function (sessionId) {
       console.log('sessionId', sessionId)
       client.subscribe(destination, function (body, headers) {
-        //接收广播并将加入房间的新用户初始化
-        that.addUser(JSON.parse(body.body));
-        console.log('From MQ:', JSON.parse(body.body));
+        console.log("subscribe:",body);
+        var data=JSON.parse(body.body);
+        if(data.type=="ROOM_MESSAGE"){
+          // var players=data.content.players;
+
+          // var userIds=[];
+          // userIds.push(data.content.userId);
+          // for(var i=0;i<players.length;i++){
+          //   userIds.push(players[i].userId);
+          // }
+          // wx.request({
+          //   url: 'http://101.200.62.252:8080/user/find',
+          //   data: 
+          //     userIds
+          //   ,
+          //   header: { "content-Type": "application/json" },
+          //   method: 'POST',
+          //   dataType: 'json',
+          //   responseType: 'text',
+          //   success: function (res) {
+          //     console.log("GET--user/find:", res);
+          //     var users = res.data;
+          //     for (var i = 0; i < users.length; i++) {
+          //       that.addUser(new util.user(users[i].userId, users[i].nickName, users[i].photo))
+          //     }
+          //   }
+          // });
+        }else if(data.type=="USER"){
+            wx.request({
+              url: 'http://101.200.62.252:8080/room/find',
+              data:{
+                roomId:roomId
+              },
+              header: { "content-Type": "application/x-wwww-formencoded" },
+              method: 'GET',
+              dataType: 'json',
+              responseType: 'text',
+              success: function (res) {
+                var players = res.data.info.players;
+                var userIds = [];
+                userIds.push(res.data.info.userId);
+                for (var i = 0; i < players.length; i++) {
+                  userIds.push(players[i].userId);
+                }
+                wx.request({
+                  url: 'http://101.200.62.252:8080/user/find',
+                  data:
+                  userIds
+                  ,
+                  header: { "content-Type": "application/json" },
+                  method: 'POST',
+                  dataType: 'json',
+                  responseType: 'text',
+                  success: function (res) {
+                    console.log("GET--user/find:", res);
+                    var users = res.data;
+                    for (var i = 0; i < users.length; i++) {
+                      that.addUser(new util.user(users[i].userId, users[i].nickName, users[i].photo))
+                    }
+                  }
+                });
+              }
+            })
+          
+        }
       });
-      client.send(destination, { priority: 9 }, JSON.stringify(gData.user));
+
+      client.send(destination,{priority:9},JSON.stringify({type:"USER",content:gData.id}));
     })
 
     
   },
-
+  dismiss:function(){
+    wx: wx.request({
+      url: 'http://101.200.62.252:8080/room/dismiss',
+      data: {
+        roomId: roomId,
+        userId: gData.id
+      },
+      header: { "content-Type": "application/x-www-form-urlencoded" },
+      method: 'POST',
+      dataType: 'json',
+      responseType: 'text',
+      success: function (res) {
+        console.log("POST--room/dismiss", res);
+      },
+      fail: function (res) { },
+      complete: function (res) { },
+    })
+  },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
     var that=this;
     var user = JSON.parse(options.user);
+    roomId = options.roomId;
+    //将自己的信息广播给其他已经进入房间的用户
+
     if (options.isOwner = true) {
       ownerId = user.id;
-      roomId = options.roomId;
+      
+      that.initData();
+      that.addUser(user);
     } else {
+      that.initData();
     }
-    that.initData();
+    
 
     console.log("roomId:",roomId);
 
@@ -253,14 +328,32 @@ Page({
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
-  
+
+
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-  
+    console.log("roomId:::::::::", roomId)
+    var that = this;
+    wx: wx.request({
+      url: 'http://101.200.62.252:8080/room/dismiss',
+      data: {
+        roomId: roomId,
+        userId: gData.id
+      },
+      header: { "content-Type": "application/x-www-form-urlencoded" },
+      method: 'POST',
+      dataType: 'json',
+      responseType: 'text',
+      success: function (res) {
+        console.log("POST--room/dismiss", res);
+      },
+      fail: function (res) { },
+      complete: function (res) { },
+    })
   },
 
   /**

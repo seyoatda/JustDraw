@@ -54,17 +54,18 @@ Page({
       currentId:u[0].id
     });
 
-    that.whenStart();   
-
     //画布socket
     canvasSocket = wx.connectSocket({
       url: 'ws://120.78.200.1:8080/JustDrawServer/canvas/'+roomId
     })
     canvasSocket.onOpen(function (res) {
-      console.log('WebSocket连接已打开！')
+      console.log('canvasSocket连接已打开！')
+    })
+    canvasSocket.onClose(function (res) {
+      console.log('canvasSocket连接已关闭！')
     })
     canvasSocket.onError(function (res) {
-      console.log('WebSocket连接打开失败，请检查！')
+      console.log('canvasSocket连接出错，请检查！')
     })
     canvasSocket.onMessage(function (res) {
       console.log('收到服务器内容：' + res.data)
@@ -132,9 +133,23 @@ Page({
           that.setData({
             score: that.data.score
           })
+          that.hideWin(1);
+          that.count(30, 1, function () {
+            that.whenFinish();
+          });
         }
       }
     })
+
+    that.whenStart();
+  },
+
+  /**
+   * 生命周期函数--监听页面卸载
+   */
+  onUnload: function () {
+    console.log("离开绘画页面！")
+    canvasSocket.close();//关闭canvasSocket
   },
 
   /**
@@ -174,7 +189,7 @@ Page({
       
       //只循环一轮
       if (that.data.currentIndex >= 6) {
-        canvasSocket.close();
+        //canvasSocket.close();
         wx.redirectTo({
           url: '../home/home',
           success: function (res) { },
@@ -228,7 +243,7 @@ Page({
         that.whenFinish();
       });
     }, function () {
-      console.log(that.data.flag_show1);
+      console.log("flag_show1:"+that.data.flag_show1);
       if (that.data.flag_show1 == false) {
         return true;
       }
@@ -239,14 +254,17 @@ Page({
    * 点击选词后修改当前的词，并且关闭选词窗口
    */
   btnCWClicked: function (e) {
+    var that = this;
     var id = e.target.id.substring(4, 5);
     this.setData({
       "currentWord": this.data.words[id]
     });
     var msg = "canvas:4,"+id
     canvasSocket.send({ data: msg })
-    console.log(this.data.currentWord);
     this.hideWin(1);
+    this.count(30, 1, function () {
+      that.whenFinish();
+    });
   },
 
   btnAnsClicked:function(){
@@ -284,7 +302,7 @@ Page({
   count: function (time, id, func, func2 = function () { return false; }) {
     var that=this;
     var countdown = time;
-    that.minus1s(that, func, countdown, id, func2 = function () { return false; });
+    that.minus1s(that, func, countdown, id, func2);
   },
 
   /**
@@ -305,9 +323,9 @@ Page({
 
     }
     setTimeout(function () {
-      that.minus1s(that, func, countdown, id);
+      that.minus1s(that, func, countdown, id ,func2);
     }
-      , 1000)
+    , 1000)
   },
 
   showWin: function (id) {
