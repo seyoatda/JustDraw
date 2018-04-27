@@ -117,11 +117,11 @@ Page({
     that.setData({
       currentIndex: that.data.currentIndex + 1
     })
-    while (that.data.users[that.data.currentIndex % 6].id == 0) {
+    /*while (that.data.users[that.data.currentIndex % 6].id == 0) {
       that.setData({
         currentIndex: that.data.currentIndex + 1
       })
-    }
+    }*/
     
 
     //弹出正确答案界面，3s后关闭
@@ -224,8 +224,8 @@ Page({
       else if (this.data.inputVal != ""){
         var msg = "canvas:6," + userIndex + ":" + this.data.inputVal
         canvasSocket.send({ data: msg })
-        that.setPopoverMsg(userIndex, this.data.inputVal)
-        that.setPopoverTimer(userIndex, popoverTime)
+        this.setPopoverMsg(userIndex, this.data.inputVal)
+        this.setPopoverTimer(userIndex, popoverTime)
       }
 
       this.setData({
@@ -442,6 +442,7 @@ Page({
   *
   */
   connectCanvasSocket:function(){
+    var that = this;
     canvasSocket = wx.connectSocket({
       url: 'ws://120.78.200.1:8080/JustDrawServer/canvas/' + roomId
     })
