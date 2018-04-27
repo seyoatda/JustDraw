@@ -35,7 +35,8 @@ Page({
    */
   data: {
     flag_show1:true,
-    flag_show2:false,
+    flag_disabled:false,
+    roomNo:0,
     users:[
       new util.user(0, "空位", ""),
       new util.user(0, "空位", ""),
@@ -218,6 +219,9 @@ Page({
     var that=this;
     var user = JSON.parse(options.user);
     roomId = options.roomId;
+    that.setData({
+      roomNo:roomId
+    })
     //将自己的信息广播给其他已经进入房间的用户
 
     if (options.isOwner = true) {
@@ -267,7 +271,7 @@ Page({
   onHide: function () {
     wx: wx.closeSocket({
       code: 0,
-      reason: 'leave room',
+      reason: 'hide room',
       success: function (res) {
         console.log("closeSocket:", res);
       },
