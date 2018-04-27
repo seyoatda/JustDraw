@@ -47,11 +47,13 @@ Page({
   },
 
   startGame:function(){
-    client.send()
+    var dest = '/topic/roomId/' + roomId;
+    client.send(dest,{priority:9},JSON.stringify({type:"START"}))
     wx.navigateTo({
       url: '../game/game?roomId='+roomId+'&users='+JSON.stringify(this.data.users)
     })
   },
+
 
   addUser:function(user){
     if(this.findId(user.id)!=-1){
@@ -159,8 +161,12 @@ Page({
       client.subscribe(destination, function (body, headers) {
         console.log("subscribe:",body);
         var data=JSON.parse(body.body);
-        if(data.type=="ROOM_MESSAGE"){
-
+        if(data.type=="START"){
+          if(gData.id!=ownerId){
+            wx.navigateTo({
+              url: '../game/game?roomId=' + roomId + '&users=' + JSON.stringify(this.data.users)
+            });
+          }
         }else if(data.type=="USER"){
             wx.request({
               url: 'http://101.200.62.252:8080/room/find',
@@ -197,7 +203,6 @@ Page({
                 });
               }
             })
-          
         }
       });
       client.send(destination,{priority:9},JSON.stringify({type:"USER",content:gData.id}));
@@ -260,7 +265,15 @@ Page({
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
-
+    wx: wx.closeSocket({
+      code: 0,
+      reason: 'leave room',
+      success: function (res) {
+        console.log("closeSocket:", res);
+      },
+      fail: function (res) { },
+      complete: function (res) { },
+    })
   },
 
   /**
@@ -309,7 +322,7 @@ Page({
           dataType: 'json',
           responseType: 'text',
           success: function (res) {
-            console.log("POST--room/dismiss", res);
+            console.log("POST--room/quit", res);
           }
       })
     }

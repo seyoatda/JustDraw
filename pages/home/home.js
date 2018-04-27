@@ -84,7 +84,7 @@ Page({
       responseType: 'text',
       success: function(res) {
         console.log("POST--room/create",res);
-        if(res.data.status=="ERROR"){
+        if ("ERROR"==res.data.status){
           console.log("用户无法创建房间,错误代码：",res.data.info);
           return;
         }
@@ -124,7 +124,7 @@ Page({
       responseType: 'text',
       success: function(res) {
         console.log("POST--room/enter:",res);
-        if(res.data.status=="ERROR"){
+        if ("ERROR"==res.data.status){
           console.log("用户无法进入房间！错误代码：",res.data.info);
           return;
         }
