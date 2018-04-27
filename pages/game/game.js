@@ -173,6 +173,8 @@ Page({
     //判断当前用户为绘画用户或回答用户
     if (that.data.currentId != app.globalData.id) {
       that.showWin(3);
+    }else{
+      that.setWords();
     }
 
     //如果倒计时结束仍未选择词，则默认选择第一个
@@ -533,6 +535,28 @@ Page({
           that.setPopoverMsg(i, index_msg[1])
           that.setPopoverTimer(i, popoverTime)
         }
+      }
+    })
+  },
+  setWords: function () {
+    var that = this;
+    wx: wx.request({
+      url: 'http://120.78.200.1:8080/JustDrawServer/words',
+      header: { "content-Type": "application/json" },
+      method: 'GET',
+      responseType: 'text',
+      success: function (res) {
+        console.log("getWords success:" + res.data)
+        that.setData({
+          words: res.data.split(",")
+        })
+      },
+      fail: function (res) {
+        console.log("fail");
+        console.log(res);
+      },
+      complete: function (res) {
+        console.log("complete");
       }
     })
   }
