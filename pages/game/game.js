@@ -203,7 +203,7 @@ Page({
     this.setData({
       "currentWord": this.data.words[id]
     });
-    var msg = "canvas:4,"+id
+    var msg = "canvas:4," + this.data.words[id]
     canvasSocket.send({ data: msg })
     this.hideWin(1);
     this.count(30, 1, function () {
@@ -513,7 +513,7 @@ Page({
         //4，选词信息
         else if (nums[0] == 4) {
           that.setData({
-            "currentWord": that.data.words[nums[1]]
+            "currentWord": nums[1]
           });
           that.hideWin(1);
           that.count(30, 1, function () {
