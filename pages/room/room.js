@@ -223,7 +223,7 @@ Page({
     if (options.isOwner = true) {
       ownerId = user.id;
       
-      that.initData();
+      //that.initData();
       that.addUser(user);
     } else {
       //如果不是房主，隐藏开始游戏按钮

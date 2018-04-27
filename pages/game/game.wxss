@@ -213,6 +213,7 @@ page{
   flex-direction: column;
   justify-content:center;
 }
+
 .btn_choose0{
   margin-top: 20rpx;
   background: gainsboro;

@@ -117,11 +117,11 @@ Page({
     that.setData({
       currentIndex: that.data.currentIndex + 1
     })
-    while (that.data.users[that.data.currentIndex % 6].id == 0) {
+    /*while (that.data.users[that.data.currentIndex % 6].id == 0) {
       that.setData({
         currentIndex: that.data.currentIndex + 1
       })
-    }
+    }*/
     
 
     //弹出正确答案界面，3s后关闭
@@ -173,6 +173,8 @@ Page({
     //判断当前用户为绘画用户或回答用户
     if (that.data.currentId != app.globalData.id) {
       that.showWin(3);
+    }else{
+      that.setWords();
     }
 
     //如果倒计时结束仍未选择词，则默认选择第一个
@@ -201,7 +203,7 @@ Page({
     this.setData({
       "currentWord": this.data.words[id]
     });
-    var msg = "canvas:4,"+id
+    var msg = "canvas:4," + this.data.words[id]
     canvasSocket.send({ data: msg })
     this.hideWin(1);
     this.count(30, 1, function () {
@@ -224,8 +226,8 @@ Page({
       else if (this.data.inputVal != ""){
         var msg = "canvas:6," + userIndex + ":" + this.data.inputVal
         canvasSocket.send({ data: msg })
-        that.setPopoverMsg(userIndex, this.data.inputVal)
-        that.setPopoverTimer(userIndex, popoverTime)
+        this.setPopoverMsg(userIndex, this.data.inputVal)
+        this.setPopoverTimer(userIndex, popoverTime)
       }
 
       this.setData({
@@ -442,6 +444,7 @@ Page({
   *
   */
   connectCanvasSocket:function(){
+    var that = this;
     canvasSocket = wx.connectSocket({
       url: 'ws://120.78.200.1:8080/JustDrawServer/canvas/' + roomId
     })
@@ -510,7 +513,7 @@ Page({
         //4，选词信息
         else if (nums[0] == 4) {
           that.setData({
-            "currentWord": that.data.words[nums[1]]
+            "currentWord": nums[1]
           });
           that.hideWin(1);
           that.count(30, 1, function () {
@@ -532,6 +535,28 @@ Page({
           that.setPopoverMsg(i, index_msg[1])
           that.setPopoverTimer(i, popoverTime)
         }
+      }
+    })
+  },
+  setWords: function () {
+    var that = this;
+    wx: wx.request({
+      url: 'http://120.78.200.1:8080/JustDrawServer/words',
+      header: { "content-Type": "application/json" },
+      method: 'GET',
+      responseType: 'text',
+      success: function (res) {
+        console.log("getWords success:" + res.data)
+        that.setData({
+          words: res.data.split(",")
+        })
+      },
+      fail: function (res) {
+        console.log("fail");
+        console.log(res);
+      },
+      complete: function (res) {
+        console.log("complete");
       }
     })
   }
