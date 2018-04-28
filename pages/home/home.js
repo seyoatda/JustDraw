@@ -68,7 +68,7 @@ Page({
    
     //房主向后台申请创建房间
     wx:wx.request({
-      url: 'http://101.200.62.252:8080/room/create',
+      url: 'http://liuyifan.club:8080/room/create',
       data: {
         userId:gData.id,
         roomName:"test",
@@ -113,7 +113,7 @@ Page({
 
     console.log("nononononno:",e.detail)
     wx:wx.request({
-      url: 'http://101.200.62.252:8080/room/enter',
+      url: 'http://liuyifan.club:8080/room/enter',
       data: {
         roomId:no,
         userId: gData.id

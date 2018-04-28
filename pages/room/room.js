@@ -35,7 +35,7 @@ Page({
    */
   data: {
     flag_show1:true,
-    flag_disabled:false,
+    flag_disabled:true,
     roomNo:0,
     users:[
       new util.user(0, "空位", ""),
@@ -72,7 +72,7 @@ Page({
     userNum++;
     if(userNum>=2){
       this.setData({
-        flag_show2:true
+        flag_disabled:false
       })
     }
     console.log("当前房间内用户：",this.data.users);
@@ -130,7 +130,7 @@ Page({
     var that=this;
     //连接websocket
     wx.connectSocket({
-      url: 'ws://101.200.62.252:8080/webSocket',
+      url: 'ws://liuyifan.club:8080/webSocket',
       success: function (res) {
         console.log(res);
       },
@@ -170,7 +170,7 @@ Page({
           }
         }else if(data.type=="USER"){
             wx.request({
-              url: 'http://101.200.62.252:8080/room/find',
+              url: 'http://liuyifan.club:8080/room/find',
               data:{
                 roomId:roomId
               },
@@ -186,7 +186,7 @@ Page({
                   userIds.push(players[i].userId);
                 }
                 wx.request({
-                  url: 'http://101.200.62.252:8080/user/find',
+                  url: 'http://liuyifan.club:8080/user/find',
                   data:
                   userIds
                   ,
@@ -222,6 +222,7 @@ Page({
     that.setData({
       roomNo:roomId
     })
+    console.log("button:",that.data.flag_disabled);
     //将自己的信息广播给其他已经进入房间的用户
 
     if (options.isOwner = true) {
@@ -299,7 +300,7 @@ Page({
       //如果用户是房主，则退出时，解散房间，否则调用退出接口
       if(ownerId!=0){
         wx: wx.request({
-          url: 'http://101.200.62.252:8080/room/dismiss',
+          url: 'http://liuyifan.club:8080/room/dismiss',
           data: {
             roomId: roomId,
             userId: gData.id
@@ -316,7 +317,7 @@ Page({
         })
       }else{
         wx: wx.request({
-          url: 'http://101.200.62.252:8080/room/quit',
+          url: 'http://liuyifan.club:8080/room/quit',
           data: {
             roomId: roomId,
             userId: gData.id
