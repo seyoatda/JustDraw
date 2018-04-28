@@ -1,5 +1,4 @@
 # JustDraw
-# mx first commit
 
 ############# 页面简介 ############
 
