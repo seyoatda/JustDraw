@@ -20,8 +20,26 @@ function sendSocketMessage(msg) {
   }
 }
 
+function closeSocket() {
+  console.log('close socket')
+  if (socketOpen) {
+    wx.closeSocket({
+      code: 0,
+      reason: 'hide room',
+      success: function (res) {
+        console.log("closeSocket:", res);
+      },
+      fail: function (res) { },
+      complete: function (res) { },
+    })
+  } else {
+    socketMsgQueue.push(msg)
+  }
+}
+
 var ws = {
   send: sendSocketMessage,
+  close: closeSocket,
   onopen: null,
   onmessage: null
 }
@@ -269,15 +287,9 @@ Page({
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
-    wx: wx.closeSocket({
-      code: 0,
-      reason: 'hide room',
-      success: function (res) {
-        console.log("closeSocket:", res);
-      },
-      fail: function (res) { },
-      complete: function (res) { },
-    })
+    client.disconnect(function () {
+      console.log("stomp disconnected success");
+    });
   },
 
   /**
@@ -285,15 +297,9 @@ Page({
    */
   onUnload: function () {
     var that = this;
-      wx:wx.closeSocket({
-        code: 0,
-        reason: 'leave room',
-        success: function(res) {
-          console.log("closeSocket:",res);
-        },
-        fail: function(res) {},
-        complete: function(res) {},
-      })
+    client.disconnect(function () {
+      console.log("stomp disconnected success");
+    });
       console.log("unload");
       console.log("roomId:::::::::", roomId);
       //如果用户是房主，则退出时，解散房间，否则调用退出接口
