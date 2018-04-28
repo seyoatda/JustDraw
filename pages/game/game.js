@@ -92,6 +92,24 @@ Page({
   onUnload: function () {
     console.log("离开绘画页面！")
     canvasSocket.close();//关闭canvasSocket
+    if (userIndex == 0) {
+      wx: wx.request({
+        url: 'http://liuyifan.club:8080/room/dismiss',
+        data: {
+          roomId: roomId,
+          userId: app.globalData.id
+        },
+        header: { "content-Type": "application/x-www-form-urlencoded" },
+        method: 'POST',
+        dataType: 'json',
+        responseType: 'text',
+        success: function (res) {
+          console.log("POST--room/dismiss", res);
+        },
+        fail: function (res) { },
+        complete: function (res) { },
+      })
+    }
   },
 
   /**

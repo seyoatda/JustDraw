@@ -165,7 +165,7 @@ Page({
         if(data.type=="START"){
           if(gData.id!=ownerId){
             wx.navigateTo({
-              url: '../game/game?roomId=' + roomId + '&users=' + JSON.stringify(this.data.users)
+              url: '../game/game?roomId=' + roomId + '&users=' + JSON.stringify(that.data.users)
             });
           }
         }else if(data.type=="USER"){
@@ -232,7 +232,7 @@ Page({
     } else {
       //如果不是房主，隐藏开始游戏按钮
       that.setData({
-        flag_show1: true
+        flag_show1: false
       })
     }
     that.initData();
@@ -278,6 +278,7 @@ Page({
       fail: function (res) { },
       complete: function (res) { },
     })
+    client.disconnect();
   },
 
   /**
@@ -285,6 +286,7 @@ Page({
    */
   onUnload: function () {
     var that = this;
+    client.disconnect();
       wx:wx.closeSocket({
         code: 0,
         reason: 'leave room',
