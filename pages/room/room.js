@@ -278,7 +278,6 @@ Page({
       fail: function (res) { },
       complete: function (res) { },
     })
-    client.disconnect();
   },
 
   /**
@@ -286,7 +285,6 @@ Page({
    */
   onUnload: function () {
     var that = this;
-    client.disconnect();
       wx:wx.closeSocket({
         code: 0,
         reason: 'leave room',
