@@ -34,7 +34,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    flag_show1:true,
+    flag_show1:false,
     flag_disabled:true,
     roomNo:0,
     users:[
@@ -227,14 +227,13 @@ Page({
 
     if (options.isOwner = true) {
       ownerId = user.id;
-      
-      //that.initData();
       that.addUser(user);
+      that.setData({
+        flag_show1: true
+      })
     } else {
       //如果不是房主，隐藏开始游戏按钮
-      that.setData({
-        flag_show1:false
-      })
+      
     }
     that.initData();
     
