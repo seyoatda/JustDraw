@@ -117,11 +117,11 @@ Page({
     that.setData({
       currentIndex: that.data.currentIndex + 1
     })
-    /*while (that.data.users[that.data.currentIndex % 6].id == 0) {
+    while (that.data.users[that.data.currentIndex % 6].id == 0) {
       that.setData({
         currentIndex: that.data.currentIndex + 1
       })
-    }*/
+    }
     
 
     //弹出正确答案界面，3s后关闭

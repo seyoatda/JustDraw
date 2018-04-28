@@ -34,7 +34,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    flag_show1:false,
+    flag_show1:true,
     flag_disabled:true,
     roomNo:0,
     users:[
@@ -91,14 +91,14 @@ Page({
       }
     }
     userNum--;
-    if (userNum == 1) {  
-      var u = this.data.users;
-      for (var i = 0; i < 6; i++) {
-        if (u[i].id != 0) {
-          ownerId = u[i].id;
-        }
-      }
-    }
+    // if (userNum == 1) {  
+    //   var u = this.data.users;
+    //   for (var i = 0; i < 6; i++) {
+    //     if (u[i].id != 0) {
+    //       ownerId = u[i].id;
+    //     }
+    //   }
+    // }
 
     //如果玩家数量为0，删除房间
     if(userNum == 0){
@@ -222,18 +222,18 @@ Page({
     that.setData({
       roomNo:roomId
     })
-    console.log("button:",that.data.flag_disabled);
+    console.log("button:",options);
     //将自己的信息广播给其他已经进入房间的用户
 
-    if (options.isOwner = true) {
+    if (options.isOwner == "true" ) {
       ownerId = user.id;
       that.addUser(user);
+      
+    } else {
+      //如果不是房主，隐藏开始游戏按钮
       that.setData({
         flag_show1: true
       })
-    } else {
-      //如果不是房主，隐藏开始游戏按钮
-      
     }
     that.initData();
     
