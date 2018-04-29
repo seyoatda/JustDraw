@@ -10,6 +10,7 @@ var canvasSocket
 var roomId
 var userIndex = 0
 var popoverTime = 5
+var answered = false
 
 Page({
 
@@ -186,6 +187,7 @@ Page({
     that.setData({
       "currentWord": that.data.words[0]
     });
+    answered = false
 
     that.showWin(1);
     //判断当前用户为绘画用户或回答用户
@@ -233,12 +235,15 @@ Page({
     if(this.data.flag_show4){
       //回答正确
       if (this.data.currentWord == this.data.inputVal) {
-        this.data.score[userIndex] += 2
-        this.setData({
-          score: this.data.score
-        })
-        var msg = "canvas:5," + userIndex
-        canvasSocket.send({ data: msg })
+        if(answered == false){
+          answered = true
+          this.data.score[userIndex] += 2
+          this.setData({
+            score: this.data.score
+          })
+          var msg = "canvas:5," + userIndex
+          canvasSocket.send({ data: msg })
+        }
       }
       //回答错误
       else if (this.data.inputVal != ""){
