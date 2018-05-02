@@ -6,16 +6,25 @@
         <view class='vw_userCtnr'>
           <image class='img_user' src='{{users[0].icon}}'></image>
           <text class='txt_user'>{{users[0].name}}</text>
+          <view class='vw_popover_top' wx:if='{{popovers[0].show}}'>
+            {{popovers[0].msg}}
+          </view>
         </view>
         <text class='txt_score'>{{score[0]}}</text>
         <view class='vw_userCtnr'>
           <image class='img_user' src='{{users[1].icon}}'></image>
           <text class='txt_user'>{{users[1].name}}</text>
+          <view class='vw_popover_top' wx:if='{{popovers[1].show}}'>
+            {{popovers[1].msg}}
+          </view>
         </view>
         <text class='txt_score'>{{score[1]}}</text>
         <view class='vw_userCtnr'>
           <image class='img_user' src='{{users[2].icon}}'></image>
           <text class='txt_user'>{{users[2].name}}</text>
+          <view class='vw_popover_top' wx:if='{{popovers[2].show}}'>
+            {{popovers[2].msg}}
+          </view>
         </view>
         <text class='txt_score'>{{score[2]}}</text>
         
@@ -67,20 +76,30 @@
         <view class='vw_userCtnr'>
           <image class='img_user' src='{{users[3].icon}}'></image>
           <text class='txt_user'>{{users[3].name}}</text>
+          <view class='vw_popover_bottom' wx:if='{{popovers[3].show}}'>
+            {{popovers[3].msg}}
+          </view>
         </view>
         <text class='txt_score'>{{score[3]}}</text>
         <view class='vw_userCtnr'>
           <image class='img_user' src='{{users[4].icon}}'></image>
           <text class='txt_user'>{{users[4].name}}</text>
+          <view class='vw_popover_bottom' wx:if='{{popovers[4].show}}'>
+            {{popovers[4].msg}}
+          </view>
         </view>
         <text class='txt_score'>{{score[4]}}</text>
         <view class='vw_userCtnr'>
           <image class='img_user' src='{{users[5].icon}}'></image>
           <text class='txt_user'>{{users[5].name}}</text>
+          <view class='vw_popover_bottom'  wx:if='{{popovers[5].show}}'>
+            {{popovers[5].msg}}
+          </view>
         </view>
         <text class='txt_score'>{{score[5]}}</text>
     </view>
   </view>
+  <!--选择界面-->
   <view id='vw_1' class='vw_winCtnr' catchtap='hideWin(1)' wx:if='{{flag_show1}}'>
     <view class="vw_win vw_choose" catchtap='stop' wx:if='{{currentId == globalData.id}}'>
       <text class='txt_header'>请选择要画的词：</text>
@@ -89,6 +108,7 @@
         <button id="btn_{{index}}" class="btn_choose{{index}}" bindtap='btnCWClicked'>{{word}}</button>
       </block>
     </view>
+
     <view class="vw_win vw_answer" catchtap='stop' wx:if='{{currentId != globalData.id}}'>
       <text class='txt_rightAnsIs'>提示：</text>
       <text class='txt_rightAns'>{{users[currentIndex % 6].name}}选词中......</text>
@@ -105,7 +125,9 @@
   </view>
   <!--输入答案控件-->
     <button class="btn_answer" wx:if="{{flag_show3}}" bindtap='btnAnsClicked'>回答</button>
-    <input class='ipt_answer' wx:if="{{flag_show4}}" bindinput="listenerTxtInput"></input>
+    <input class='ipt_answer' wx:if="{{flag_show4}}" bindinput="listenerInputVal"></input>
 
+  <!--游戏结束弹窗-->
+  
 
 </view>

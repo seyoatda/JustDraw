@@ -1,5 +1,5 @@
 # JustDraw
-# mx first commit
+# push to resolve the bug about disconnect
 
 ############# 页面简介 ############
 

@@ -104,7 +104,7 @@ App({
       dataType: 'json',
       responseType: 'text',
       success: function (data) {
-        console.log("GET--userId:",data);
+        console.log("GET--user/isRegistered:",data);
         if(data.data.info=="YES"){
           return true;
         }else{
@@ -130,7 +130,7 @@ App({
       dataType: 'json',
       responseType: 'text',
       success: function (data) {
-        console.log("POST--register:", data);
+        console.log("POST--user/register:", data);
         
       }
     })
