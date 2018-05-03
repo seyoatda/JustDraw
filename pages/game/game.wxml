@@ -128,6 +128,11 @@
     <input class='ipt_answer' wx:if="{{flag_show4}}" bindinput="listenerInputVal"></input>
 
   <!--游戏结束弹窗-->
+  <modal hidden="{{modalHidden}}" title="游戏结束" confirm-text="继续游戏" cancel-text="返回主页" bindcancel="backToHome" bindconfirm="backToRoom">
+    <block wx:for="{{ranks}}" wx:key="item" wx:for-index="index">
+        <view class="modal_vw">{{item}}</view>
+    </block>
+  </modal>
   
 
 </view>
