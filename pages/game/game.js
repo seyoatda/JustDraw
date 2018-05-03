@@ -49,6 +49,7 @@ Page({
     ranks:[],
     test:[{hi:"yes"}],
     inputVal:"",
+    score:[0,0,0,0,0,0],
     modalHidden: true
   },
 
@@ -156,7 +157,6 @@ Page({
       
       //只循环一轮
       if (that.data.currentIndex >= 6) {
-        //canvasSocket.close();
         wx.redirectTo({
           url: '../home/home',
           success: function (res) { },
@@ -243,8 +243,9 @@ Page({
       if (this.data.currentWord == this.data.inputVal) {
         if(answered == false){
           answered = true
+          this.data.score[userIndex] += 2
           this.setData({
-            ["users["+userIndex + "].score"]: this.data.users[userIndex].score+2
+            score: this.data.score
           })
           var msg = "canvas:5," + userIndex
           canvasSocket.send({ data: msg })
@@ -551,8 +552,9 @@ Page({
         //5,回答正确
         else if (nums[0] == 5) {
           var i = parseInt(nums[1])
+          that.data.score[i] += 2
           that.setData({
-            ["users[" + i + "].score"]: this.data.users[i].score + 2
+            score: that.data.score
           })
         }
         //6,回答错误
@@ -572,8 +574,20 @@ Page({
       var index = 0;
       var max = 0;//最高分
       var maxIndex = 0;
+      while (index >= this.data.users.length){
+        if (this.data.users[index].id != 0 && this.data.users[index].score > max){
+          maxIndex = index;
+          max = this.data.users[index].score;
+        }
+      }
+      var info = "{user:"+this.data.users[maxIndex]+",score:"+score+"}";
+      this.data.ranks.push(info);
+      this.data.users.splice(maxIndex,1);
+      this.setData({
+        ranks: this.data.ranks,
+        users: this.data.users
+      })
       userNum--;
-      //this.data.ranks.push()
     }
     
     this.setData({

@@ -10,7 +10,7 @@
             {{popovers[0].msg}}
           </view>
         </view>
-        <text class='txt_score'>{{users[0].score}}</text>
+        <text class='txt_score'>{{score[0]}}</text>
         <view class='vw_userCtnr'>
           <image class='img_user' src='{{users[1].icon}}'></image>
           <text class='txt_user'>{{users[1].name}}</text>
@@ -18,7 +18,7 @@
             {{popovers[1].msg}}
           </view>
         </view>
-        <text class='txt_score'>{{users[1].score}}</text>
+        <text class='txt_score'>{{score[1]}}</text>
         <view class='vw_userCtnr'>
           <image class='img_user' src='{{users[2].icon}}'></image>
           <text class='txt_user'>{{users[2].name}}</text>
@@ -26,7 +26,7 @@
             {{popovers[2].msg}}
           </view>
         </view>
-        <text class='txt_score'>{{users[2].score}}</text>
+        <text class='txt_score'>{{score[2]}}</text>
         
       </view>
   </view>
@@ -80,7 +80,7 @@
             {{popovers[3].msg}}
           </view>
         </view>
-        <text class='txt_score'>{{users[3].score}}</text>
+        <text class='txt_score'>{{score[3]}}</text>
         <view class='vw_userCtnr'>
           <image class='img_user' src='{{users[4].icon}}'></image>
           <text class='txt_user'>{{users[4].name}}</text>
@@ -88,7 +88,7 @@
             {{popovers[4].msg}}
           </view>
         </view>
-        <text class='txt_score'>{{users[4].score}}</text>
+        <text class='txt_score'>{{score[4]}}</text>
         <view class='vw_userCtnr'>
           <image class='img_user' src='{{users[5].icon}}'></image>
           <text class='txt_user'>{{users[5].name}}</text>
@@ -96,7 +96,7 @@
             {{popovers[5].msg}}
           </view>
         </view>
-        <text class='txt_score'>{{users[5].score}}</text>
+        <text class='txt_score'>{{score[5]}}</text>
     </view>
   </view>
   <!--选择界面-->
@@ -130,7 +130,7 @@
   <!--游戏结束弹窗-->
   <modal hidden="{{modalHidden}}" title="游戏结束" confirm-text="继续游戏" cancel-text="返回主页" bindcancel="backToHome" bindconfirm="backToRoom">
     <block wx:for="{{ranks}}" wx:key="item" wx:for-index="index">
-        <view class="modal_vw">{{item.name}}</view>
+        <view class="modal_vw">{{item}}</view>
     </block>
   </modal>
   
