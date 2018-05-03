@@ -1,16 +1,17 @@
 // pages/game/game.js
 var util = require('../../utils/util.js');
 const app = getApp();
-const ctx = wx.createCanvasContext('myCanvas')
-var x, y
-var radius
-var countdown = 1;
-var moved = 0
-var canvasSocket
-var roomId
-var userIndex = 0
-var popoverTime = 5
-var answered = false
+const ctx = wx.createCanvasContext('myCanvas') //画布
+var x, y //像素位置
+var radius  //圆点半径
+var countdown = 1;  //倒计时单位时间1s
+var moved = 0 //绘画是否进行移动，未移动则画点
+var canvasSocket  //画布socket接口
+var roomId  //房间号
+var userIndex = 0 //本机用户索引
+var userNum = 0 //房间用户数量
+var popoverTime = 5 //聊天弹框弹出的时间
+var answered = false //本机玩家是否已做出回答
 
 Page({
 
@@ -45,9 +46,10 @@ Page({
       { show: false, timer: 0 , msg: "" },
       { show: false, timer: 0 , msg: "" }
     ],
+    ranks:[],
     test:[{hi:"yes"}],
     inputVal:"",
-    score:[0,0,0,0,0,0]
+    modalHidden: true
   },
 
 
@@ -60,16 +62,20 @@ Page({
     var u = JSON.parse(options.users);
     roomId = options.roomId;
 
-    //设置本机玩家的index
-    while(userIndex < 6){
-      if(app.globalData.id == u[userIndex].id){
-        break;
+    //设置本机玩家的index和玩家数量
+    var index = 0;
+    while(index < 6){
+      if(app.globalData.id == u[index].id){
+        userIndex = index;
       }
-      userIndex++;
+      if (u[index].id != 0){
+        userNum++;
+      }
+      index++;
     }
-    if(userIndex == 6){
+    if(userNum == 0){
       wx.showToast({
-        title: '本机玩家数据出错',
+        title: '没有玩家数据',
         duration: 2000
       })
       return;
@@ -237,9 +243,8 @@ Page({
       if (this.data.currentWord == this.data.inputVal) {
         if(answered == false){
           answered = true
-          this.data.score[userIndex] += 2
           this.setData({
-            score: this.data.score
+            ["users["+userIndex + "].score"]: this.data.users[userIndex].score+2
           })
           var msg = "canvas:5," + userIndex
           canvasSocket.send({ data: msg })
@@ -546,9 +551,8 @@ Page({
         //5,回答正确
         else if (nums[0] == 5) {
           var i = parseInt(nums[1])
-          that.data.score[i] += 2
           that.setData({
-            score: that.data.score
+            ["users[" + i + "].score"]: this.data.users[i].score + 2
           })
         }
         //6,回答错误
@@ -561,6 +565,22 @@ Page({
       }
     })
   },
+
+  //游戏结束rank
+  showRank:function(){
+    while(userNum>0){
+      var index = 0;
+      var max = 0;//最高分
+      var maxIndex = 0;
+      userNum--;
+      //this.data.ranks.push()
+    }
+    
+    this.setData({
+      ranks:this.data.ranks
+    })
+  },
+
   setWords: function () {
     var that = this;
     wx: wx.request({

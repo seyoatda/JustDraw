@@ -140,6 +140,7 @@ App({
     user: null,
     id:1,
     icon:"",
-    name:""
+    name:"",
+    score:0
   }
 })
