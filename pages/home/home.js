@@ -68,7 +68,7 @@ Page({
    
     //房主向后台申请创建房间
     wx:wx.request({
-      url: 'http://101.200.62.252:8080/room/create',
+      url: 'http://liuyifan.club:8080/room/create',
       data: {
         userId:gData.id,
         roomName:"test",
@@ -83,9 +83,9 @@ Page({
       dataType: 'json',
       responseType: 'text',
       success: function(res) {
-        console.log("create room success")
-        console.log(res);
-        if(res.data.status=="ERROR"){
+        console.log("POST--room/create",res);
+        if ("ERROR"==res.data.status){
+          console.log("用户无法创建房间,错误代码：",res.data.info);
           return;
         }
         //成功之后进行跳转页面，注明房主身份
@@ -102,24 +102,18 @@ Page({
         wx.navigateTo({
           url: '../room/room?isOwner=true&roomId='+res.data.info+'&user='+JSON.stringify(gData.user),
         })
-      },
-      fail: function(res) {
-        console.log("fail");
-        console.log(res);
-      },
-      complete: function(res) {
-        console.log("complete");
-      },
+      }
+
     })
   },
 
   //加入房间访问后台
   enterRoom:function(e){
-    var no = e.detail.value;
+    var no = e.detail.value.roomNumber;
 
     console.log("nononononno:",e.detail)
     wx:wx.request({
-      url: 'http://101.200.62.252:8080/room/enter',
+      url: 'http://liuyifan.club:8080/room/enter',
       data: {
         roomId:no,
         userId: gData.id
@@ -130,7 +124,8 @@ Page({
       responseType: 'text',
       success: function(res) {
         console.log("POST--room/enter:",res);
-        if(res.data.status=="ERROR"){
+        if ("ERROR"==res.data.status){
+          console.log("用户无法进入房间！错误代码：",res.data.info);
           return;
         }
         wx.navigateTo({

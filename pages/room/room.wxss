@@ -32,6 +32,18 @@ page{
   flex-direction: column;
   justify-content: center;
 }
+.txt_roomNo{
+  margin-top:10rpx; 
+  margin-left:200rpx; 
+  width: 50%;
+  height: 100rpx;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items:center;
+  background-color: yellowgreen;
+  box-shadow: 2px 2px 2px 2px gray;
+}
 .btn_invite{
   margin-top: 15%;
   width: 50%;
