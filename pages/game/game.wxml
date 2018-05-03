@@ -103,9 +103,83 @@
       <text class='txt_getScore'>剩余时间：{{time2}}</text>
     </view>
   </view>
-  <view id="vw_account" class='vw_account' wx:if='{{account_show}}'>
-    
+  <!--结算窗口-->
+  <view id="vw_account" class='vw_winCtnr' catchtap='hideWin(2)' wx:if='{{flag_show5}}'> 
+    <view class='vw_account' catchtap='stop'>
+      <text class='txt_title'>本局结算</text>
+      <view class='vw_row1'>
+        <view class='vw_scoreCtn'>
+          <view class='vw_userCtn'>
+            <image class='user_image'></image>
+            <text class='user_name'>aaaaaa</text>
+          </view>
+          <text class='user_score'>100000</text>
+        </view>
+        <view class='vw_scoreCtn'>
+          <view class='vw_userCtn'>
+            <image class='user_image'></image>
+            <text class='user_name'>aaaaaa</text>
+          </view>
+          <text class='user_score'>100000</text>
+        </view>
+      </view>
+      <view class='vw_row2'>
+        <view class='vw_scoreCtn'>
+          <view class='vw_userCtn'>
+            <image class='user_image'></image>
+            <text class='user_name'>aaaaaa</text>
+          </view>
+          <text class='user_score'>100000</text>
+        </view>
+        <view class='vw_scoreCtn'>
+          <view class='vw_userCtn'>
+            <image class='user_image'></image>
+            <text class='user_name'>aaaaaa</text>
+          </view>
+          <text class='user_score'>100000</text>
+        </view>
+      </view>
+      <view class='vw_row3'>
+        <view class='vw_scoreCtn'>
+          <view class='vw_userCtn'>
+            <image class='user_image'></image>
+            <text class='user_name'>aaaaaa</text>
+          </view>
+          <text class='user_score'>100000</text>
+        </view>
+        <view class='vw_scoreCtn'>
+          <view class='vw_userCtn'>
+            <image class='user_image'></image>
+            <text class='user_name'>aaaaaa</text>
+          </view>
+          <text class='user_score'>100000</text>
+        </view>
+      </view>
+      
+      <view class='btn_container'>
+        <button class='btn_again'>再来一局</button>
+        <button class='btn_back' bindtap='btnBack'>返回主页</button>
+      </view>
+    </view>
   </view>
+  <!--
+  <view id="vw_account" class='vw_winCtnr' catchtap='hideWin(2)' wx:if='{{flag_show5}}'> 
+    <view class='vw_hide' catchtap='stop'>
+      <view class='vw_account'>
+        <text class='user_times'>游戏局数：</text>
+        <text class='user_score'>共获分数：</text>
+        <view class='btn_container'>
+          <button class='btn_again'>再来一局</button>
+          <button class='btn_back' bindtap='btnBack'>返回主页</button>
+        </view>
+      </view>
+      <view class='vw_userCtn'>
+        <image class='user_image'></image>
+        <text class='user_name'>aaaaaa</text>
+      </view>
+    </view>
+  </view>
+  -->
   <!--输入答案控件-->
     <button class="btn_answer" wx:if="{{flag_show3}}" bindtap='btnAnsClicked'>回答</button>
     <input class='ipt_answer' wx:if="{{flag_show4}}" bindinput="listenerTxtInput"></input>

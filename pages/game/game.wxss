@@ -278,3 +278,163 @@ page{
   box-shadow: 2rpx 2rpx 2rpx 2rpx grey;
   opacity: 0.8;
 }
+.vw_account{
+  width: 70%;
+  height: 550rpx;
+  top: 20%;
+  left: 15%;
+  background-color: white;
+  border-radius: 20rpx;
+  position: absolute; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.9;
+  box-shadow: 2px 2px 2px 2px rgb(40,40,40);
+}
+.txt_title{
+  text-align: center;
+  font-weight: bold;
+  color: rgb(80,80,80);
+  font-size: 40rpx;
+}
+.vw_row1{
+  margin-top: 10%;
+  height: 20%;
+  width: 10%;
+  display: flex;
+  flex-direction: row;
+}
+.vw_row2{
+  margin-top: 10%;
+  height: 20%;
+  width: 10%;
+  display: flex;
+  flex-direction: row;
+}
+.vw_row3{
+  margin-top: 10%;
+  height: 20%;
+  width: 10%;
+  display: flex;
+  flex-direction: row;
+}
+.vw_scoreCtn{
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+}
+.vw_userCtn{
+  height: 100%;
+  width: 30%;
+  position: absolute; 
+  display: flex;
+  flex-direction: column;
+}
+.user_image{
+  border-radius: 80rpx;
+  height: 80%;
+  width: 100%;
+  background-color: bisque;
+  box-shadow: 1px 1px 1px 1px rgb(80,80,80);
+}
+.user_score{
+  height: 100%;
+  width: 70%;
+  text-align: center;
+}
+.btn_container{
+  height: 80rpx;
+  width: 100%;
+  margin-top: 10%;
+  display: flex;
+  flex-direction: row;
+}
+.btn_again{
+  height: 80rpx;
+  width: 40%;
+  font-size: 35rpx;
+  box-shadow: 2px 2px 2px 2px gray;
+  font-weight: bold;
+  color: rgb(60,60,60);
+}
+.btn_back{
+  height:80rpx;
+  width: 40%;
+  font-size: 35rpx;
+  box-shadow: 2px 2px 2px 2px gray;
+  font-weight: bold;
+  color: rgb(60,60,60);
+}
+
+/*
+.vw_hide{
+  width: 70%;
+  height: 550rpx;
+  top: 20%;
+  left: 15%;
+  border-radius: 20rpx;
+  position: absolute; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.vw_account{
+  width: 100%;
+  height: 450rpx;
+  margin-top: 100rpx;
+  background-color: white;
+  border-radius: 20rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  opacity: 0.9;
+  box-shadow: 2px 2px 2px 2px rgb(40,40,40);
+}
+.user_times{
+  margin-top: 15%;
+  text-align: center;
+}
+.user_score{
+  margin-top: 3%;
+  text-align: center;
+}
+.btn_container{
+  height: 80rpx;
+  width: 100%;
+  margin-top: 10%;
+  display: flex;
+  flex-direction: row;
+}
+.btn_again{
+  height: 80rpx;
+  width: 40%;
+  font-size: 35rpx;
+  box-shadow: 2px 2px 2px 2px gray;
+  font-weight: bold;
+  color: rgb(60,60,60);
+}
+.btn_back{
+  height:80rpx;
+  width: 40%;
+  font-size: 35rpx;
+  box-shadow: 2px 2px 2px 2px gray;
+  font-weight: bold;
+  color: rgb(60,60,60);
+}
+.vw_userCtn{
+  margin-top: 40rpx;
+  height: 140rpx;
+  width: 120rpx;
+  position: absolute; 
+}
+.user_image{
+  border-radius: 80rpx;
+  height: 120rpx;
+  width: 120rpx;
+  background-color: bisque;
+  box-shadow: 1px 1px 1px 1px rgb(80,80,80);
+}
+*/

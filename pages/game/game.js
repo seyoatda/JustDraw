@@ -29,7 +29,7 @@ Page({
     flag_show2:false,
     flag_show3: false,
     flag_show4: false,
-    account_show: false,
+    flag_show5:false,
 
     itemWidth: [15, 20, 25, 30, 35, 40, 45 ],
     itemColor: ['#000000', '#ff0000', '#00ff00', '#0000ff', '#00ffff', '#ff00ff', '#ffff00','#C0C0C0','#ffffff'],
@@ -188,23 +188,34 @@ Page({
       that.hideWin(2);
       
       //只循环一轮
-      if (that.data.currentIndex >= 6) {
+      if (that.data.currentIndex >= 0) {
         //canvasSocket.close();
+        that.showWin(5);
+        that.hideWin(2);
+        /*
         wx.redirectTo({
           url: '../home/home',
           success: function (res) { },
           fail: function (res) { },
           complete: function (res) { },
         })
+        */
       }
       else{
         that.whenStart();
       }
-    });
+    }); 
+    
+  },
 
-    
-    
-    
+  //返回主界面按钮
+  btnBack: function(){
+    wx.redirectTo({
+      url: '../home/home',
+      success: function (res) { },
+      fail: function (res) { },
+      complete: function (res) { },
+    })
   },
 
   whenStart: function () {
@@ -262,7 +273,7 @@ Page({
     var msg = "canvas:4,"+id
     canvasSocket.send({ data: msg })
     this.hideWin(1);
-    this.count(30, 1, function () {
+    this.count(3, 1, function () {
       that.whenFinish();
     });
   },
