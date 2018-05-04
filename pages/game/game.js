@@ -598,15 +598,24 @@ Page({
   setWords: function () {
     var that = this;
     wx: wx.request({
-      url: 'http://120.78.200.1:8080/JustDrawServer/words',
-      header: { "content-Type": "application/json" },
+      url: 'http://liuyifan.club:8080/painting/genTarget',
+      data: {
+        userId: that.data.currentId,
+        roomId: roomId
+      },
+      header: { "content-Type": "application/x-www-form-urlencoded" },
       method: 'GET',
+      dataType: 'json',
       responseType: 'text',
       success: function (res) {
-        console.log("getWords success:" + res.data)
-        that.setData({
-          words: res.data.split(",")
-        })
+        console.log(res)
+
+        var wordsarray = res.data.info
+        for (var i = 0; i < 4; i++) {
+          that.setData({
+            ["words[" + i + "]"]: wordsarray[i].name
+          })
+        }
       },
       fail: function (res) {
         console.log("fail");
