@@ -279,7 +279,7 @@ page{
   box-shadow: 2rpx 2rpx 2rpx 2rpx grey;
   opacity: 0.8;
 }
-<<<<<<< HEAD
+/*
 .vw_account{
   width: 70%;
   height: 550rpx;
@@ -370,8 +370,8 @@ page{
   font-weight: bold;
   color: rgb(60,60,60);
 }
+*/
 
-/*
 .vw_hide{
   width: 70%;
   height: 550rpx;
@@ -439,8 +439,7 @@ page{
   background-color: bisque;
   box-shadow: 1px 1px 1px 1px rgb(80,80,80);
 }
-*/
-=======
+
 
 .vw_popover_top{
   z-index: 2000;
@@ -491,4 +490,3 @@ page{
    border-right: 13rpx solid transparent;
    border-top: 26rpx solid #eee;
 }
->>>>>>> c54059838d1b6f479e16d8f7460d5e67e3244faa

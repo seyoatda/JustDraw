@@ -23,18 +23,17 @@ Page({
     this.setData({
       btnAnimationJoi: animation_btn.export(),
     })
-
+    //界面弹出
     var animation = wx.createAnimation({
       duration: 300,
       timingFunction: "linear",
       delay: 0
     })
     this.animation = animation
-    animation.scale(2).step()
-    animation.scale(1).step()
+    animation.opacity(1).step()
     this.setData({
       animationData: animation.export(),
-      'setShow': true
+      'setShow': true,
     })
       animation.translateY(0).step()
       this.setData({
@@ -56,7 +55,7 @@ Page({
       animation.translateY(0).step()
       this.setData({
         animationData: animation.export(),
-        'setShow':false
+        'setShow':false,
       })
     }.bind(this), 300)
   },

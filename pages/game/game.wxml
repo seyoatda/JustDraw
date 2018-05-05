@@ -124,6 +124,7 @@
     </view>
   </view>
   <!--结算窗口-->
+  <!--
   <view id="vw_account" class='vw_winCtnr' catchtap='hideWin(2)' wx:if='{{flag_show5}}'> 
     <view class='vw_account' catchtap='stop'>
       <text class='txt_title'>本局结算</text>
@@ -182,7 +183,7 @@
       </view>
     </view>
   </view>
-  <!--
+  -->
   <view id="vw_account" class='vw_winCtnr' catchtap='hideWin(2)' wx:if='{{flag_show5}}'> 
     <view class='vw_hide' catchtap='stop'>
       <view class='vw_account'>
@@ -199,7 +200,6 @@
       </view>
     </view>
   </view>
-  -->
   <!--输入答案控件-->
     <button class="btn_answer" wx:if="{{flag_show3}}" bindtap='btnAnsClicked'>回答</button>
     <input class='ipt_answer' wx:if="{{flag_show4}}" bindinput="listenerInputVal"></input>

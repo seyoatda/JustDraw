@@ -1,21 +1,21 @@
 <!--pages/home/home.wxml-->
 <!-- <view class="container" > -->
-<view class="whole" style='background:url("https://upload-images.jianshu.io/upload_images/9653454-18e6491d0c98a767.jpg?imageMogr2/auto-orient/");-webkit-background-size:cover;'>
+<view class="whole" style='background:url("https://upload-images.jianshu.io/upload_images/9653454-e1eaaed42013d3e4.jpg?imageMogr2/auto-orient/");-webkit-background-size:cover;'>
   <view class="v_btnCtnr">
     <view class='btn_flex'>
-      <view class="btntoroom"><image animation="{{btnAnimationCre}}" class="btn" src='https://upload-images.jianshu.io/upload_images/9653454-ba269754ab787cf2.png?imageMogr2/auto-orient/' bindtap='jump2Room'></image></view>
-      <view class="btntoroom"><image animaiton="{{btnAnimationRan}}" class="btn" src='https://upload-images.jianshu.io/upload_images/9653454-0983a3671467a170.png?imageMogr2/auto-orient/' bindtap='jump2Ran'></image></view>
-      <view class='btntoroom'><image animaiton="{{btnAnimatioJoi}}" class='btn' src='https://upload-images.jianshu.io/upload_images/9653454-4a4882378b2ea61c.png?imageMogr2/auto-orient/' bindtap='showWin'></image></view>
+      <view class="btntoroom"><image animation="{{btnAnimationCre}}" class="btn" bindtap='jump2Room' src='https://upload-images.jianshu.io/upload_images/9653454-c82e75016e7a27dd.png?imageMogr2/auto-orient/'></image></view>
+      <view class="btntoroom"><image animaiton="{{btnAnimationRan}}" class="btn" src='https://upload-images.jianshu.io/upload_images/9653454-34bd41b8171501df.png?imageMogr2/auto-orient/' bindtap='jump2Ran'></image></view>
+      <view class='btntoroom'><image animaiton="{{btnAnimatioJoi}}" class='btn' src='https://upload-images.jianshu.io/upload_images/9653454-4c89f6165a748430.png?imageMogr2/auto-orient/' bindtap='showWin'></image></view>
     </view>
   </view>
   <view class='v_roll' catchtap='showWin'></view>
   <view class='vw_winCtnr' catchtap='hideWin' wx:if='{{setShow}}'>
-    <view animation="{{animationData}}" class="v_enterRoom" catchtap='stop' wx:if='{{setShow}}' style='background:url("https://upload-images.jianshu.io/upload_images/9653454-7a47a8af260f9a59.png?imageMogr2/auto-orient/");-webkit-background-size:cover;'>
+    <view animation="{{animationData}}" class="v_enterRoom" catchtap='stop' wx:if='{{setShow}}' style='background:url("https://upload-images.jianshu.io/upload_images/9653454-9a14d370b25647ca.jpg?imageMogr2/auto-orient/");-webkit-background-size:cover;'>
       <form bindsubmit='enterRoom'>
-        <input class='i_room' name="roomNumber" focus='true' confirm-type='go' maxlength='30' bindconfirm='enterRoom' placeholder-style="font-size:15px" placeholder="请输入房间号" auto-focus></input>
+        <input class='i_room' name="roomNumber" focus='true' confirm-type='go' maxlength='30' bindconfirm='enterRoom' placeholder-style="font-size:15px" placeholder="     请输入房间号" placeholder-class="phcolor" auto-focus></input>
         <view class='btn_ctn'>
-          <button class='btn_yes' form-type="submit" plain='true'>确认</button>
-          <text class='btn_no' bindtap='hideWin' plain='false'>取消</text>
+          <button class='btn_yes' form-type="submit" plain='true' style='color:rgb(240,220,200);border:2px solid rgb(240,220,200);border-radius:5px;opacity:0.8'>确 认</button>
+          <button class='btn_no' bindtap='hideWin' plain='false' style='color:rgb(240,220,200);border:2px solid rgb(240,220,200);border-radius:5px;opacity:0.8'>取 消</button>
         </view>
       </form>
     </view>
