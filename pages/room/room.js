@@ -50,9 +50,12 @@ Page({
    * 页面的初始数据
    */
   data: {
-    flag_show1: true,
-    flag_disabled: true,
     roomNo: 0,
+    flags:[
+      true,//加入房间弹窗是否显示
+      true,//开始游戏按钮是否可用
+      true //创建房间弹窗是否显示
+      ],
     users: [
       new util.user(0, "空位", ""),
       new util.user(0, "空位", ""),
@@ -101,7 +104,7 @@ Page({
     //如果当前用户数量大于2，开始按钮取消disabled
     if (this.getUserNum() >= 2) {
       this.setData({
-        flag_disabled: false
+        ["flags[1]"]: false
       })
     }
     console.log("当前房间内用户：", this.data.users);
@@ -234,12 +237,12 @@ Page({
       ownerId = user.id;
       that.addUser(user);
       that.setData({
-        flag_disabled:true
+        ["flags[1]"]:true
       });
     } else {
       //如果不是房主，隐藏开始游戏按钮
       that.setData({
-        flag_show1: false
+        ["flags[0]"]: false
       })
     }
     that.initData();
