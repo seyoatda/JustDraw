@@ -105,7 +105,7 @@ Page({
     if (userIndex == 0) {
       util.req_quitRoom({
         roomId: roomId,
-        userId: gData.id
+        userId: app.globalData.id
       }, (res) => {
         console.log('POST--room/quit', res);
       })
@@ -206,17 +206,42 @@ Page({
     //如果倒计时结束仍未选择词，则默认选择第一个
     that.count(10, 2, function () {
       that.hideWin(1);
-
-      console.log("currentWord:" + that.data.currentWord);
-
-      that.count(30, 1, function () {
-        that.whenFinish();
-      });
+      that.startDrawing();
     }, function () {
-      console.log("flag_show1:" + that.data.flag_show1);
       if (that.data.flag_show1 == false) {
         return true;
       }
+    });
+  },
+
+  /**
+   * 开始绘制
+   */
+  startDrawing:function(){
+    var that = this;
+    //如果本机用户为绘画者，传给服务器选中的词汇
+    if (that.data.currentId != app.globalData.id) {
+      wx: wx.request({
+        url: 'http://liuyifan.club:8080/painting/setTarget',
+        data: {
+          userId: that.data.currentId,
+          roomId: roomId,
+          targetName: that.data.currentWord
+        },
+        header: { "content-Type": "application/x-www-form-urlencoded" },
+        method: 'GET',
+        dataType: 'json',
+        responseType: 'text',
+        success: function (res) {
+          console.log("setTarget succeed!")
+          console.log(res)
+        }
+      })
+    }
+    
+    //开始画图
+    that.count(30, 1, function () {
+      that.whenFinish();
     });
   },
 
@@ -229,39 +254,60 @@ Page({
     this.setData({
       "currentWord": this.data.words[id]
     });
-    var msg = "canvas:4," + this.data.words[id]
+    //var msg = "canvas:4," + this.data.words[id]
+    var msg = "canvas:4,选词"
     canvasSocket.send({ data: msg })
     this.hideWin(1);
-    this.count(30, 1, function () {
-      that.whenFinish();
-    });
+    this.startDrawing();
   },
 
   btnAnsClicked: function () {
+    var that = this;
     if (this.data.flag_show4) {
+      this.setData({
+        "flag_show4": false
+      });
+      if (this.data.inputVal == ""){
+        return;
+      }
+      var scoreAdded = 0;
+      //验证答案
+      wx: wx.request({
+        url: 'http://liuyifan.club:8080/painting/isRightGuess',
+        data: {
+          userId: that.data.currentId,
+          roomId: roomId,
+          targetName: that.data.inputVal
+        },
+        header: { "content-Type": "application/x-www-form-urlencoded" },
+        method: 'GET',
+        dataType: 'json',
+        responseType: 'text',
+        success: function (res) {
+          console.log(res)
+          scoreAdded = parseInt(res.data.info);
+        }
+      })
       //回答正确
-      if (this.data.currentWord == this.data.inputVal) {
+      if (scoreAdded != 0) {
         if (answered == false) {
           answered = true
-          this.data.score[userIndex] += 2
+          this.data.score[userIndex] += scoreAdded
           this.setData({
             score: this.data.score
           })
-          var msg = "canvas:5," + userIndex
+          var msg = "canvas:5," + userIndex + ":" + this.data.score;
           canvasSocket.send({ data: msg })
         }
       }
       //回答错误
-      else if (this.data.inputVal != "") {
+      else {
         var msg = "canvas:6," + userIndex + ":" + this.data.inputVal
         canvasSocket.send({ data: msg })
         this.setPopoverMsg(userIndex, this.data.inputVal)
         this.setPopoverTimer(userIndex, popoverTime)
       }
 
-      this.setData({
-        "flag_show4": false
-      });
     } else {
       this.setData({
         "flag_show4": true
@@ -487,7 +533,7 @@ Page({
       console.log('canvasSocket连接出错，请检查！')
     })
     canvasSocket.onMessage(function (res) {
-      console.log('收到服务器内容：' + res.data)
+      
       if (res.data.length < 8 || res.data.substring(0, 7) != "canvas:") {
         return false
       }
@@ -541,18 +587,16 @@ Page({
         }
         //4，选词信息
         else if (nums[0] == 4) {
-          that.setData({
-            "currentWord": nums[1]
-          });
+          // that.setData({
+          //   "currentWord": nums[1]
+          // });
           that.hideWin(1);
-          that.count(30, 1, function () {
-            that.whenFinish();
-          });
+          that.startDrawing();
         }
         //5,回答正确
         else if (nums[0] == 5) {
-          var i = parseInt(nums[1])
-          that.data.score[i] += 2
+          var index_score = parseInt(nums[1]).split(":")
+          that.data.score[index_score[0]] += parseInt(index_score[1])
           that.setData({
             score: that.data.score
           })
