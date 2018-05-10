@@ -19,38 +19,38 @@ Page({
    * 页面的初始数据
    */
   data: {
-    currentId:0,
+    currentId: 0,
     currentIndex: 0,
-    currentWord:"",
+    currentWord: "",
     activeWidthIndex: 3,
     activeColorIndex: 0,
     globalData: app.globalData,
 
-    time1:'',
-    time2:'',
+    time1: '',
+    time2: '',
 
-    flag_show1:false,
-    flag_show2:false,
+    flag_show1: false,
+    flag_show2: false,
     flag_show3: false,
     flag_show4: false,
-    flag_show5:false,
+    flag_show5: false,
 
-    itemWidth: [15, 20, 25, 30, 35, 40, 45 ],
-    itemColor: ['#000000', '#ff0000', '#00ff00', '#0000ff', '#00ffff', '#ff00ff', '#ffff00','#C0C0C0','#ffffff'],
-    words:["a","b","c","d"],
-    users:null,
+    itemWidth: [15, 20, 25, 30, 35, 40, 45],
+    itemColor: ['#000000', '#ff0000', '#00ff00', '#0000ff', '#00ffff', '#ff00ff', '#ffff00', '#C0C0C0', '#ffffff'],
+    words: ["a", "b", "c", "d"],
+    users: null,
     popovers: [
-      { show: false, timer: 0 , msg: "" },
-      { show: false, timer: 0 , msg: "" },
-      { show: false, timer: 0 , msg: "" },
-      { show: false, timer: 0 , msg: "" },
-      { show: false, timer: 0 , msg: "" },
-      { show: false, timer: 0 , msg: "" }
+      { show: false, timer: 0, msg: "" },
+      { show: false, timer: 0, msg: "" },
+      { show: false, timer: 0, msg: "" },
+      { show: false, timer: 0, msg: "" },
+      { show: false, timer: 0, msg: "" },
+      { show: false, timer: 0, msg: "" }
     ],
-    ranks:[],
-    test:[{hi:"yes"}],
-    inputVal:"",
-    score:[0,0,0,0,0,0],
+    ranks: [],
+    test: [{ hi: "yes" }],
+    inputVal: "",
+    score: [0, 0, 0, 0, 0, 0],
     modalHidden: true
   },
 
@@ -59,34 +59,34 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    var that=this;
-    
+    var that = this;
+
     var u = JSON.parse(options.users);
     roomId = options.roomId;
 
     //设置本机玩家的index和玩家数量
     var index = 0;
-    while(index < 6){
-      if(app.globalData.id == u[index].id){
+    while (index < 6) {
+      if (app.globalData.id == u[index].id) {
         userIndex = index;
       }
-      if (u[index].id != 0){
+      if (u[index].id != 0) {
         userNum++;
       }
       index++;
     }
-    if(userNum == 0){
+    if (userNum == 0) {
       wx.showToast({
         title: '没有玩家数据',
         duration: 2000
       })
       return;
     }
-    
-    
+
+
     that.setData({
       users: u,
-      currentId:u[0].id
+      currentId: u[0].id
     });
 
     //画布socket
@@ -99,24 +99,15 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-    console.log("离开绘画页面！")
-    canvasSocket.close();//关闭canvasSocket
+    console.log("离开绘画页面！");
+    //关闭canvasSocket，并且退出房间（此处无需解散房间，后台会处理）
+    canvasSocket.close();
     if (userIndex == 0) {
-      wx: wx.request({
-        url: 'http://liuyifan.club:8080/room/dismiss',
-        data: {
-          roomId: roomId,
-          userId: app.globalData.id
-        },
-        header: { "content-Type": "application/x-www-form-urlencoded" },
-        method: 'POST',
-        dataType: 'json',
-        responseType: 'text',
-        success: function (res) {
-          console.log("POST--room/dismiss", res);
-        },
-        fail: function (res) { },
-        complete: function (res) { },
+      util.req_quitRoom({
+        roomId: roomId,
+        userId: app.globalData.id
+      }, (res) => {
+        console.log('POST--room/quit', res);
       })
     }
   },
@@ -127,12 +118,12 @@ Page({
   onReady: function () {
     var iniIndex = this.data.activeWidthIndex
     var iniWidth = this.data.itemWidth[iniIndex]
-    ctx.setLineWidth(iniWidth/2.5) // 设置线宽
-    radius = iniWidth/4.5
+    ctx.setLineWidth(iniWidth / 2.5) // 设置线宽
+    radius = iniWidth / 4.5
     ctx.setLineCap('round') //设置线条的端点样式
     ctx.setStrokeStyle('#000000') //描边样式
     ctx.setFillStyle('#000000') //填充样式
-    
+
   },
 
   /**
@@ -149,32 +140,32 @@ Page({
         currentIndex: that.data.currentIndex + 1
       })
     }
-    
+
 
     //弹出正确答案界面，3s后关闭
     that.showWin(2);
     that.count(3, 2, function () {
       that.hideWin(2);
-      
+
       //只循环一轮
 
       if (that.data.currentIndex >= 6) {
-         wx.redirectTo({
-           url: '../home/home',
-           success: function (res) { },
-           fail: function (res) { },
-           complete: function (res) { },
-         })    
+        wx.redirectTo({
+          url: '../home/home',
+          success: function (res) { },
+          fail: function (res) { },
+          complete: function (res) { },
+        })
       }
-      else{
+      else {
         that.whenStart();
       }
-    }); 
-    
+    });
+
   },
 
   //返回主界面按钮
-  btnBack: function(){
+  btnBack: function () {
     wx.redirectTo({
       url: '../home/home',
       success: function (res) { },
@@ -184,8 +175,8 @@ Page({
   },
 
   whenStart: function () {
-    var that=this;
-    
+    var that = this;
+
     console.log("currentIndex:" + that.data.currentIndex);
     console.log("currentId:" + that.data.currentId);
     console.log("userId:" + app.globalData.id);
@@ -208,24 +199,49 @@ Page({
     //判断当前用户为绘画用户或回答用户
     if (that.data.currentId != app.globalData.id) {
       that.showWin(3);
-    }else{
+    } else {
       that.setWords();
     }
 
     //如果倒计时结束仍未选择词，则默认选择第一个
     that.count(10, 2, function () {
       that.hideWin(1);
-
-      console.log("currentWord:" + that.data.currentWord);
-
-      that.count(30, 1, function () {
-        that.whenFinish();
-      });
+      that.startDrawing();
     }, function () {
-      console.log("flag_show1:"+that.data.flag_show1);
       if (that.data.flag_show1 == false) {
         return true;
       }
+    });
+  },
+
+  /**
+   * 开始绘制
+   */
+  startDrawing:function(){
+    var that = this;
+    //如果本机用户为绘画者，传给服务器选中的词汇
+    if (that.data.currentId != app.globalData.id) {
+      wx: wx.request({
+        url: 'http://liuyifan.club:8080/painting/setTarget',
+        data: {
+          userId: that.data.currentId,
+          roomId: roomId,
+          targetName: that.data.currentWord
+        },
+        header: { "content-Type": "application/x-www-form-urlencoded" },
+        method: 'GET',
+        dataType: 'json',
+        responseType: 'text',
+        success: function (res) {
+          console.log("setTarget succeed!")
+          console.log(res)
+        }
+      })
+    }
+    
+    //开始画图
+    that.count(30, 1, function () {
+      that.whenFinish();
     });
   },
 
@@ -238,40 +254,61 @@ Page({
     this.setData({
       "currentWord": this.data.words[id]
     });
-    var msg = "canvas:4," + this.data.words[id]
+    //var msg = "canvas:4," + this.data.words[id]
+    var msg = "canvas:4,选词"
     canvasSocket.send({ data: msg })
     this.hideWin(1);
-    this.count(30, 1, function () {
-      that.whenFinish();
-    });
+    this.startDrawing();
   },
 
-  btnAnsClicked:function(){
-    if(this.data.flag_show4){
+  btnAnsClicked: function () {
+    var that = this;
+    if (this.data.flag_show4) {
+      this.setData({
+        "flag_show4": false
+      });
+      if (this.data.inputVal == ""){
+        return;
+      }
+      var scoreAdded = 0;
+      //验证答案
+      wx: wx.request({
+        url: 'http://liuyifan.club:8080/painting/isRightGuess',
+        data: {
+          userId: that.data.currentId,
+          roomId: roomId,
+          targetName: that.data.inputVal
+        },
+        header: { "content-Type": "application/x-www-form-urlencoded" },
+        method: 'GET',
+        dataType: 'json',
+        responseType: 'text',
+        success: function (res) {
+          console.log(res)
+          scoreAdded = parseInt(res.data.info);
+        }
+      })
       //回答正确
-      if (this.data.currentWord == this.data.inputVal) {
-        if(answered == false){
+      if (scoreAdded != 0) {
+        if (answered == false) {
           answered = true
-          this.data.score[userIndex] += 2
+          this.data.score[userIndex] += scoreAdded
           this.setData({
             score: this.data.score
           })
-          var msg = "canvas:5," + userIndex
+          var msg = "canvas:5," + userIndex + ":" + this.data.score;
           canvasSocket.send({ data: msg })
         }
       }
       //回答错误
-      else if (this.data.inputVal != ""){
+      else {
         var msg = "canvas:6," + userIndex + ":" + this.data.inputVal
         canvasSocket.send({ data: msg })
         this.setPopoverMsg(userIndex, this.data.inputVal)
         this.setPopoverTimer(userIndex, popoverTime)
       }
 
-      this.setData({
-        "flag_show4": false
-      });
-    }else{
+    } else {
       this.setData({
         "flag_show4": true
       });
@@ -282,7 +319,7 @@ Page({
    * 设定倒计时时间
    */
   count: function (time, id, func, func2 = function () { return false; }) {
-    var that=this;
+    var that = this;
     var countdown = time;
     that.minus1s(that, func, countdown, id, func2);
   },
@@ -290,9 +327,9 @@ Page({
   /**
    * 倒计时-1s,倒计时为0时执行函数
    */
-  minus1s: function (that, func, countdown, id,func2=function(){return false;}) {
+  minus1s: function (that, func, countdown, id, func2 = function () { return false; }) {
     //设置函数使倒计时中途停止
-    if(func2())return;
+    if (func2()) return;
     //倒计时为0时执行指定函数
     if (countdown == 0) {
       func();
@@ -305,9 +342,9 @@ Page({
 
     }
     setTimeout(function () {
-      that.minus1s(that, func, countdown, id ,func2);
+      that.minus1s(that, func, countdown, id, func2);
     }
-    , 1000)
+      , 1000)
   },
 
   showWin: function (id) {
@@ -323,7 +360,7 @@ Page({
   },
 
   //隐藏所有窗口
-  clearWin:function(){
+  clearWin: function () {
     this.hideWin(1);
     this.hideWin(2);
     this.hideWin(3);
@@ -334,7 +371,7 @@ Page({
   stop: function () {
   },
 
-//坐标
+  //坐标
   start: function (e) {
     if (this.data.currentId != app.globalData.id) {
       return false
@@ -363,13 +400,13 @@ Page({
     if (this.data.currentId != app.globalData.id) {
       return false
     }
-    if(moved == 0){
+    if (moved == 0) {
       ctx.moveTo(x, y) //圆心
       ctx.arc(x, y, radius, 0, 2 * Math.PI)//圆点
       ctx.fill()
       ctx.draw(true)
       var msg = "canvas:"
-      msg += x+","+y+","+x+","+y
+      msg += x + "," + y + "," + x + "," + y
       canvasSocket.send({ data: msg })
     }
   },
@@ -402,7 +439,7 @@ Page({
     canvasSocket.send({ data: msg })
   },
 
-  erase:function(event){
+  erase: function (event) {
     if (this.data.currentId != app.globalData.id) {
       return false
     }
@@ -418,7 +455,7 @@ Page({
   },
 
   clearAll: function () {
-    if (this.data.currentId != app.globalData.id){
+    if (this.data.currentId != app.globalData.id) {
       return false
     }
     ctx.draw();
@@ -428,7 +465,7 @@ Page({
 
   listenerInputVal: function (e) {
     this.setData({
-      inputVal:e.detail.value
+      inputVal: e.detail.value
     })
   },
 
@@ -445,11 +482,11 @@ Page({
   },
 
   //设置弹出框Timer时间和显示弹出框，并开始倒计时，参数：i是popovers[]的index索引，time是倒计时时间
-  setPopoverTimer:function(i ,time){
+  setPopoverTimer: function (i, time) {
     this.setData({
       ["popovers[" + i + "].timer"]: time
     })
-    if(this.data.popovers[i].show == false){
+    if (this.data.popovers[i].show == false) {
       this.setData({
         ["popovers[" + i + "].show"]: true
       })
@@ -458,21 +495,21 @@ Page({
   },
 
   //popover计时器开始，参数i表示popovers[]的index
-  startPopoverTimer:function(i){
+  startPopoverTimer: function (i) {
     var that = this;
     that.setData({
       ["popovers[" + i + "].timer"]: that.data.popovers[i].timer - 1
     })
-    if(that.data.popovers[i].timer <= 0){
+    if (that.data.popovers[i].timer <= 0) {
       that.setData({
         ["popovers[" + i + "].show"]: false
       })
     }
-    else{
+    else {
       setTimeout(function () {
         that.startPopoverTimer(i);
       }
-      ,1000)
+        , 1000)
     }
   },
 
@@ -481,7 +518,7 @@ Page({
   *以下是game数据同步的socket设置
   *
   */
-  connectCanvasSocket:function(){
+  connectCanvasSocket: function () {
     var that = this;
     canvasSocket = wx.connectSocket({
       url: 'ws://120.78.200.1:8080/JustDrawServer/canvas/' + roomId
@@ -496,7 +533,7 @@ Page({
       console.log('canvasSocket连接出错，请检查！')
     })
     canvasSocket.onMessage(function (res) {
-      console.log('收到服务器内容：' + res.data)
+      
       if (res.data.length < 8 || res.data.substring(0, 7) != "canvas:") {
         return false
       }
@@ -550,18 +587,16 @@ Page({
         }
         //4，选词信息
         else if (nums[0] == 4) {
-          that.setData({
-            "currentWord": nums[1]
-          });
+          // that.setData({
+          //   "currentWord": nums[1]
+          // });
           that.hideWin(1);
-          that.count(30, 1, function () {
-            that.whenFinish();
-          });
+          that.startDrawing();
         }
         //5,回答正确
         else if (nums[0] == 5) {
-          var i = parseInt(nums[1])
-          that.data.score[i] += 2
+          var index_score = parseInt(nums[1]).split(":")
+          that.data.score[index_score[0]] += parseInt(index_score[1])
           that.setData({
             score: that.data.score
           })
@@ -599,7 +634,7 @@ Page({
       _score.splice(maxIndex,1);
       userNum--;
     }
-    
+
     this.setData({
       modalHidden:false,
       ranks: this.data.ranks

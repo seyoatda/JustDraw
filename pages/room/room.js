@@ -16,11 +16,11 @@ function sendSocketMessage(msg) {
       data: msg
     })
   } else {
-    socketMsgQueue.push(msg)
+    socketMsgQueue.push(msg);
   }
 }
 
-function closeSocket() {
+function closeSocket(){
   console.log('close socket')
   if (socketOpen) {
     wx.closeSocket({
@@ -50,10 +50,13 @@ Page({
    * 页面的初始数据
    */
   data: {
-    flag_show1: true,
-    flag_disabled: true,
     roomNo: 0,
     btn_style: "border-radius:60rpx;border:none;color: rgb(240,220,200);background-color: gray;opacity:0.9;",
+    flags:[
+      true,//加入房间弹窗是否显示
+      true,//开始游戏按钮是否可用
+      true //创建房间弹窗是否显示
+      ],
     users: [
       new util.user(0, "空位", ""),
       new util.user(0, "空位", ""),
@@ -102,8 +105,8 @@ Page({
     //如果当前用户数量大于2，开始按钮取消disabled
     if (this.getUserNum() >= 2) {
       this.setData({
-        flag_disabled: false,
-        btn_style: "border-radius:60rpx;border:none;color: rgb(240,220,200);background-color: dodgerblue;opacity:0.9;"
+        btn_style: "border-radius:60rpx;border:none;color: rgb(240,220,200);background-color: dodgerblue;opacity:0.9;",
+        ["flags[1]"]: false
       })
     }
     console.log("当前房间内用户：", this.data.users);
@@ -122,22 +125,9 @@ Page({
       }
     }
     userNum--;
-
-    //如果玩家数量为0，删除房间
-    if (that.getUserNum() == 0) {
-      wx: wx.request({
-        url: '',
-        data: '',
-        header: {},
-        method: 'GET',
-        dataType: 'json',
-        responseType: 'text',
-        success: function (res) { },
-        fail: function (res) { },
-        complete: function (res) { },
-      })
-    }
   },
+
+  //查询玩家id是否在玩家池中
   findId: function (id) {
     var u = this.data.users;
     for (var i = 0; i < 6; i++) {
@@ -182,6 +172,8 @@ Page({
       // 接收广播并将加入房间的新用户初始化
       client.subscribe(destination, function (body, headers) {
         var data = JSON.parse(body.body);
+
+        //收到开始游戏的广播，开始游戏
         if (data.type == "START") {
           if (gData.id != ownerId) {
             console.log("startGame:", data.type);
@@ -189,68 +181,74 @@ Page({
               url: '../game/game?roomId=' + roomId + '&users=' + JSON.stringify(that.data.users)
             });
           }
-        } else if (data.type == "USER") {
-          //查询房间内所有用户的id
-          util.req_findRoom({
-            roomId: roomId
-          }, (res) => {
-            var players = res.data.info.players;
-            var userIds = [];
-            userIds.push(res.data.info.userId);
-            for (var i = 0; i < players.length; i++) {
-              userIds.push(players[i].userId);
+        } else if (data.type == "ENTER") {
+          //查询房间内所有用户的id,并加入玩家池
+          that.getUserInfoInRoom(roomId, (res) => {
+            console.log("GET--user/find:", res);
+            var users = res.data;
+            for (var i = 0; i < users.length; i++) {
+              that.addUser(new util.user(users[i].userId, users[i].nickName, users[i].photo));
             }
-            //查询房间内所有用户的信息并加入
-            util.req_findUser(userIds, (res) => {
-              console.log("GET--user/find:", res);
-              var users = res.data;
-              for (var i = 0; i < users.length; i++) {
-                that.addUser(new util.user(users[i].userId, users[i].nickName, users[i].photo))
-              }
-            });
-          })
+          });
+        } else if (data.type == "QUIT") {
+          //查询房间内所有用户的id,并从玩家池中删除
+          that.getUserInfoInRoom(roomId, (res) => {
+            console.log("GET--user/find:", res);
+            var users = res.data;
+            for (var i = 0; i < users.length; i++) {
+              that.delUser(users[i].userId);
+            }
+          });
         }
       });
-      client.send(destination, { priority: 9 }, JSON.stringify({ type: "USER", content: gData.id }));
+      
+      client.send(destination, { priority: 9 }, JSON.stringify({ type: "ENTER", content: gData.id }));
     })
   },
 
+  getUserInfoInRoom: function (roomId, callback) {
+    //request 查询房间内所有用户的id
+    util.req_findRoom({
+      roomId: roomId
+    }, (res) => {
+      var players = res.data.info.players;
+      var userIds = [];
+      userIds.push(res.data.info.userId);
+      for (var i = 0; i < players.length; i++) {
+        userIds.push(players[i].userId);
+      }
+      //request 查询房间内所有用户的信息并加入
+      util.req_findUser(userIds, callback);
+    })
+  },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
     var that = this;
+    userNum=0;
     var user = JSON.parse(options.user);
     roomId = options.roomId;
     that.setData({
       roomNo: roomId
     })
     console.log("button:", options);
+
     //将自己的信息广播给其他已经进入房间的用户
     if (options.isOwner == "true") {
       ownerId = user.id;
       that.addUser(user);
-
+      that.setData({
+        ["flags[1]"]:true
+      });
     } else {
       //如果不是房主，隐藏开始游戏按钮
       that.setData({
-        flag_show1: false
+        ["flags[0]"]: false
       })
     }
     that.initData();
-
-
     console.log("roomId:", roomId);
-
-    console.log(gData);
-
-
-
-
-
-
-
-
   },
 
   /**
@@ -264,7 +262,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    
   },
 
   /**
@@ -284,42 +282,33 @@ Page({
     client.disconnect(function () {
       console.log("stomp disconnected success");
     });
-    console.log("unload");
-    console.log("roomId:::::::::", roomId);
+    console.log("unload",userNum);
     //如果用户是房主，则退出时，解散房间，否则调用退出接口
-    if (ownerId != 0) {
-      wx: wx.request({
-        url: 'http://liuyifan.club:8080/room/dismiss',
-        data: {
-          roomId: roomId,
-          userId: gData.id
-        },
-        header: { "content-Type": "application/x-www-form-urlencoded" },
-        method: 'POST',
-        dataType: 'json',
-        responseType: 'text',
-        success: function (res) {
-          console.log("POST--room/dismiss", res);
-        },
-        fail: function (res) { },
-        complete: function (res) { },
+    // if (ownerId != 0) {
+    //   wx: wx.request({
+    //     url: 'http://liuyifan.club:8080/room/dismiss',
+    //     data: {
+    //       roomId: roomId,
+    //       userId: gData.id
+    //     },
+    //     header: { "content-Type": "application/x-www-form-urlencoded" },
+    //     method: 'POST',
+    //     dataType: 'json',
+    //     responseType: 'text',
+    //     success: function (res) {
+    //       console.log("POST--room/dismiss", res);
+    //     },
+    //     fail: function (res) { },
+    //     complete: function (res) { },
+    //   })
+    // } else {
+      util.req_quitRoom({
+        roomId: roomId,
+        userId: gData.id
+      },(res)=>{
+        console.log('POST--room/quit',res);
       })
-    } else {
-      wx: wx.request({
-        url: 'http://liuyifan.club:8080/room/quit',
-        data: {
-          roomId: roomId,
-          userId: gData.id
-        },
-        header: { "content-Type": "application/x-www-form-urlencoded" },
-        method: 'POST',
-        dataType: 'json',
-        responseType: 'text',
-        success: function (res) {
-          console.log("POST--room/quit", res);
-        }
-      })
-    }
+    // }
 
 
   },

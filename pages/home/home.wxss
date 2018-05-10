@@ -44,12 +44,21 @@ page{
   top:0;
   background-color: rgba(0, 0, 0, 0);
   z-index: 999;
-  
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items:center;
 }
 .vw_winCtnr .v_enterRoom{
-  width: 100%;
-  height: 100%;
+  width: 70%;
+  height: 60%;
   position: absolute;
+  border:2px solid rgb(240,220,200);
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 .vw_winCtnr .v_header{
   width: 100%;
@@ -58,15 +67,35 @@ page{
   flex-direction: row;
   justify-content: center;
 }
-.v_enterRoom{
-  width: 60%;
-  height: 100%;
+
+.vw_setRoom{
+  width: 70%;
+  height: 60%;
+  position: absolute;
+  border:2px solid rgb(240,220,200);
+  border-radius: 5px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
-
+.vw_setRoom .vw_line{
+  margin-top: 20rpx;
+  width: 80%;
+  height: 150rpx;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.txt_line{
+  left:0;
+  width: 100rpx;
+  text-align: center
+}
+.slider1{
+  width: 300rpx;
+}
 .btn_ctn{
   width: 100%;
   height: 400rpx;
@@ -75,7 +104,7 @@ page{
 }
 .btn_yes{
   margin-top: 15%;
-  width: 80%;
+  width: 300rpx;
   height: 100rpx;
   text-align: center;
   font-weight: bold;
@@ -84,7 +113,7 @@ page{
 }
 .btn_no{
   margin-top: 10%;
-  width: 80%;
+  width: 300rpx;
   height: 100rpx;
   text-align: center;
   font-weight: bold;
@@ -93,14 +122,15 @@ page{
 }
 
 .i_room{
-  margin-left: 10%;
+  margin-top: 100rpx;
   text-align: center;
-  width: 80%;
+  width: 300rpx;
   color: rgb(240,220,200);
   lighting-color: rgb(240,220,200);
   border-bottom: 1px solid rgb(240,220,200);
 }
 .phcolor{
+  
   color:rgb(150,150,150);
 }
 
@@ -185,4 +215,5 @@ page{
   margin-top: 40rpx;
   font-size: 70rpx;
   color: rgb(240,220,200);
+  margin: auto;
 }

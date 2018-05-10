@@ -14,6 +14,16 @@ Page({
   data: {
     setShow: false,
     display: false,//是否弹出
+    flags:[
+      false,
+      false
+    ],
+    styles:[
+      "",
+      ""
+    ],
+    maxNum:6,
+    isPrivate:true,
     plain: true,
     animationP: {},//item位移,透明度  
     focus: true,
@@ -72,7 +82,7 @@ Page({
     }.bind(this), 300)
   },
 
-  showWin: function () {
+  showWin: function (i) {
     var animation_btn = wx.createAnimation({
       duration: 100,
       timingFunction: "linear",
@@ -93,14 +103,14 @@ Page({
     animation.opacity(1).step()
     this.setData({
       animationData: animation.export(),
-      'setShow': true,
+      ["flags["+i+"]"]: true,
     })
     animation.translateY(0).step()
     this.setData({
       animationData: animation.export(),
     });
   },
-  hideWin: function () {
+  hideWin: function (i) {
     var animation = wx.createAnimation({
       duration: 300,
       timingFunction: "linear",
@@ -115,30 +125,65 @@ Page({
       animation.translateY(0).step()
       this.setData({
         animationData: animation.export(),
-        'setShow': false
+        ["flags["+i+"]"]: false,
       })
     }.bind(this), 300)
   },
+  //拦截点击事件，空函数体，do nothing
   stop: function () {
 
   },
+  btnCreClicked: function () {
+    this.showWin(1);
+    this.setData({
+      isPrivate: false,
+      ["styles[0]"]: "background:red;"
+    });
+  },
+  btnJoinClicked: function () {
+    this.showWin(0);
+  },
+  vwCreClicked:function(){
+    this.hideWin(1);
+  },
+  vwJoinClicked:function(){
+    this.hideWin(0);
+  },
+  btnPriClicked:function(e){
+    var id=e.currentTarget.id;
+    this.setData({
+      styles:["",""]
+    });
+    if(id=="btn_public"){
+      this.setData({
+        isPrivate:false,
+        ["styles[0]"]:"background:red;"
+      });
+    }else if(id=="btn_private"){
+      this.setData({
+        isPrivate: true,
+        ["styles[1]"]: "background:red;"
+      });
+    }
+  },
+  //跳转至房间页面
   jump2Room: function () {
     var that = this;
     //request 查询用户是否在房间
     util.req_getPlayer({
-      userId:gData.id
-    },(res)=>{
-      console.log("POST--player/get",res);
-      if(res.data.status=="SUCCESS"){
-      //request 将用户退出房间
-      util.req_quitRoom({
-        roomId:res.data.info.roomId,
-        userId:res.data.info.userId
-      },(res)=>{
-        console.log("POST--room/quit",res);
-        that.cbCreateRoom();
-      });
-      }else{
+      userId: gData.id
+    }, (res) => {
+      console.log("POST--player/get", res);
+      if (res.data.status == "SUCCESS") {
+        //request 将用户退出房间
+        util.req_quitRoom({
+          roomId: res.data.info.roomId,
+          userId: res.data.info.userId
+        }, (res) => {
+          console.log("POST--room/quit", res);
+          that.cbCreateRoom();
+        });
+      } else {
         that.cbCreateRoom();
       }
     })
@@ -177,8 +222,8 @@ Page({
     })
   },
 
-  cbCreateRoom:function(){
-    var that=this;
+  cbCreateRoom: function () {
+    var that = this;
     //request 房主向后台申请创建房间
     util.req_createRoom({
       userId: gData.id,
@@ -195,7 +240,7 @@ Page({
         return;
       }
       //成功之后进行跳转页面，注明房主身份
-      //TODO: 封装todo
+      //TODO: 封装动画
       var animation = wx.createAnimation({
         duration: 40,
         timingFunction: "linear",
@@ -210,7 +255,7 @@ Page({
       wx.navigateTo({
         url: '../room/room?isOwner=true&roomId=' + res.data.info + '&user=' + JSON.stringify(gData.user),
       })
-    })  
+    })
   },
 
   /**

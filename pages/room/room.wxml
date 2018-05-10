@@ -30,7 +30,7 @@
 </view>
 <view class='v_botCtnr'>
   <text class="txt_roomNo">房间号：{{roomNo}}</text>
-  <button class='btn_start' bindtap='startGame' wx:if="{{flag_show1}}" disabled='{{flag_disabled}}' style='{{btn_style}}'>开始游戏</button>
+  <button class='btn_start' bindtap='startGame' wx:if="{{flags[0]}}" disabled='{{flags[1]}}' style='{{btn_style}}'>开始游戏</button>
   <button class='btn_invite' style='border-radius:60rpx;border:none;color: rgb(240,220,200);' plain='true'>邀请好友</button>
 </view>
 </view>

@@ -33,29 +33,20 @@ App({
                 dataType: 'json',
                 responseType: 'text',
                 success:function(data){
-            
                   console.log(data);
                   if (data.data.status == 1) {
                     var u = data.data.userInfo;
-                    
                     that.globalData.user = new util.user(u.openId,u.nickName,u.avatarUrl);
                     that.globalData.id = u.openId;
-
-                    if (!that.isRegistered()) {
-                      that.register();
-                    }
+                    that.globalData.icon=u.avatarUrl;
+                    that.globalData.name=u.nickName;
+                    that.isRegistered();
                   } else {
                     console.log('解密失败');
                   }
-                },
-                fail: function () {
-                  console.log('系统错误')
                 }
               })
               //...
-            },
-            fail: function () {
-              console.log('获取用户信息失败')
             }
           })
         }
@@ -64,18 +55,16 @@ App({
     // 获取用户信息
     wx.getSetting({
       success: res => {
-        //判断用户是否注册，若未注册先注册用户
-        
-       
-
+        var that = this;
+        console.log(res);
         if (res.authSetting['scope.userInfo']) {
           // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
           wx.getUserInfo({
             success: res => {
               // 可以将 res 发送给后台解码出 unionId
-              var u = res.userInfo;
-              this.globalData.icon = res.userInfo.avatarUrl
-              this.globalData.name = res.userInfo.nickName
+              // var u = res.userInfo;
+              // this.globalData.icon = res.userInfo.avatarUrl
+              // this.globalData.name = res.userInfo.nickName
               // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
               // 所以此处加入 callback 以防止这种情况
               if (this.userInfoReadyCallback) {
@@ -106,9 +95,9 @@ App({
       success: function (data) {
         console.log("GET--user/isRegistered:",data);
         if(data.data.info=="YES"){
-          return true;
+          that.update();
         }else{
-          return false;
+          that.register();
         }
       }
     }) 
@@ -131,11 +120,12 @@ App({
       responseType: 'text',
       success: function (data) {
         console.log("POST--user/register:", data);
-        
       }
     })
   },
+  update:function(){
 
+  },
   globalData: {
     user: null,
     id:1,
