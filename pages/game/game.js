@@ -159,12 +159,12 @@ Page({
       //只循环一轮
 
       if (that.data.currentIndex >= 6) {
-        wx.redirectTo({
-          url: '../home/home',
-          success: function (res) { },
-          fail: function (res) { },
-          complete: function (res) { },
-        })    
+         wx.redirectTo({
+           url: '../home/home',
+           success: function (res) { },
+           fail: function (res) { },
+           complete: function (res) { },
+         })    
       }
       else{
         that.whenStart();
@@ -579,28 +579,30 @@ Page({
 
   //游戏结束rank
   showRank:function(){
+    var _users = JSON.parse(JSON.stringify(this.data.users));
+    var _score = JSON.parse(JSON.stringify(this.data.score));
+
     while(userNum>0){
-      var index = 0;
+      var index = _users.length-1;
       var max = 0;//最高分
       var maxIndex = 0;
-      while (index >= this.data.users.length){
-        if (this.data.users[index].id != 0 && this.data.users[index].score > max){
+      while (index >= 0){
+        if (_users[index].id != 0 && _score[index] >= max){
           maxIndex = index;
-          max = this.data.users[index].score;
+          max = _score[index];
         }
+        index--;
       }
-      var info = "{user:"+this.data.users[maxIndex]+",score:"+score+"}";
+      var info = { id: _users[maxIndex].id,name:_users[maxIndex].name,score:max};
       this.data.ranks.push(info);
-      this.data.users.splice(maxIndex,1);
-      this.setData({
-        ranks: this.data.ranks,
-        users: this.data.users
-      })
+      _users.splice(maxIndex,1);
+      _score.splice(maxIndex,1);
       userNum--;
     }
     
     this.setData({
-      ranks:this.data.ranks
+      modalHidden:false,
+      ranks: this.data.ranks
     })
   },
 
