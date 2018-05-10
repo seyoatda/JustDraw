@@ -21,14 +21,18 @@
     </view>
   </view>
   <view class='vw_winCtnr' catchtap='hideWin' wx:if='{{flag_show2}}'>
-    <view class='vw_setRoom' catchtap='stop' wx:if='{{flag_show2}}'>
-      <view class='vw_line1'>
+    <view class='vw_setRoom' catchtap='stop' wx:if='{{flag_show2}}' animation="{{animationData}}" style='background:url("https://upload-images.jianshu.io/upload_images/9653454-9a14d370b25647ca.jpg?imageMogr2/auto-orient/");-webkit-background-size:cover;'>
+      <view class='vw_line'>
         <text>人数</text>
         <slider bindchange="slider4change" min="2" max="6" show-value/>
       </view>
-      <view class='vw_line2'>
+      <view class='vw_line'>
         <button class='btn_public' bindtap='btnPriClicked' style='{{btnPriStyle[0]}}'>公开</button>
         <button class='btn_private' bindtap='btnPriClicked' style='{{btnPriStyle[1]}}'>私密</button>
+      </view>
+      <view class='vw_line'>
+        <button bindtap='jump2Room'>创建</button>
+        <button >取消</button>
       </view>
     </view>
   </view>
