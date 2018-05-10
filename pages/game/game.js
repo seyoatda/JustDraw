@@ -232,7 +232,7 @@ Page({
     var msg = "canvas:4," + this.data.words[id]
     canvasSocket.send({ data: msg })
     this.hideWin(1);
-    this.count(3, 1, function () {
+    this.count(30, 1, function () {
       that.whenFinish();
     });
   },
@@ -569,28 +569,30 @@ Page({
   },
 
   //游戏结束rank
-  showRank: function () {
-    while (userNum > 0) {
-      var index = 0;
+  showRank:function(){
+    var _users = JSON.parse(JSON.stringify(this.data.users));
+    var _score = JSON.parse(JSON.stringify(this.data.score));
+
+    while(userNum>0){
+      var index = _users.length-1;
       var max = 0;//最高分
       var maxIndex = 0;
-      while (index >= this.data.users.length) {
-        if (this.data.users[index].id != 0 && this.data.users[index].score > max) {
+      while (index >= 0){
+        if (_users[index].id != 0 && _score[index] >= max){
           maxIndex = index;
-          max = this.data.users[index].score;
+          max = _score[index];
         }
+        index--;
       }
-      var info = "{user:" + this.data.users[maxIndex] + ",score:" + score + "}";
+      var info = { id: _users[maxIndex].id,name:_users[maxIndex].name,score:max};
       this.data.ranks.push(info);
-      this.data.users.splice(maxIndex, 1);
-      this.setData({
-        ranks: this.data.ranks,
-        users: this.data.users
-      })
+      _users.splice(maxIndex,1);
+      _score.splice(maxIndex,1);
       userNum--;
     }
 
     this.setData({
+      modalHidden:false,
       ranks: this.data.ranks
     })
   },

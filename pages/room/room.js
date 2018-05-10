@@ -71,7 +71,18 @@ Page({
     })
   },
 
-
+  getUserNum: function(){
+    var u = this.data.users;
+    var num = 0;
+    for(var i = 0;i < u.length;i++)
+    {
+      if(u[i].id!=0)
+      {
+        num++;
+      }
+    }
+    return num;
+  },
   addUser: function (user) {
     if (this.findId(user.id) != -1) {
       return;
@@ -88,7 +99,7 @@ Page({
     userNum++;
 
     //如果当前用户数量大于2，开始按钮取消disabled
-    if (userNum >= 2) {
+    if (this.getUserNum() >= 2) {
       this.setData({
         flag_disabled: false
       })
@@ -109,9 +120,6 @@ Page({
       }
     }
     userNum--;
-
-    //如果玩家数量为0，删除房间
-
   },
 
   //查询玩家id是否在玩家池中

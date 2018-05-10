@@ -1,18 +1,17 @@
 /* pages/room/room.wxss */
 page{  
-  background-color: salmon;  
+  background-color: lemonchiffon;  
   width:100%;  
   height:100%;  
 } 
 .whole{  
-  background-color: darkkhaki;  
+  background-color: lemonchiffon;  
   width:100%;  
   height:100%;   
 }  
 .v_topCtnr{
+  padding-top: 50rpx;
   width: 100%;
-  height: 300rpx;
-  background: gray;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -20,20 +19,18 @@ page{
 .v_botCtnr{
   position: absolute;
   width: 100%;
-  height: 300rpx;
-  bottom: 0;
-  background: gray;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-}
-.v_midCtnr{
+  margin-top: 50rpx;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
+.v_midCtnr{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
 .txt_roomNo{
-  margin-top:10rpx; 
+  margin-top:50rpx; 
   margin-left:200rpx; 
   width: 50%;
   height: 100rpx;
@@ -41,37 +38,41 @@ page{
   flex-direction: row;
   justify-content: center;
   align-items:center;
-  background-color: yellowgreen;
-  box-shadow: 2px 2px 2px 2px gray;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color:rgb(240,220,200);
+  box-shadow: 1px 1px 3px 3px darkgrey;
+  border-radius: 5rpx;
 }
 .btn_invite{
-  margin-top: 15%;
+  margin-top: 5%;
   width: 50%;
-  height: 120rpx;
-  background-color: darkkhaki;
-  box-shadow: 5px 5px 5px 5px gray;
-  color: rgb(30,30,30);
+  height: 100rpx;
+  box-shadow: 1px 1px 3px 3px darkgray;
+  color: rgb(220,220,220);
 }
 .btn_start{
-  margin-top: 15%;
+  margin-top: 10%;
   width: 50%;
-  height: 120rpx;
-  background-color: darkkhaki;
-  box-shadow: 5px 5px 5px 5px gray;
-  color: rgb(30,30,30);
+  height: 100rpx;
+  background-color: dodgerblue;
+  color: rgb(220,220,220);
+  border:none;
+}
+.btn_start::after{
+  border:none;
 }
 .v_userInfo{
   margin-left: 50rpx;
-  margin-top: 80rpx;
+  margin-top: 50rpx;
   display: flex;
   flex-direction: column;
   border: 0 solid #ff0000;
 }
 .img_user{
-  width: 150rpx;
-  height: 150rpx;
+  width: 130rpx;
+  height: 130rpx;
   border-radius: 75rpx;
-  background: silver;
+  background: gainsboro;
 }
 .txt_user{
   width: 150rpx;
@@ -80,4 +81,5 @@ page{
   text-overflow:ellipsis;
   white-space:nowrap;
   text-align: center;
+  color:beige;
 }
