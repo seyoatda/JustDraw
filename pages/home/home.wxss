@@ -102,11 +102,21 @@ page{
   align-items: center;
 }
 .vw_setRoom .vw_line{
-  width: 300rpx;
+  margin-top: 20rpx;
+  width: 80%;
+  height: 150rpx;
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
+}
+.txt_line{
+  left:0;
+  width: 100rpx;
+  text-align: center
+}
+.slider1{
+  width: 300rpx;
 }
 .btn_ctn{
   width: 100%;

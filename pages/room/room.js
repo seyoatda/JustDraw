@@ -16,11 +16,11 @@ function sendSocketMessage(msg) {
       data: msg
     })
   } else {
-    socketMsgQueue.push(msg)
+    socketMsgQueue.push(msg);
   }
 }
 
-function closeSocket() {
+function closeSocket(){
   console.log('close socket')
   if (socketOpen) {
     wx.closeSocket({

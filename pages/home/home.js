@@ -9,10 +9,20 @@ Page({
    * 页面的初始数据
    */
   data: {
-    flag_show1: false,
+    flags:[
+      false,
+      false
+    ],
+    styles:[
+      "",
+      ""
+    ],
+    maxNum:6,
+    isPrivate:true,
     plain: true,
   },
-  showWin: function () {
+
+  showWin: function (i) {
     var animation_btn = wx.createAnimation({
       duration: 100,
       timingFunction: "linear",
@@ -33,14 +43,14 @@ Page({
     animation.opacity(1).step()
     this.setData({
       animationData: animation.export(),
-      'flag_show1': true,
+      ["flags["+i+"]"]: true,
     })
     animation.translateY(0).step()
     this.setData({
       animationData: animation.export(),
     });
   },
-  hideWin: function () {
+  hideWin: function (i) {
     var animation = wx.createAnimation({
       duration: 300,
       timingFunction: "linear",
@@ -55,23 +65,48 @@ Page({
       animation.translateY(0).step()
       this.setData({
         animationData: animation.export(),
-        flag_show1: false,
-        flag_show2: false
+        ["flags["+i+"]"]: false,
       })
     }.bind(this), 300)
   },
-
+  //拦截点击事件，空函数体，do nothing
   stop: function () {
 
   },
   btnCreClicked: function () {
+    this.showWin(1);
     this.setData({
-      flag_show2: true
+      isPrivate: false,
+      ["styles[0]"]: "background:red;"
     });
-    
-    
-
   },
+  btnJoinClicked: function () {
+    this.showWin(0);
+  },
+  vwCreClicked:function(){
+    this.hideWin(1);
+  },
+  vwJoinClicked:function(){
+    this.hideWin(0);
+  },
+  btnPriClicked:function(e){
+    var id=e.currentTarget.id;
+    this.setData({
+      styles:["",""]
+    });
+    if(id=="btn_public"){
+      this.setData({
+        isPrivate:false,
+        ["styles[0]"]:"background:red;"
+      });
+    }else if(id=="btn_private"){
+      this.setData({
+        isPrivate: true,
+        ["styles[1]"]: "background:red;"
+      });
+    }
+  },
+  //跳转至房间页面
   jump2Room: function () {
     var that = this;
     //request 查询用户是否在房间

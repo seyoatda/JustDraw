@@ -1,38 +1,44 @@
 <!--pages/home/home.wxml-->
-<!-- <view class="container" > -->
+<!-- 请不要删除注释！！！ -->
 <view class="whole" style='background:url("https://upload-images.jianshu.io/upload_images/9653454-e1eaaed42013d3e4.jpg?imageMogr2/auto-orient/");-webkit-background-size:cover;'>
   <view class="v_btnCtnr">
     <view class='btn_flex'>
       <view class="btntoroom"><image animation="{{btnAnimationCre}}" class="btn" bindtap='btnCreClicked' src='https://upload-images.jianshu.io/upload_images/9653454-c82e75016e7a27dd.png?imageMogr2/auto-orient/'></image></view>
       <view class="btntoroom"><image animaiton="{{btnAnimationRan}}" class="btn" src='https://upload-images.jianshu.io/upload_images/9653454-34bd41b8171501df.png?imageMogr2/auto-orient/' bindtap='jump2Ran'></image></view>
-      <view class='btntoroom'><image animaiton="{{btnAnimatioJoi}}" class='btn' src='https://upload-images.jianshu.io/upload_images/9653454-4c89f6165a748430.png?imageMogr2/auto-orient/' bindtap='showWin'></image></view>
+      <view class='btntoroom'><image animaiton="{{btnAnimatioJoi}}" class='btn' src='https://upload-images.jianshu.io/upload_images/9653454-4c89f6165a748430.png?imageMogr2/auto-orient/' bindtap='btnJoinClicked'></image></view>
     </view>
   </view>
   <view class='v_roll' catchtap='showWin'></view>
-  <view class='vw_winCtnr' catchtap='hideWin' wx:if='{{flag_show1}}'>
-    <view animation="{{animationData}}" class="v_enterRoom" catchtap='stop' wx:if='{{flag_show1}}' style='background:url("https://upload-images.jianshu.io/upload_images/9653454-9a14d370b25647ca.jpg?imageMogr2/auto-orient/");-webkit-background-size:cover;'>
+  <!--加入房间弹出的窗口-->
+  <view class='vw_winCtnr' catchtap='vwJoinClicked' wx:if='{{flags[0]}}'>
+    <view animation="{{animationData}}" class="v_enterRoom" catchtap='stop' wx:if='{{flags[0]}}' style='background:url("https://upload-images.jianshu.io/upload_images/9653454-9a14d370b25647ca.jpg?imageMogr2/auto-orient/");-webkit-background-size:cover;'>
       <form bindsubmit='enterRoom'>
         <input class='i_room' name="roomNumber" focus='true' confirm-type='go' maxlength='8' bindconfirm='enterRoom' placeholder-style="font-size:15px" placeholder="     请输入房间号" placeholder-class="phcolor" auto-focus></input>
         <view class='btn_ctn'>
           <button class='btn_yes' form-type="submit" plain='true' style='color:rgb(240,220,200);border:2px solid rgb(240,220,200);border-radius:5px;opacity:0.8'>确 认</button>
-          <button class='btn_no' bindtap='hideWin' plain='false' style='color:rgb(240,220,200);border:2px solid rgb(240,220,200);border-radius:5px;opacity:0.8'>取 消</button>
+          <button class='btn_no' bindtap='vwJoinClicked' plain='false' style='color:rgb(240,220,200);border:2px solid rgb(240,220,200);border-radius:5px;opacity:0.8'>取 消</button>
         </view>
       </form>
     </view>
   </view>
-  <view class='vw_winCtnr' catchtap='hideWin' wx:if='{{flag_show2}}'>
-    <view class='vw_setRoom' catchtap='stop' wx:if='{{flag_show2}}' animation="{{animationData}}" style='background:url("https://upload-images.jianshu.io/upload_images/9653454-9a14d370b25647ca.jpg?imageMogr2/auto-orient/");-webkit-background-size:cover;'>
+
+  <!--创建房间弹出的设置窗口-->
+  <view class='vw_winCtnr' catchtap='vwCreClicked' wx:if='{{flags[1]}}'>
+    <view class='vw_setRoom' catchtap='stop' wx:if='{{flags[1]}}' animation="{{animationData}}" style='background:url("https://upload-images.jianshu.io/upload_images/9653454-9a14d370b25647ca.jpg?imageMogr2/auto-orient/");-webkit-background-size:cover;'>
       <view class='vw_line'>
-        <text>人数</text>
-        <slider bindchange="slider4change" min="2" max="6" show-value/>
+        <text class="txt_line">人数</text>
+        <button id='btn_max2' class='btn_max' bindtap='btnMaxClicked'>2</button>
+        <button id='btn_max4' class='btn_max' bindtap='btnMaxClicked'>4</button>
+        <button id='btn_max6' class='btn_max' bindtap='btnMaxClicked'>6</button>
       </view>
       <view class='vw_line'>
-        <button class='btn_public' bindtap='btnPriClicked' style='{{btnPriStyle[0]}}'>公开</button>
-        <button class='btn_private' bindtap='btnPriClicked' style='{{btnPriStyle[1]}}'>私密</button>
+        <text class='txt_line'>房间类型</text>
+        <button id="btn_public" class='btn_public' bindtap='btnPriClicked' style='{{styles[0]}}'>公开</button>
+        <button id="btn_private" class='btn_public' bindtap='btnPriClicked' style='{{styles[1]}}'>私密</button>
       </view>
       <view class='vw_line'>
-        <button bindtap='jump2Room'>创建</button>
-        <button >取消</button>
+        <button  bindtap='jump2Room'>创建</button>
+        <button id="btn" bindtap='vwCreClicked'>取消</button>
       </view>
     </view>
   </view>
