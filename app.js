@@ -40,10 +40,7 @@ App({
                     
                     that.globalData.user = new util.user(u.openId,u.nickName,u.avatarUrl);
                     that.globalData.id = u.openId;
-
-                    if (!that.isRegistered()) {
-                      that.register();
-                    }
+                    that.register();
                   } else {
                     console.log('解密失败');
                   }
