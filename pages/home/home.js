@@ -1,6 +1,9 @@
 // pages/home/home.js
 var util = require('../../utils/util.js');
-
+var start_s;
+var end_s; 
+var start_c;
+var end_c;
 
 var gData = getApp().globalData;
 Page({
@@ -10,8 +13,65 @@ Page({
    */
   data: {
     setShow: false,
+    display: false,//是否弹出
     plain: true,
+    animationP: {},//item位移,透明度  
+    focus: true,
   },
+  // 滑动开始  
+  touchstart: function (e) {
+    start_s = e.changedTouches[0].clientY;
+  },
+  // 滑动结束  
+  touchend: function (e) {
+    end_s = e.changedTouches[0].clientY;
+    if (start_s - end_s > 80) {
+      this.openIt();
+      this.setData({
+        display: "true",
+      })
+    } 
+    else if (start_s - end_s > 0) {
+      this.setData({
+        display: "false",
+      })
+    }
+  },  
+  //弹出动画
+  openIt: function(){
+    var ani = wx.createAnimation({
+      duration: 300,
+      timingFunction: 'ease-out'
+    })  
+    ani.translate(0, -40).opacity(1).step();  
+    this.setData({
+      animationP: ani.export(),
+    })
+  },
+  //关闭弹窗
+  closePage: function(){
+    this.closeIt();
+
+  },
+  closeIt: function () {
+    var ani = wx.createAnimation({
+      duration: 300,
+      timingFunction: 'linear',
+      delay: 0
+    })
+    ani.opacity(0).step();
+    this.setData({
+      animationP: ani.export(),
+    }) 
+    setTimeout(function () {
+      ani.translateY(0).step()
+      this.setData({
+        animationP: ani.export(),
+        'display': false,
+      })
+    }.bind(this), 300)
+  },
+
   showWin: function () {
     var animation_btn = wx.createAnimation({
       duration: 100,

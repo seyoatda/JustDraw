@@ -6,7 +6,8 @@ page{
 .whole{  
   background-color: green;  
   width:100%;  
-  height:100%;  
+  height:100%; 
+  z-index: 1; 
 } 
 .v_btnCtnr{
   display: flex;
@@ -45,29 +46,6 @@ page{
   z-index: 999;
   
 }
-/*
-.vw_winCtnr .v_enterRoom{
-  width: 60%;
-  height: 200rpx;
-  top: 40%;
-  left: 20%;
-  position: absolute;
-}
-.vw_winCtnr .v_header{
-  width: 400rpx;
-  height: 200rpx;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-}
-.v_enterRoom{
-  width: 400rpx;
-  height: 200rpx;
-  display: flex;
-  flex-direction: column;
-  border-radius: 6px;
-}
-*/
 .vw_winCtnr .v_enterRoom{
   width: 100%;
   height: 100%;
@@ -124,4 +102,87 @@ page{
 }
 .phcolor{
   color:rgb(150,150,150);
+}
+
+/*这是侧滑栏*/
+.page_tab{
+  margin-top: 30%;
+  margin-left: 10%;
+  height: 70%;
+  width: 80%;
+  position: absolute;
+  background-color: purple;
+  border-radius: 20rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;  
+  box-shadow: 1px 1px 2px 2px darksalmon;
+  opacity: 0;
+}
+.page_content{
+  margin-top: 20rpx;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; 
+}
+.v_title{
+  margin-top: 20rpx;
+  height: 90rpx;
+  display: flex;
+  flex-direction: row;
+}
+.t_title{
+  text-align: center;
+  margin-left: 35%;
+  font-size: 70rpx;
+  color: rgb(240,220,200);
+  font-weight: bold;
+}
+.v_cancel{
+  margin-left: 80rpx;
+  margin-top: 10rpx;
+}
+.v_item{
+  margin-left: 10%;
+  height: 22%;
+  width: 80%;
+  display: flex;
+  flex-direction: row;
+  border-top: 2rpx solid rgb(240,220,200);
+}
+.t_number{
+  font-size: 60rpx;
+  margin-left: 20rpx;
+  text-align: center;
+  color: rgb(240,220,200);
+  font-weight: bold;
+}
+.v_info{
+  height: 100%;
+  margin-left: 30rpx;
+  margin-top: 10rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.i_userimage{
+  height: 100rpx;
+  width: 100rpx;
+  border-radius: 500rpx;
+  background-color: grey;
+}
+.t_username{
+  font-size: 40rpx;
+  text-align: center;
+  color: rgb(240,220,200);
+}
+.t_score{
+  margin-left: 90rpx;
+  text-align: center;
+  margin-top: 40rpx;
+  font-size: 70rpx;
+  color: rgb(240,220,200);
 }

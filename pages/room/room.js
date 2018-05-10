@@ -53,6 +53,7 @@ Page({
     flag_show1: true,
     flag_disabled: true,
     roomNo: 0,
+    btn_style: "border-radius:60rpx;border:none;color: rgb(240,220,200);background-color: gray;opacity:0.9;",
     users: [
       new util.user(0, "空位", ""),
       new util.user(0, "空位", ""),
@@ -101,7 +102,8 @@ Page({
     //如果当前用户数量大于2，开始按钮取消disabled
     if (this.getUserNum() >= 2) {
       this.setData({
-        flag_disabled: false
+        flag_disabled: false,
+        btn_style: "border-radius:60rpx;border:none;color: rgb(240,220,200);background-color: dodgerblue;opacity:0.9;"
       })
     }
     console.log("当前房间内用户：", this.data.users);

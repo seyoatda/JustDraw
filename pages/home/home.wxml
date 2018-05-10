@@ -1,6 +1,58 @@
 <!--pages/home/home.wxml-->
 <!-- <view class="container" > -->
-<view class="whole" style='background:url("https://upload-images.jianshu.io/upload_images/9653454-e1eaaed42013d3e4.jpg?imageMogr2/auto-orient/");-webkit-background-size:cover;'>
+<view class="whole" style='background:url("https://upload-images.jianshu.io/upload_images/9653454-e1eaaed42013d3e4.jpg?imageMogr2/auto-orient/");-webkit-background-size:cover;' bindtouchstart='touchstart' bindtouchend='touchend' focus="{{focus}}">
+  <!--排行榜-->
+  <view class=".page_tab" style='background:url("https://upload-images.jianshu.io/upload_images/9653454-7f5a3b9cc76742a9.jpg?imageMogr2/auto-orient/");-webkit-background-size:cover;{{translate}}' wx:if='{{display}}' animation='{{animationP}}'>  
+    <view class='v_title'>
+      <text class='t_title'>排行榜</text>
+      <view class='v_cancel'>
+        <icon class='icon_cancel' type='cancel' bindtap='closePage' color='rgb(240,220,200)'></icon>
+      </view>  
+    </view>
+    <scroll-view class='.page_content' scroll-y='true'>
+      <view class='v_item'>
+        <text class='t_number'>1</text>
+        <view class='v_info'>
+          <image class='i_userimage'></image>
+          <text class='t_username'>明贤大佬</text>
+        </view>
+        <text class='t_score'>666</text>
+      </view>
+    <view class='v_item'>
+      <text class='t_number'>2</text>
+      <view class='v_info'>
+        <image class='i_userimage'></image>
+        <text class='t_username'>明贤大佬</text>
+      </view>
+      <text class='t_score'>776</text>
+    </view>
+    <view class='v_item'>
+      <text class='t_number'>3</text>
+      <view class='v_info'>
+        <image class='i_userimage'></image>
+        <text class='t_username'>明贤大佬</text>
+      </view>
+      <text class='t_score'>666</text>
+    </view>
+    <view class='v_item'>
+      <text class='t_number'>4</text>
+      <view class='v_info'>
+        <image class='i_userimage'></image>
+        <text class='t_username'>明贤大佬</text>
+      </view>
+      <text class='t_score'>666</text>
+    </view>
+      <view class='v_item'>
+        <text class='t_number'>5</text>
+        <view class='v_info'>
+          <image class='i_userimage'></image>
+          <text class='t_username'>明贤大佬</text>
+        </view>
+        <text class='t_score'>666</text>
+      </view> 
+    </scroll-view>
+  </view>
+  <!--主界面-->
   <view class="v_btnCtnr">
     <view class='btn_flex'>
       <view class="btntoroom"><image animation="{{btnAnimationCre}}" class="btn" bindtap='jump2Room' src='https://upload-images.jianshu.io/upload_images/9653454-c82e75016e7a27dd.png?imageMogr2/auto-orient/'></image></view>
