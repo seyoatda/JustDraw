@@ -13,7 +13,7 @@
   <view class='vw_winCtnr' catchtap='vwJoinClicked' wx:if='{{flags[0]}}'>
     <view animation="{{animationData}}" class="v_enterRoom" catchtap='stop' wx:if='{{flags[0]}}' style='background:url("https://upload-images.jianshu.io/upload_images/9653454-9a14d370b25647ca.jpg?imageMogr2/auto-orient/");-webkit-background-size:cover;'>
       <form bindsubmit='enterRoom'>
-        <input class='i_room' name="roomNumber" focus='true' confirm-type='go' maxlength='8' bindconfirm='enterRoom' placeholder-style="font-size:15px" placeholder="     请输入房间号" placeholder-class="phcolor" auto-focus></input>
+        <input class='i_room' name="roomNumber" focus='true' confirm-type='go' maxlength='30' bindconfirm='enterRoom' placeholder-style="font-size:15px" placeholder="     请输入房间号" placeholder-class="phcolor" auto-focus></input>
         <view class='btn_ctn'>
           <button class='btn_yes' form-type="submit" plain='true' style='color:rgb(240,220,200);border:2px solid rgb(240,220,200);border-radius:5px;opacity:0.8'>确 认</button>
           <button class='btn_no' bindtap='vwJoinClicked' plain='false' style='color:rgb(240,220,200);border:2px solid rgb(240,220,200);border-radius:5px;opacity:0.8'>取 消</button>
