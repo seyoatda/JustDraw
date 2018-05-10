@@ -241,7 +241,7 @@ Page({
     var msg = "canvas:4," + this.data.words[id]
     canvasSocket.send({ data: msg })
     this.hideWin(1);
-    this.count(3, 1, function () {
+    this.count(30, 1, function () {
       that.whenFinish();
     });
   },

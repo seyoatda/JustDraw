@@ -137,12 +137,13 @@ Page({
       //成功之后进行跳转页面，注明房主身份
       //TODO: 封装todo
       var animation = wx.createAnimation({
-        duration: 100,
+        duration: 40,
         timingFunction: "linear",
         delay: 0
       })
       that.animation = animation
       animation.opacity(0.7).step()
+      animation.opacity(1).step()
       that.setData({
         btnAnimationCre: animation.export(),
       })
