@@ -58,6 +58,25 @@
       <block wx:for="{{itemColor}}" wx:for-index="index" wx:key="item">
         <cover-view class="color-item {{activeColorIndex == index ?'active-item':''}}" data-index="{{index}}" bindtap="setItemColor" style="background:{{item}};"></cover-view>
       </block>
+     <dl class="menu">
+      <dt data-index="0" class="graph" bindtap="tapMainMenu" >Graph</dt>
+        <dd class="{{subMenuDisplay[0]}}">
+          <ul>
+            <li class="{{subMenuHighLight[0][0]}}" data-index="0-0" bindtap="tapSubMenu">三角形</li>
+            <li class="{{subMenuHighLight[0][1]}}" data-index="0-1" bindtap="tapSubMenu">矩形</li>
+            <li class="{{subMenuHighLight[0][2]}}" data-index="0-2" bindtap="tapSubMenu">圆形</li>
+            <li class="{{subMenuHighLight[0][3]}}" data-index="0-3" bindtap="tapSubMenu">多边形</li>
+          </ul>
+        </dd>
+      <dt data-index="1" class="rank" bindtap="tapMainMenu">Rank</dt>
+        <dd class="{{subMenuDisplay[1]}}">
+          <ul>
+            <li class="{{subMenuHighLight[1][0]}}" data-index="1-0" bindtap="tapSubMenu">level1</li>
+            <li class="{{subMenuHighLight[1][1]}}" data-index="1-1" bindtap="tapSubMenu">level2</li>
+            <li class="{{subMenuHighLight[1][2]}}" data-index="1-2" bindtap="tapSubMenu">level3</li>
+          </ul>
+        </dd>
+    </dl>
       </cover-view>
     </cover-view>
     <!--绘画结束，正确回答界面-->

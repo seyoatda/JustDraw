@@ -521,3 +521,51 @@ page{
   border:1rpx solid #000;
   border-radius: 10rpx;
 }
+.show {
+   display: block;
+}
+.hidden {
+ display: none;
+}
+.graph{
+  margin-left:10rpx;
+  border-radius:50rpx;
+  border:1rpx solid #000;
+  font-size:60%;
+}
+.rank{
+  margin-left:5rpx;
+  border-radius:50rpx;
+  border:1rpx solid #000;
+  font-size:60%;
+}
+/*一级菜单*/
+.menu dt {
+  width: 50%;
+  border-right: 1px solid #d2d2d2;
+  border-bottom: 1px solid #d2d2d2;
+  text-align: center;
+  background-color: #f4f4f4;
+  color: #5a5a5a;
+  position: relative;
+}
+ 
+/*二级菜单外部容器样式*/
+.menu dd{
+  width: 100%;
+  position: absolute;
+  z-index: 999;
+}
+.menu li{
+  font-size: 14px;
+  line-height: 34px;
+  color: #575757;
+  height: 34px;
+  display: block;
+  padding-left: 15px;
+  border-bottom: 1px solid #dbdbdb;
+}
+.highlight{
+  background-color: #f4f4f4;
+ 
+}

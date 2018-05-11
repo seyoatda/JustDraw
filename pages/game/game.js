@@ -51,7 +51,14 @@ Page({
     test: [{ hi: "yes" }],
     inputVal: "",
     score: [0, 0, 0, 0, 0, 0],
-    modalHidden: true
+    modalHidden: true,
+
+    subMenuDisplay: ["hidden", "hidden"],
+    subMenuHighLight: [
+      ['', '', '', ''],
+      ['', '', ''],
+    ],
+    historyAColor:0
   },
 
 
@@ -250,7 +257,7 @@ Page({
     }
     
     //开始画图
-    that.count(30, 1, function () {
+    that.count(3000, 1, function () {
       that.whenFinish();
     });
   },
@@ -687,6 +694,67 @@ Page({
         console.log("complete");
       }
     })
+  },
+
+  tapMainMenu: function (e) {
+    var that = this;
+    var index = parseInt(e.currentTarget.dataset.index); // 生成数组，全为hidden的，只对当前的进行显示
+    var newSubMenuDisplay = that.data.subMenuDisplay// 如果目前是显示则隐藏，反之亦反之。同时要隐藏其他的菜单
+    if (that.data.subMenuDisplay[index] == 'hidden') {
+      newSubMenuDisplay[index] = 'show';
+      newSubMenuDisplay[1 - index] = "hidden";
+      that.data.historyAColor = that.data.activeColorIndex
+      var color = this.data.itemColor[8]
+      ctx.setFillStyle(color)
+      ctx.setStrokeStyle(color)
+      this.setData({
+        activeColorIndex: 8
+      })
+      
+    } else {
+      var color = this.data.itemColor[that.data.historyAColor]
+      ctx.setFillStyle(color)
+      ctx.setStrokeStyle(color)
+      this.setData({
+        activeColorIndex: that.data.historyAColor
+      })
+      newSubMenuDisplay[index] = 'hidden';
+      newSubMenuDisplay[1 - index] = "hidden";
+    }        // 设置为新的数组
+
+    that.setData({
+      subMenuDisplay: newSubMenuDisplay
+    });
+  },
+
+  tapSubMenu: function (e) {
+    var that = this;
+    // 处理二级菜单，首先获取当前显示的二级菜单标识
+    var indexArray = e.currentTarget.dataset.index.split('-');
+    var newSubMenuHighLight = that.data.subMenuHighLight;
+    // 与一级菜单不同，这里不需要判断当前状态，只需要点击就给class赋予highlight即可
+    if (indexArray[0] == 0) {
+      for (var i = 0; i < 4; i++) {
+        if (indexArray[1] == i) {
+          newSubMenuHighLight[indexArray[0]][i] = 'highlight';
+        } else {
+          newSubMenuHighLight[indexArray[0]][i] = "";
+        }
+      }
+    } else {
+      for (var i = 0; i < 3; i++) {
+        if (indexArray[1] == i) {
+          newSubMenuHighLight[indexArray[0]][i] = 'highlight';
+        } else {
+          newSubMenuHighLight[indexArray[0]][i] = "";
+        }
+      }
+    }
+    // 设置为新的数组
+    this.setData({
+      subMenuHighLight: newSubMenuHighLight
+    });
   }
+
 
 })
