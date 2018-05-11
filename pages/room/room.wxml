@@ -1,11 +1,12 @@
 <!--pages/room/room.wxml-->
 <view class='whole' style='background:url("https://upload-images.jianshu.io/upload_images/9653454-7f5a3b9cc76742a9.jpg?imageMogr2/auto-orient/");-webkit-background-size:cover;'>
 <view class='v_topCtnr' style='opacity:0.8'>
-  <view class='v_userInfo'>
-    <image class='img_user' src='{{users[0].icon}}'></image>
-    <text class='txt_user'>{{users[0].name}}</text>
-  </view>
-  <view class='v_userInfo'>
+    <view class='v_userInfo' wx:for="{{users}}" wx:key="name" wx:for-item="user">
+      <image class='img_user' src='{{user.icon}}'></image>
+      <text class='txt_user'>{{user.name}}</text>
+    </view>
+</view>
+  <!-- <view class='v_userInfo'>
     <image class='img_user' src='{{users[1].icon}}'></image>
     <text class='txt_user'>{{users[1].name}}</text>
   </view>
@@ -13,7 +14,7 @@
     <image class='img_user' src='{{users[2].icon}}'></image>
     <text class='txt_user'>{{users[2].name}}</text>
   </view>
-</view>
+
 <view class='v_midCtnr' style='opacity:0.8'>
   <view class='v_userInfo'>
     <image class='img_user' src='{{users[3].icon}}'></image>
@@ -27,7 +28,7 @@
     <image class='img_user' src='{{users[5].icon}}'></image>
     <text class='txt_user'>{{users[5].name}}</text>
   </view>
-</view>
+</view> -->
 <view class='v_botCtnr'>
   <text class="txt_roomNo">房间号：{{roomNo}}</text>
   <button class='btn_start' bindtap='startGame' wx:if="{{flags[0]}}" disabled='{{flags[1]}}' style='{{btn_style}}'>开始游戏</button>

@@ -8,6 +8,7 @@
           <text class='txt_user'>{{users[0].name}}</text>
           <view class='vw_popover_top' wx:if='{{popovers[0].show}}'>
             {{popovers[0].msg}}
+            
           </view>
         </view>
         <text class='txt_score'>{{score[0]}}</text>

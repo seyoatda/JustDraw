@@ -4,7 +4,8 @@ var start_s;
 var end_s; 
 var start_c;
 var end_c;
-
+var style1= "color:rgb(240,220,200);border:2px solid rgb(240,220,200);border-radius:5px;opacity:0.8;font-family: fantasy;";
+var style2 ="color:rgb(0,0,0);border:2px solid rgb(240,220,200);border-radius:5px;opacity:0.8;font-family: fantasy;background:rgb(240,220,200);";
 var gData = getApp().globalData;
 Page({
 
@@ -18,12 +19,18 @@ Page({
       false,
       false
     ],
+    
     styles:[
-      "",
-      ""
+      style2,
+      style1
     ],
+    maxStyles:[
+      style1,
+      style1,
+      style2
+    ],  
     maxNum:6,
-    isPrivate:true,
+    isPrivate:false,
     plain: true,
     animationP: {},//item位移,透明度  
     focus: true,
@@ -133,38 +140,42 @@ Page({
   stop: function () {
 
   },
+  //点击创建房间按钮时触发事件
   btnCreClicked: function () {
     this.showWin(1);
-    this.setData({
-      isPrivate: false,
-      ["styles[0]"]: "background:red;"
-    });
   },
   btnJoinClicked: function () {
     this.showWin(0);
   },
   vwCreClicked:function(){
     this.hideWin(1);
+
   },
   vwJoinClicked:function(){
     this.hideWin(0);
   },
+  //点击弹窗内房间类型时触发事件
   btnPriClicked:function(e){
-    var id=e.currentTarget.id;
+    var id=e.currentTarget.id.substring(7,8);
     this.setData({
-      styles:["",""]
+      styles:[style1,style1],
+      isPrivate: false,
     });
-    if(id=="btn_public"){
       this.setData({
         isPrivate:false,
-        ["styles[0]"]:"background:red;"
-      });
-    }else if(id=="btn_private"){
-      this.setData({
-        isPrivate: true,
-        ["styles[1]"]: "background:red;"
-      });
-    }
+        ["styles["+id+"]"]:style2
+    });
+  },
+  btnMaxClicked:function(e){
+    var id=e.currentTarget.id.substring(7,8);
+    this.setData({
+      maxStyles:[style1,style1,style1]
+    });
+    this.setData({
+      maxNum: (parseInt(id)+1)*2,
+      ["maxStyles[" + id + "]"]: style2
+    });
+    
   },
   //跳转至房间页面
   jump2Room: function () {
@@ -186,26 +197,31 @@ Page({
       } else {
         that.cbCreateRoom();
       }
-    })
+    });
   },
 
   //加入房间访问后台
   enterRoom: function (e) {
     var no = e.detail.value.roomNumber;
-    console.log("nononononno:", e.detail);
-    //request 向后台请求加入房间
-    util.req_enterRoom({
-      roomId: no,
+    console.log("INPUT----roomNumber:", e.detail);
+    var that = this;
+    //request 查询用户是否在房间
+    util.req_getPlayer({
       userId: gData.id
     }, (res) => {
-      console.log("POST--room/enter:", res);
-      if ("ERROR" == res.data.status) {
-        console.log("用户无法进入房间！错误代码：", res.data.info);
-        return;
+      console.log("POST--player/get", res);
+      if (res.data.status == "SUCCESS") {
+        //request 将用户退出房间
+        util.req_quitRoom({
+          roomId: res.data.info.roomId,
+          userId: res.data.info.userId
+        }, (res) => {
+          console.log("POST--room/quit", res);
+          that.cbEnterRoom(no);
+        });
+      } else {
+        that.cbEnterRoom(no);
       }
-      wx.navigateTo({
-        url: '../room/room?isOwner=false&roomId=' + no + '&user=' + JSON.stringify(gData.user),
-      })
     });
   },
 
@@ -228,11 +244,11 @@ Page({
     util.req_createRoom({
       userId: gData.id,
       roomName: "test",
-      maxSize: 6,
+      maxSize: that.data.maxNum,
       level: 1,
       picProvided: false,
       diyEnable: false,
-      appendEnable: false
+      appendEnable: that.data.isPrivate
     }, (res) => {
       console.log("POST--room/create", res);
       if ("ERROR" == res.data.status) {
@@ -253,16 +269,37 @@ Page({
         btnAnimationCre: animation.export(),
       })
       wx.navigateTo({
-        url: '../room/room?isOwner=true&roomId=' + res.data.info + '&user=' + JSON.stringify(gData.user),
+        url: '../room/room?isOwner=true&roomId=' + res.data.info + "&maxNum="+this.data.maxNum,
       })
     })
+  },
+  cbEnterRoom:function(no){
+    //request 向后台请求加入房间
+    util.req_enterRoom({
+      roomId: no,
+      userId: gData.id
+    }, (res) => {
+      console.log("POST--room/enter:", res);
+      if ("ERROR" == res.data.status) {
+        console.log("用户无法进入房间！错误代码：", res.data.info);
+        return;
+      }
+      wx.navigateTo({
+        url: '../room/room?isOwner=false&roomId=' + no + '&user=' + JSON.stringify(gData.user),
+      })
+    });
+  },
+  //在页面加载时完成初始设置
+  initData:function(){
+    this.hideWin(0);
+    this.hideWin(1);
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    this.initData();
   },
 
   /**
@@ -276,14 +313,14 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
-
+    this.initData();
   },
 
   /**

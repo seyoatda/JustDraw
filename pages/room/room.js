@@ -4,6 +4,7 @@ const gData = getApp().globalData;
 var roomId = 0;
 var ownerId = 0;
 var userNum = 0;
+var maxNum=0;
 
 var Stomp = require('../../utils/stomp.js').Stomp;
 var socketOpen = false
@@ -57,14 +58,7 @@ Page({
       true,//开始游戏按钮是否可用
       true //创建房间弹窗是否显示
       ],
-    users: [
-      new util.user(0, "空位", ""),
-      new util.user(0, "空位", ""),
-      new util.user(0, "空位", ""),
-      new util.user(0, "空位", ""),
-      new util.user(0, "空位", ""),
-      new util.user(0, "空位", ""),
-    ]
+    users: []
   },
 
   startGame: function () {
@@ -92,7 +86,7 @@ Page({
       return;
     }
     var u = this.data.users;
-    for (var i = 0; i < 6; i++) {
+    for (var i = 0; i < maxNum; i++) {
       if (u[i].id == 0) {
         this.setData({
           ["users[" + i + "]"]: user
@@ -117,7 +111,7 @@ Page({
     //删除玩家
     //成功后将玩家信息从前端清除
     var u = that.data.users;
-    for (var i = 0; i < 6; i++) {
+    for (var i = 0; i < maxNum; i++) {
       if (u[i].id == id) {
         that.setData({
           ["users[" + i + "]"]: new util.user(0, "空位", "")
@@ -130,7 +124,7 @@ Page({
   //查询玩家id是否在玩家池中
   findId: function (id) {
     var u = this.data.users;
-    for (var i = 0; i < 6; i++) {
+    for (var i = 0; i < maxNum; i++) {
       if (u[i].id == id) {
         return i;
       }
@@ -140,7 +134,15 @@ Page({
 
   //进入房间后初始化数据，包括房间内的各种信息
   initData: function () {
+    //初始化空位
     var that = this;
+    for (var i = 0; i < maxNum; i++) {
+      this.data.users.push(new util.user(0, "空位", ""));
+
+    }
+    this.setData({
+      users: this.data.users
+    })
     //连接websocket
     wx.connectSocket({
       url: 'ws://liuyifan.club:8080/webSocket',
@@ -172,7 +174,6 @@ Page({
       // 接收广播并将加入房间的新用户初始化
       client.subscribe(destination, function (body, headers) {
         var data = JSON.parse(body.body);
-
         //收到开始游戏的广播，开始游戏
         if (data.type == "START") {
           if (gData.id != ownerId) {
@@ -225,19 +226,18 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    var that = this;
+    var that=this;
+    maxNum = options.maxNum;
     userNum=0;
-    var user = JSON.parse(options.user);
+    var user = gData.user
     roomId = options.roomId;
     that.setData({
       roomNo: roomId
     })
     console.log("button:", options);
-
     //将自己的信息广播给其他已经进入房间的用户
     if (options.isOwner == "true") {
       ownerId = user.id;
-      that.addUser(user);
       that.setData({
         ["flags[1]"]:true
       });
@@ -248,7 +248,7 @@ Page({
       })
     }
     that.initData();
-    console.log("roomId:", roomId);
+    console.log("roomId:", options.maxNum);
   },
 
   /**
