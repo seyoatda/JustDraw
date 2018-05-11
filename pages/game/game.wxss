@@ -59,6 +59,7 @@ page{
 }
 
 .vw_toolkit{
+  z-index:1999;
   width:100%;
   color: #1aad19;
   flex-direction: row;
@@ -161,7 +162,6 @@ page{
 }
 .vw_answer {
   width: 60%;
-  height: 150rpx;
   top: 40%;
   left: 20%;
   background-color: white;
@@ -180,6 +180,8 @@ page{
 }
 .txt_rightAns{
   width: 100%;
+  white-space:pre-line;
+  word-wrap:break-word;
   text-align: center;
   background-color: black;
   color: white;
@@ -217,8 +219,11 @@ page{
 .btn_choose0{
   margin-top: 20rpx;
   background: gainsboro;
+  border-radius: 10rpx;
   width: 85%;
   height: 100rpx;
+  line-height: 100rpx;
+  align-self:center;
   text-align: center;
   box-shadow: 6rpx 6rpx 6rpx 6rpx gray;
   z-index: 999;
@@ -226,24 +231,33 @@ page{
 .btn_choose1{
   margin-top: 20rpx;
   background: wheat;
+  border-radius: 10rpx;
   width: 85%;
   height: 100rpx;
+  line-height: 100rpx;
+  align-self:center;
   text-align: center;
   box-shadow: 6rpx 6rpx 6rpx 6rpx gray;
 }
 .btn_choose2{
   margin-top: 20rpx;
   background: cadetblue;
+  border-radius: 10rpx;
   width: 85%;
   height: 100rpx;
+  line-height: 100rpx;
+  align-self:center;
   text-align: center;
   box-shadow: 6rpx 6rpx 6rpx 6rpx gray;
 }
 .btn_choose3{
   margin-top: 20rpx;
   background: wheat;
+  border-radius: 10rpx;
   width: 85%;
   height: 100rpx;
+  line-height: 100rpx;
+  align-self:center;
   text-align: center;
   box-shadow: 6rpx 6rpx 6rpx 6rpx gray;
   margin-bottom:20rpx;

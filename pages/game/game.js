@@ -101,7 +101,8 @@ Page({
   onUnload: function () {
     console.log("离开绘画页面！");
     //关闭canvasSocket，并且退出房间（此处无需解散房间，后台会处理）
-    canvasSocket.close();
+    //canvasSocket.close();
+    wx.closeSocket()
     if (userIndex == 0) {
       util.req_quitRoom({
         roomId: roomId,
@@ -116,6 +117,15 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
+    this.resetPencil();
+
+  },
+
+  resetPencil:function(){
+    this.setData({
+      activeWidthIndex: 3,
+      activeColorIndex: 0
+    })
     var iniIndex = this.data.activeWidthIndex
     var iniWidth = this.data.itemWidth[iniIndex]
     ctx.setLineWidth(iniWidth / 2.5) // 设置线宽
@@ -123,7 +133,6 @@ Page({
     ctx.setLineCap('round') //设置线条的端点样式
     ctx.setStrokeStyle('#000000') //描边样式
     ctx.setFillStyle('#000000') //填充样式
-
   },
 
   /**
@@ -186,8 +195,9 @@ Page({
       currentId: that.data.users[that.data.currentIndex % 6].id,
     })
 
-    //重置画布
+    //重置画布和画笔
     ctx.draw()
+    that.resetPencil()
 
     //选词默认选择第一项
     that.setData({
@@ -220,7 +230,7 @@ Page({
   startDrawing:function(){
     var that = this;
     //如果本机用户为绘画者，传给服务器选中的词汇
-    if (that.data.currentId != app.globalData.id) {
+    if (that.data.currentId == app.globalData.id) {
       wx: wx.request({
         url: 'http://liuyifan.club:8080/painting/setTarget',
         data: {
@@ -272,7 +282,6 @@ Page({
       if (this.data.inputVal == ""){
         return;
       }
-      var scoreAdded = 0;
       //验证答案
       wx: wx.request({
         url: 'http://liuyifan.club:8080/painting/isRightGuess',
@@ -285,30 +294,37 @@ Page({
         method: 'GET',
         dataType: 'json',
         responseType: 'text',
+        //request等待回调的过程中不阻碍主线程，注意
         success: function (res) {
-          console.log(res)
-          scoreAdded = parseInt(res.data.info);
+          console.log("回答处理结果：" + res.data.info)
+          var scoreAdded = parseInt(res.data.info);
+
+          //回答不规范
+          if (Number.isNaN(scoreAdded)) {
+            return;
+          }
+          //回答正确
+          else if (scoreAdded != 0) {
+            console.log("加分")
+            if (answered == false) {
+              answered = true
+              that.data.score[userIndex] += scoreAdded
+              that.setData({
+                score: that.data.score
+              })
+              var msg = "canvas:5," + userIndex + ":" + that.data.score;
+              canvasSocket.send({ data: msg })
+            }
+          }
+          //回答错误
+          else if (scoreAdded == 0) {
+            var msg = "canvas:6," + userIndex + ":" + that.data.inputVal
+            canvasSocket.send({ data: msg })
+            that.setPopoverMsg(userIndex, that.data.inputVal)
+            that.setPopoverTimer(userIndex, popoverTime)
+          }
         }
       })
-      //回答正确
-      if (scoreAdded != 0) {
-        if (answered == false) {
-          answered = true
-          this.data.score[userIndex] += scoreAdded
-          this.setData({
-            score: this.data.score
-          })
-          var msg = "canvas:5," + userIndex + ":" + this.data.score;
-          canvasSocket.send({ data: msg })
-        }
-      }
-      //回答错误
-      else {
-        var msg = "canvas:6," + userIndex + ":" + this.data.inputVal
-        canvasSocket.send({ data: msg })
-        this.setPopoverMsg(userIndex, this.data.inputVal)
-        this.setPopoverTimer(userIndex, popoverTime)
-      }
 
     } else {
       this.setData({
@@ -417,7 +433,7 @@ Page({
     if (this.data.currentId != app.globalData.id) {
       return false
     }
-    var width = this.data.itemWidth[event.target.dataset.index]
+    var width = parseInt(this.data.itemWidth[event.target.dataset.index])
     ctx.setLineWidth(width / 2.5)
     radius = width / 4.5
     this.setData({
@@ -559,7 +575,7 @@ Page({
       else if (nums.length == 2) {
         //nums[0]=1,2,3；分别进行线宽、颜色、清空操作
         if (nums[0] == 1) {
-          var width = that.data.itemWidth[nums[1]]
+          var width = parseInt(that.data.itemWidth[nums[1]])
           ctx.setLineWidth(width / 2.5)
           radius = width / 4.5
           that.setData({
