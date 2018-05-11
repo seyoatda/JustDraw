@@ -101,7 +101,8 @@ Page({
   onUnload: function () {
     console.log("离开绘画页面！");
     //关闭canvasSocket，并且退出房间（此处无需解散房间，后台会处理）
-    canvasSocket.close();
+    //canvasSocket.close();
+    wx.closeSocket()
     if (userIndex == 0) {
       util.req_quitRoom({
         roomId: roomId,
@@ -220,7 +221,7 @@ Page({
   startDrawing:function(){
     var that = this;
     //如果本机用户为绘画者，传给服务器选中的词汇
-    if (that.data.currentId != app.globalData.id) {
+    if (that.data.currentId == app.globalData.id) {
       wx: wx.request({
         url: 'http://liuyifan.club:8080/painting/setTarget',
         data: {
