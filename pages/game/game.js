@@ -267,6 +267,8 @@ Page({
    */
   btnCWClicked: function (e) {
     var that = this;
+
+    
     var id = e.target.id.substring(4, 5);
     this.setData({
       "currentWord": this.data.words[id]

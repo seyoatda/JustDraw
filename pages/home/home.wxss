@@ -96,6 +96,12 @@ page{
 .slider1{
   width: 300rpx;
 }
+.btn_cre{
+  color:rgb(240,220,200);
+  border:2px solid rgb(240,220,200);
+  border-radius:5px;
+  opacity:0.8;
+}
 .btn_ctn{
   width: 100%;
   height: 400rpx;

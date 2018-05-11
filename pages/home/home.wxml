@@ -80,18 +80,18 @@
     <view class='vw_setRoom' catchtap='stop' wx:if='{{flags[1]}}' animation="{{animationData}}" style='background:url("https://upload-images.jianshu.io/upload_images/9653454-9a14d370b25647ca.jpg?imageMogr2/auto-orient/");-webkit-background-size:cover;'>
       <view class='vw_line'>
         <text class="txt_line">人数</text>
-        <button id='btn_max2' class='btn_max' bindtap='btnMaxClicked'>2</button>
-        <button id='btn_max4' class='btn_max' bindtap='btnMaxClicked'>4</button>
-        <button id='btn_max6' class='btn_max' bindtap='btnMaxClicked'>6</button>
+        <button id='btn_max0' class='btn_max' bindtap='btnMaxClicked' plain='true' style='{{maxStyles[0]}}'>2</button>
+        <button id='btn_max1' class='btn_max' bindtap='btnMaxClicked' plain='true' style='{{maxStyles[1]}}'>4</button>
+        <button id='btn_max2' class='btn_max' bindtap='btnMaxClicked' plain='true' style='{{maxStyles[2]}}'>6</button>
       </view>
       <view class='vw_line'>
         <text class='txt_line'>房间类型</text>
-        <button id="btn_public" class='btn_public' bindtap='btnPriClicked' style='{{styles[0]}}'>公开</button>
-        <button id="btn_private" class='btn_public' bindtap='btnPriClicked' style='{{styles[1]}}'>私密</button>
+        <button id="btn_pri0" class='btn_public' bindtap='btnPriClicked' plain='true' style='{{styles[0]}}'>公开</button>
+        <button id="btn_pri1" class='btn_public' bindtap='btnPriClicked' plain='true' style='{{styles[1]}}'>私密</button>
       </view>
       <view class='vw_line'>
-        <button  bindtap='jump2Room'>创建</button>
-        <button id="btn" bindtap='vwCreClicked'>取消</button>
+        <button class="btn_cre" bindtap='jump2Room' plain='true' style='color:rgb(240,220,200);border:2px solid rgb(240,220,200);border-radius:5px;opacity:0.8;font-family: fantasy;'>创建</button>
+        <button class="btn_cre" bindtap='vwCreClicked' plain='true' style='color:rgb(240,220,200);border:2px solid rgb(240,220,200);border-radius:5px;opacity:0.8;font-family: fantasy;'>取消</button>
       </view>
     </view>
   </view>

@@ -8,13 +8,17 @@ page{
   background-color: lemonchiffon;  
   width:100%;  
   height:100%;   
+
 }  
 .v_topCtnr{
   padding-top: 50rpx;
-  width: 100%;
+  height: 500rpx;
+  width: 90%;
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   justify-content: center;
+  margin: auto;
 }
 .v_botCtnr{
   position: absolute;
@@ -62,15 +66,16 @@ page{
   border:none;
 }
 .v_userInfo{
-  margin-left: 50rpx;
+  margin-left: 20rpx;
+  margin-right: 20rpx;
   margin-top: 50rpx;
   display: flex;
   flex-direction: column;
   border: 0 solid #ff0000;
 }
 .img_user{
-  width: 130rpx;
-  height: 130rpx;
+  width: 150rpx;
+  height: 150rpx;
   border-radius: 75rpx;
   background: gainsboro;
 }
