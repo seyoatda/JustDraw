@@ -201,7 +201,7 @@
     </view>
   </view>
   <!--输入答案控件-->
-    <button class="btn_answer" wx:if="{{flag_show3}}" bindtap='btnAnsClicked'>回答</button>
+    <button class="btn_answer"  bindtap='btnAnsClicked'>回答</button>
     <input class='ipt_answer' wx:if="{{flag_show4}}" bindinput="listenerInputVal"></input>
 
   <!--游戏结束弹窗-->
