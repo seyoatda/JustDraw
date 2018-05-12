@@ -106,19 +106,21 @@ Page({
     console.log("当前房间内用户：", this.data.users);
   },
 
-  delUser: function (id) {
+  updateUser: function (users) {
     var that = this;
-    //删除玩家
-    //成功后将玩家信息从前端清除
+    //更新玩家
+    //成功后将玩家信息对前端进行更新
     var u = that.data.users;
     for (var i = 0; i < maxNum; i++) {
-      if (u[i].id == id) {
-        that.setData({
-          ["users[" + i + "]"]: new util.user(0, "空位", "")
-        });
-      }
+      that.setData({
+        ["users[" + i + "]"]: new util.user(0, "空位", "")
+      });
     }
-    userNum--;
+    for(var i = 0;i < users.length; i++)
+    {
+      that.addUser(new util.user(users[i].userId, users[i].nickName, users[i].photo));
+    }
+    userNum = users.length;
   },
 
   //查询玩家id是否在玩家池中
@@ -176,12 +178,13 @@ Page({
         var data = JSON.parse(body.body);
         //收到开始游戏的广播，开始游戏
         if (data.type == "START") {
-          if (gData.id != ownerId) {
-            console.log("startGame:", data.type);
-            wx.navigateTo({
-              url: '../game/game?roomId=' + roomId + '&users=' + JSON.stringify(that.data.users)
-            });
-          }
+          // if (gData.id != ownerId) {
+            
+          // }
+          console.log("startGame:", data.type);
+          wx.navigateTo({
+            url: '../game/game?roomId=' + roomId + '&users=' + JSON.stringify(that.data.users)
+          });
         } else if (data.type == "ENTER") {
           //查询房间内所有用户的id,并加入玩家池
           that.getUserInfoInRoom(roomId, (res) => {
@@ -191,14 +194,12 @@ Page({
               that.addUser(new util.user(users[i].userId, users[i].nickName, users[i].photo));
             }
           });
-        } else if (data.type == "QUIT") {
+        } else if (data.type == "ROOM_MESSAGE") {
           //查询房间内所有用户的id,并从玩家池中删除
           that.getUserInfoInRoom(roomId, (res) => {
             console.log("GET--user/find:", res);
             var users = res.data;
-            for (var i = 0; i < users.length; i++) {
-              that.delUser(users[i].userId);
-            }
+            that.updateUser(users);
           });
         }
       });
