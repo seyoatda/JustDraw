@@ -285,7 +285,7 @@ Page({
         return;
       }
       wx.navigateTo({
-        url: '../room/room?isOwner=false&roomId=' + no + '&user=' + JSON.stringify(gData.user),
+        url: '../room/room?isOwner=false&roomId=' + no + '&user=' + JSON.stringify(gData.user)+'&maxNum='+this.data.maxNum,
       })
     });
   },
