@@ -278,15 +278,18 @@ Page({
     util.req_enterRoom({
       roomId: no,
       userId: gData.id
-    }, (res) => {
+    }, res => {
       console.log("POST--room/enter:", res);
       if ("ERROR" == res.data.status) {
         console.log("用户无法进入房间！错误代码：", res.data.info);
         return;
       }
-      wx.navigateTo({
-        url: '../room/room?isOwner=false&roomId=' + no + '&user=' + JSON.stringify(gData.user),
+      util.req_findRoom(no,res=>{
+        wx.navigateTo({
+          url: '../room/room?isOwner=false&roomId=' + no + '&user=' + "&maxNum=" + res.data.info.maxSize,
+        })
       })
+     
     });
   },
   //在页面加载时完成初始设置

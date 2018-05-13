@@ -13,11 +13,12 @@ App({
       success: res => {
         // 发送 res.code 到后台换取 openId, sessionKey
         if (res.code) {
+          console.log(res);
           var vcode=res.code;
           var that=this;
           wx.getUserInfo({
+            withCredentials: true,
             success: function (res) {
-              console.log({ encryptedData: res.encryptedData, iv: res.iv, code: vcode })
               //3.解密用户信息 获取unionId
               wx.request({
                 url: 'http://101.200.62.252:8080/decryption/decodeUserInfo',
@@ -47,6 +48,8 @@ App({
                 }
               })
               //...
+            },fail(res){
+              console.log("授权失败",res);
             }
           })
         }

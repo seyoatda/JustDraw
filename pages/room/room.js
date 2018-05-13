@@ -2,7 +2,7 @@
 var util = require('../../utils/util.js');
 const gData = getApp().globalData;
 var roomId = 0;
-var ownerId = 0;
+var isOwner=false;
 var userNum = 0;
 var maxNum=0;
 
@@ -176,7 +176,7 @@ Page({
         var data = JSON.parse(body.body);
         //收到开始游戏的广播，开始游戏
         if (data.type == "START") {
-          if (gData.id != ownerId) {
+          if (!isOwner) {
             console.log("startGame:", data.type);
             wx.navigateTo({
               url: '../game/game?roomId=' + roomId + '&users=' + JSON.stringify(that.data.users)
@@ -212,6 +212,7 @@ Page({
     util.req_findRoom({
       roomId: roomId
     }, (res) => {
+      console.log("POST----room/find:",res);
       var players = res.data.info.players;
       var userIds = [];
       userIds.push(res.data.info.userId);
@@ -237,7 +238,7 @@ Page({
     console.log("button:", options);
     //将自己的信息广播给其他已经进入房间的用户
     if (options.isOwner == "true") {
-      ownerId = user.id;
+      isOwner=true;
       that.setData({
         ["flags[1]"]:true
       });

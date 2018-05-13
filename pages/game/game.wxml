@@ -3,16 +3,16 @@
 <view class='vw_ctnr'>
   <view class='vw_top'>
       <view class='vw_userInfo'>
-        <view class='vw_userCtnr'>
-          <image class='img_user' src='{{users[0].icon}}'></image>
-          <text class='txt_user'>{{users[0].name}}</text>
-          <view class='vw_popover_top' wx:if='{{popovers[0].show}}'>
-            {{popovers[0].msg}}
-            
-          </view>
+        <view class='vw_userCtnr' wx:for='{{users}}' wx:if='{{index<3}}' wx:key="name" wx:for-item="user">
+          <image class='img_user' src='{{user.icon}}'></image>
+          <text class='txt_user'>{{user.name}}</text>
+          
         </view>
-        <text class='txt_score'>{{score[0]}}</text>
-        <view class='vw_userCtnr'>
+        <text class='txt_score' wx:for='{{score}}' wx:for-item="scr">{{scr}}</text>
+        <view class='vw_popover_top' wx:for='{{popovers}}' wx:for-item='popover' wx:if='{{popover.show}}'>
+            {{popover.msg}}
+        </view>
+        <!-- <view class='vw_userCtnr'>
           <image class='img_user' src='{{users[1].icon}}'></image>
           <text class='txt_user'>{{users[1].name}}</text>
           <view class='vw_popover_top' wx:if='{{popovers[1].show}}'>
@@ -27,7 +27,7 @@
             {{popovers[2].msg}}
           </view>
         </view>
-        <text class='txt_score'>{{score[2]}}</text>
+        <text class='txt_score'>{{score[2]}}</text> -->
         
       </view>
   </view>
