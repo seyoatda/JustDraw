@@ -284,12 +284,14 @@ Page({
         console.log("用户无法进入房间！错误代码：", res.data.info);
         return;
       }
-      util.req_findRoom(no,res=>{
+      util.req_findRoom({
+        roomId:no
+      },res=>{
+        console.log("POST-----room/find:",res); 
         wx.navigateTo({
-          url: '../room/room?isOwner=false&roomId=' + no + '&user=' + "&maxNum=" + res.data.info.maxSize,
+            url: '../room/room?isOwner=false&roomId=' + no + '&user=' + "&maxNum=" + res.data.info.maxSize,
         })
       })
-     
     });
   },
   //在页面加载时完成初始设置

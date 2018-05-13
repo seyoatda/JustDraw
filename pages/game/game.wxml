@@ -2,16 +2,16 @@
 <!--顶部组件，放置用户信息-->
 <view class='vw_ctnr'>
   <view class='vw_top'>
-      <view class='vw_userInfo'>
-        <view class='vw_userCtnr' wx:for='{{users}}' wx:if='{{index<3}}' wx:key="name" wx:for-item="user">
-          <image class='img_user' src='{{user.icon}}'></image>
-          <text class='txt_user'>{{user.name}}</text>
-          
+      <view class='vw_userInfo' wx:for='{{users}}' wx:if="{{index<3}}">
+        <view class='vw_userCtnr' >
+          <image class='img_user' src='{{users[index].icon}}'></image>
+          <text class='txt_user'>{{users[index].name}}</text>
         </view>
-        <text class='txt_score' wx:for='{{score}}' wx:for-item="scr">{{scr}}</text>
-        <view class='vw_popover_top' wx:for='{{popovers}}' wx:for-item='popover' wx:if='{{popover.show}}'>
-            {{popover.msg}}
+        <text class='txt_score' >{{score[index]}}</text>
+        <view class='vw_popover_top'  wx:if='{{popovers[index].show}}'>
+            {{popover[index].msg}}
         </view>
+      </view>
         <!-- <view class='vw_userCtnr'>
           <image class='img_user' src='{{users[1].icon}}'></image>
           <text class='txt_user'>{{users[1].name}}</text>
@@ -29,7 +29,7 @@
         </view>
         <text class='txt_score'>{{score[2]}}</text> -->
         
-      </view>
+      
   </view>
 
   <!--中间组件，放置画板，计时器，提示-->
@@ -59,6 +59,25 @@
       <block wx:for="{{itemColor}}" wx:for-index="index" wx:key="item">
         <cover-view class="color-item {{activeColorIndex == index ?'active-item':''}}" data-index="{{index}}" bindtap="setItemColor" style="background:{{item}};"></cover-view>
       </block>
+     <dl class="menu">
+      <dt data-index="0" class="graph" bindtap="tapMainMenu" >Graph</dt>
+        <dd class="{{subMenuDisplay[0]}}">
+          <ul>
+            <li class="{{subMenuHighLight[0][0]}}" data-index="0-0" bindtap="tapSubMenu">三角形</li>
+            <li class="{{subMenuHighLight[0][1]}}" data-index="0-1" bindtap="tapSubMenu">矩形</li>
+            <li class="{{subMenuHighLight[0][2]}}" data-index="0-2" bindtap="tapSubMenu">圆形</li>
+            <li class="{{subMenuHighLight[0][3]}}" data-index="0-3" bindtap="tapSubMenu">多边形</li>
+          </ul>
+        </dd>
+      <dt data-index="1" class="rank" bindtap="tapMainMenu">Rank</dt>
+        <dd class="{{subMenuDisplay[1]}}">
+          <ul>
+            <li class="{{subMenuHighLight[1][0]}}" data-index="1-0" bindtap="tapSubMenu">level1</li>
+            <li class="{{subMenuHighLight[1][1]}}" data-index="1-1" bindtap="tapSubMenu">level2</li>
+            <li class="{{subMenuHighLight[1][2]}}" data-index="1-2" bindtap="tapSubMenu">level3</li>
+          </ul>
+        </dd>
+    </dl>
       </cover-view>
     </cover-view>
     <!--绘画结束，正确回答界面-->
@@ -73,7 +92,17 @@
   </view>
 
   <view class='vw_bot'>
-    <view class='vw_userInfo'>
+  <view class='vw_userInfo' wx:for='{{users}}' wx:if='{{index>=3}}'>
+        <view class='vw_userCtnr' >
+          <image class='img_user' src='{{users[index].icon}}'></image>
+          <text class='txt_user'>{{users[index].name}}</text>
+        </view>
+        <text class='txt_score' >{{score[index]}}</text>
+        <view class='vw_popover_top'  wx:if='{{popovers[index].show}}'>
+            {{popover[index].msg}}
+        </view>
+      </view>
+    <!-- <view class='vw_userInfo'>
         <view class='vw_userCtnr'>
           <image class='img_user' src='{{users[3].icon}}'></image>
           <text class='txt_user'>{{users[3].name}}</text>
@@ -97,8 +126,8 @@
             {{popovers[5].msg}}
           </view>
         </view>
-        <text class='txt_score'>{{score[5]}}</text>
-    </view>
+        <text class='txt_score'>{{score[5]}}</text></view> -->
+    
   </view>
   <!--选择界面-->
   <cover-view id='vw_1' class='vw_winCtnr' catchtap='hideWin(1)' wx:if='{{flag_show1}}'>

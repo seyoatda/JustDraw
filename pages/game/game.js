@@ -8,6 +8,7 @@ var countdown = 1;  //倒计时单位时间1s
 var moved = 0 //绘画是否进行移动，未移动则画点
 var canvasSocket  //画布socket接口
 var roomId  //房间号
+var maxNum  //房间用户最大数量
 var userIndex = 0 //本机用户索引
 var userNum = 0 //房间用户数量
 var popoverTime = 5 //聊天弹框弹出的时间
@@ -51,7 +52,14 @@ Page({
     test: [{ hi: "yes" }],
     inputVal: "",
     score: [0, 0, 0, 0, 0, 0],
-    modalHidden: true
+    modalHidden: true,
+
+    subMenuDisplay: ["hidden", "hidden"],
+    subMenuHighLight: [
+      ['', '', '', ''],
+      ['', '', ''],
+    ],
+    historyAColor:0
   },
 
 
@@ -63,10 +71,10 @@ Page({
 
     var u = JSON.parse(options.users);
     roomId = options.roomId;
-
+    maxNum=options.maxNum;
     //设置本机玩家的index和玩家数量
     var index = 0;
-    while (index < 6) {
+    while (index < maxNum) {
       if (app.globalData.id == u[index].id) {
         userIndex = index;
       }
@@ -144,7 +152,7 @@ Page({
     that.setData({
       currentIndex: that.data.currentIndex + 1
     })
-    while (that.data.users[that.data.currentIndex % 6].id == 0) {
+    while (that.data.users[that.data.currentIndex % maxNum].id == 0) {
       that.setData({
         currentIndex: that.data.currentIndex + 1
       })
@@ -158,7 +166,7 @@ Page({
 
       //只循环一轮
 
-      if (that.data.currentIndex >= 6) {
+      if (that.data.currentIndex >= maxNum) {
         wx.redirectTo({
           url: '../home/home',
           success: function (res) { },
@@ -192,7 +200,7 @@ Page({
 
     //设置当前画画用户id,设置index
     that.setData({
-      currentId: that.data.users[that.data.currentIndex % 6].id,
+      currentId: that.data.users[that.data.currentIndex % maxNum].id,
     })
 
     //重置画布和画笔
@@ -250,7 +258,7 @@ Page({
     }
     
     //开始画图
-    that.count(30, 1, function () {
+    that.count(3000, 1, function () {
       that.whenFinish();
     });
   },
@@ -689,6 +697,67 @@ Page({
         console.log("complete");
       }
     })
+  },
+
+  tapMainMenu: function (e) {
+    var that = this;
+    var index = parseInt(e.currentTarget.dataset.index); // 生成数组，全为hidden的，只对当前的进行显示
+    var newSubMenuDisplay = that.data.subMenuDisplay// 如果目前是显示则隐藏，反之亦反之。同时要隐藏其他的菜单
+    if (that.data.subMenuDisplay[index] == 'hidden') {
+      newSubMenuDisplay[index] = 'show';
+      newSubMenuDisplay[1 - index] = "hidden";
+      that.data.historyAColor = that.data.activeColorIndex
+      var color = this.data.itemColor[8]
+      ctx.setFillStyle(color)
+      ctx.setStrokeStyle(color)
+      this.setData({
+        activeColorIndex: 8
+      })
+      
+    } else {
+      var color = this.data.itemColor[that.data.historyAColor]
+      ctx.setFillStyle(color)
+      ctx.setStrokeStyle(color)
+      this.setData({
+        activeColorIndex: that.data.historyAColor
+      })
+      newSubMenuDisplay[index] = 'hidden';
+      newSubMenuDisplay[1 - index] = "hidden";
+    }        // 设置为新的数组
+
+    that.setData({
+      subMenuDisplay: newSubMenuDisplay
+    });
+  },
+
+  tapSubMenu: function (e) {
+    var that = this;
+    // 处理二级菜单，首先获取当前显示的二级菜单标识
+    var indexArray = e.currentTarget.dataset.index.split('-');
+    var newSubMenuHighLight = that.data.subMenuHighLight;
+    // 与一级菜单不同，这里不需要判断当前状态，只需要点击就给class赋予highlight即可
+    if (indexArray[0] == 0) {
+      for (var i = 0; i < 4; i++) {
+        if (indexArray[1] == i) {
+          newSubMenuHighLight[indexArray[0]][i] = 'highlight';
+        } else {
+          newSubMenuHighLight[indexArray[0]][i] = "";
+        }
+      }
+    } else {
+      for (var i = 0; i < 3; i++) {
+        if (indexArray[1] == i) {
+          newSubMenuHighLight[indexArray[0]][i] = 'highlight';
+        } else {
+          newSubMenuHighLight[indexArray[0]][i] = "";
+        }
+      }
+    }
+    // 设置为新的数组
+    this.setData({
+      subMenuHighLight: newSubMenuHighLight
+    });
   }
+
 
 })

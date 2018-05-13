@@ -65,7 +65,7 @@ Page({
     var dest = '/topic/roomId/' + roomId;
     client.send(dest, { priority: 9 }, JSON.stringify({ type: "START" }))
     wx.navigateTo({
-      url: '../game/game?roomId=' + roomId + '&users=' + JSON.stringify(this.data.users)
+      url: '../game/game?roomId=' + roomId +"&maxNum="+maxNum + '&users=' + JSON.stringify(this.data.users)
     })
   },
 
@@ -106,19 +106,21 @@ Page({
     console.log("当前房间内用户：", this.data.users);
   },
 
-  delUser: function (id) {
+  updateUser: function (users) {
     var that = this;
-    //删除玩家
-    //成功后将玩家信息从前端清除
+    //更新玩家
+    //成功后将玩家信息对前端进行更新
     var u = that.data.users;
     for (var i = 0; i < maxNum; i++) {
-      if (u[i].id == id) {
-        that.setData({
-          ["users[" + i + "]"]: new util.user(0, "空位", "")
-        });
-      }
+      that.setData({
+        ["users[" + i + "]"]: new util.user(0, "空位", "")
+      });
     }
-    userNum--;
+    for(var i = 0;i < users.length; i++)
+    {
+      that.addUser(new util.user(users[i].userId, users[i].nickName, users[i].photo));
+    }
+    userNum = users.length;
   },
 
   //查询玩家id是否在玩家池中
@@ -179,7 +181,7 @@ Page({
           if (!isOwner) {
             console.log("startGame:", data.type);
             wx.navigateTo({
-              url: '../game/game?roomId=' + roomId + '&users=' + JSON.stringify(that.data.users)
+              url: '../game/game?roomId=' + roomId +"&maxNum="+maxNum + '&users=' + JSON.stringify(that.data.users)
             });
           }
         } else if (data.type == "ENTER") {
@@ -191,14 +193,12 @@ Page({
               that.addUser(new util.user(users[i].userId, users[i].nickName, users[i].photo));
             }
           });
-        } else if (data.type == "QUIT") {
+        } else if (data.type == "ROOM_MESSAGE") {
           //查询房间内所有用户的id,并从玩家池中删除
           that.getUserInfoInRoom(roomId, (res) => {
             console.log("GET--user/find:", res);
             var users = res.data;
-            for (var i = 0; i < users.length; i++) {
-              that.delUser(users[i].userId);
-            }
+            that.updateUser(users);
           });
         }
       });
@@ -284,34 +284,12 @@ Page({
       console.log("stomp disconnected success");
     });
     console.log("unload",userNum);
-    //如果用户是房主，则退出时，解散房间，否则调用退出接口
-    // if (ownerId != 0) {
-    //   wx: wx.request({
-    //     url: 'http://liuyifan.club:8080/room/dismiss',
-    //     data: {
-    //       roomId: roomId,
-    //       userId: gData.id
-    //     },
-    //     header: { "content-Type": "application/x-www-form-urlencoded" },
-    //     method: 'POST',
-    //     dataType: 'json',
-    //     responseType: 'text',
-    //     success: function (res) {
-    //       console.log("POST--room/dismiss", res);
-    //     },
-    //     fail: function (res) { },
-    //     complete: function (res) { },
-    //   })
-    // } else {
-      util.req_quitRoom({
-        roomId: roomId,
-        userId: gData.id
-      },(res)=>{
-        console.log('POST--room/quit',res);
-      })
-    // }
-
-
+    util.req_quitRoom({
+      roomId: roomId,
+      userId: gData.id
+    },(res)=>{
+      console.log('POST--room/quit',res);
+    });
   },
 
   /**
