@@ -51,7 +51,7 @@ page{
   border-radius: 20rpx;
 }
 .canvas_style{
-  height:80%;
+  height:92%;
   width: 100%;
   border:2rpx solid #d3d3d3;
   border-radius: 20rpx;
@@ -142,6 +142,7 @@ page{
   font-size: 10pt;
   white-space: nowrap;
   text-overflow:ellipsis;
+  text-align: center;
 }
 .txt_score{
   height: 50rpx;
@@ -267,12 +268,14 @@ page{
   height: 90rpx;
   width: 90rpx;
   border-radius: 80rpx;
-  padding-left:20rpx;
-  padding-right:20rpx;
+  white-space:pre-line; 
+  padding-top:5rpx;
+  /*padding-left:20rpx;
+  padding-right:20rpx;*/
   background: gainsboro;
   position: absolute;
   right:10rpx;
-  top:77%; 
+  top:75%; 
   font-size:30rpx;
   line-height:40rpx;
   margin-right: 20rpx;
@@ -283,13 +286,14 @@ page{
 }
 .ipt_answer{
   height: 90rpx;
-  width: 200rpx;
+  width: 100%;
   border-radius: 10rpx;
   border-bottom: 1rpx solid #000;
   background: gainsboro;
   position: absolute;
-  right:150rpx;
-  top:77%;
+  /*right:150rpx;
+  top:77%;*/
+  top:0;
   box-shadow: 2rpx 2rpx 2rpx 2rpx grey;
   opacity: 0.8;
 }
@@ -457,7 +461,6 @@ page{
 
 .vw_popover_top{
   z-index: 2000;
-  word-wrap:break-word;
   width: 150rpx; 
   background: #eee;
   position: absolute;
@@ -466,23 +469,24 @@ page{
   -webkit-border-radius: 10rpx; 
   border-radius:         10rpx;
   border:1rpx solid #d3d3d3;
+  opacity: 0.8;
 }
 
 .vw_popover_top::before {
    content:"";
    position: absolute;
-   left:26rpx;
+   left:75rpx;
    bottom: 100%;
    width: 0;
    height: 0;
    border-left: 13rpx solid transparent;
    border-right: 13rpx solid transparent;
    border-bottom: 26rpx solid #eee;
+   opacity: 0.8;
 }
 
 .vw_popover_bottom{
   z-index: 2000;
-  word-wrap:break-word;
   width: 150rpx; 
   background: #eee;
   position: absolute;
@@ -491,18 +495,31 @@ page{
   -webkit-border-radius: 10rpx; 
   border-radius:         10rpx;
   border:1rpx solid #d3d3d3;
+  opacity: 0.8;
 }
 
 .vw_popover_bottom::before {
    content:"";
    position: absolute;
-   left:26rpx;
+   left:75rpx;
    top: 100%;
    width: 0;
    height: 0;
    border-left: 13rpx solid transparent;
    border-right: 13rpx solid transparent;
    border-top: 26rpx solid #eee;
+   opacity: 0.8;
+}
+
+.ppr_cover{
+  background: #eee;
+  -moz-border-radius:    10rpx; 
+  -webkit-border-radius: 10rpx; 
+  border-radius:         10rpx;
+  border:1rpx solid #d3d3d3;
+  word-wrap:break-word;
+  white-space:pre-line;
+  opacity: 0.8;
 }
 
 

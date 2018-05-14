@@ -13,6 +13,10 @@ var userIndex = 0 //本机用户索引
 var userNum = 0 //房间用户数量
 var popoverTime = 5 //聊天弹框弹出的时间
 var answered = false //本机玩家是否已做出回答
+var drawingTime = 10 //绘画时长
+var selectingTime = 10 //选词时长
+var answerShowTime = 5 //正确答案显示时长
+var closeAllCountDown = false //是否关闭倒计时
 
 Page({
 
@@ -38,7 +42,7 @@ Page({
 
     itemWidth: [15, 20, 25, 30, 35, 40, 45],
     itemColor: ['#000000', '#ff0000', '#00ff00', '#0000ff', '#00ffff', '#ff00ff', '#ffff00', '#C0C0C0', '#ffffff'],
-    words: ["a", "b", "c", "d"],
+    words: ["", "", "", ""],
     users: null,
     popovers: [
       { show: false, timer: 0, msg: "" },
@@ -67,11 +71,12 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    console.log("进入绘画页面")
     var that = this;
 
     var u = JSON.parse(options.users);
     roomId = options.roomId;
-    maxNum=options.maxNum;
+    maxNum = parseInt(options.maxNum);
     //设置本机玩家的index和玩家数量
     var index = 0;
     while (index < maxNum) {
@@ -108,6 +113,8 @@ Page({
    */
   onUnload: function () {
     console.log("离开绘画页面！");
+    //退出房间时关闭所有倒计时
+    closeAllCountDown = true
     //关闭canvasSocket，并且退出房间（此处无需解散房间，后台会处理）
     //canvasSocket.close();
     wx.closeSocket()
@@ -149,23 +156,21 @@ Page({
   whenFinish: function () {
     var that = this;
     that.clearWin();
-    that.setData({
-      currentIndex: that.data.currentIndex + 1
-    })
-    while (that.data.users[that.data.currentIndex % maxNum].id == 0) {
+
+    //弹出正确答案界面
+    that.showWin(2);
+    that.count(answerShowTime, 2, function () {
+      that.hideWin(2);
       that.setData({
         currentIndex: that.data.currentIndex + 1
       })
-    }
-
-
-    //弹出正确答案界面，3s后关闭
-    that.showWin(2);
-    that.count(3, 2, function () {
-      that.hideWin(2);
+      while (that.data.users[that.data.currentIndex % maxNum].id == 0) {
+        that.setData({
+          currentIndex: that.data.currentIndex + 1
+        })
+      }
 
       //只循环一轮
-
       if (that.data.currentIndex >= maxNum) {
         wx.redirectTo({
           url: '../home/home',
@@ -213,16 +218,19 @@ Page({
     });
     answered = false
 
+    //显示选词框，绘画者和回答者看到不同界面
     that.showWin(1);
     //判断当前用户为绘画用户或回答用户
     if (that.data.currentId != app.globalData.id) {
+      //如果是回答者，显示回答按钮
       that.showWin(3);
     } else {
+      //如果是绘画者，设置待选词
       that.setWords();
     }
 
     //如果倒计时结束仍未选择词，则默认选择第一个
-    that.count(10, 2, function () {
+    that.count(selectingTime, 2, function () {
       that.hideWin(1);
       that.startDrawing();
     }, function () {
@@ -258,8 +266,13 @@ Page({
     }
     
     //开始画图
-    that.count(3000, 1, function () {
-      that.whenFinish();
+    that.count(drawingTime, 1, function () {
+      //绘画者
+      var msg = "canvas:7,"+that.data.currentWord
+      canvasSocket.send({ data: msg })
+      //that.whenFinish();
+
+      //回答者通过socket接收从绘画者传来的正确答案并予以展示
     });
   },
 
@@ -368,7 +381,9 @@ Page({
 
     }
     setTimeout(function () {
-      that.minus1s(that, func, countdown, id, func2);
+      if (closeAllCountDown == false){
+        that.minus1s(that, func, countdown, id, func2);
+      }
     }
       , 1000)
   },
@@ -391,6 +406,7 @@ Page({
     this.hideWin(2);
     this.hideWin(3);
     this.hideWin(4);
+    this.hideWin(5);
   },
 
   //把点击事件拦截，啥都不用做。
@@ -533,7 +549,9 @@ Page({
     }
     else {
       setTimeout(function () {
-        that.startPopoverTimer(i);
+        if(closeAllCountDown == false){
+          that.startPopoverTimer(i);
+        }
       }
         , 1000)
     }
@@ -633,6 +651,15 @@ Page({
           var i = parseInt(index_msg[0])
           that.setPopoverMsg(i, index_msg[1])
           that.setPopoverTimer(i, popoverTime)
+        }
+        //7,正确答案
+        else if(nums[0] == 7){
+          console.log("收到服务器"+nums)
+          var msg = nums[1];
+          that.setData({
+            currentWord:msg
+          })
+          that.whenFinish();
         }
       }
     })
