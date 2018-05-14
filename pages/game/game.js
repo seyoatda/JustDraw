@@ -13,7 +13,7 @@ var userIndex = 0 //本机用户索引
 var userNum = 0 //房间用户数量
 var popoverTime = 5 //聊天弹框弹出的时间
 var answered = false //本机玩家是否已做出回答
-var drawingTime = 10 //绘画时长
+var drawingTime = 30 //绘画时长
 var selectingTime = 10 //选词时长
 var answerShowTime = 5 //正确答案显示时长
 var closeAllCountDown = false //是否关闭倒计时
@@ -56,7 +56,6 @@ Page({
     test: [{ hi: "yes" }],
     inputVal: "",
     score: [0, 0, 0, 0, 0, 0],
-    modalHidden: true,
 
     subMenuDisplay: ["hidden", "hidden"],
     subMenuHighLight: [
@@ -115,6 +114,7 @@ Page({
     console.log("离开绘画页面！");
     //退出房间时关闭所有倒计时
     closeAllCountDown = true
+    this.clearWin();
     //关闭canvasSocket，并且退出房间（此处无需解散房间，后台会处理）
     //canvasSocket.close();
     wx.closeSocket()
@@ -172,12 +172,7 @@ Page({
 
       //只循环一轮
       if (that.data.currentIndex >= maxNum) {
-        wx.redirectTo({
-          url: '../home/home',
-          success: function (res) { },
-          fail: function (res) { },
-          complete: function (res) { },
-        })
+        that.showRank();
       }
       else {
         that.whenStart();
@@ -268,9 +263,11 @@ Page({
     //开始画图
     that.count(drawingTime, 1, function () {
       //绘画者
-      var msg = "canvas:7,"+that.data.currentWord
-      canvasSocket.send({ data: msg })
-      //that.whenFinish();
+      if(that.data.currentId == app.globalData.id){
+        var msg = "canvas:7," + that.data.currentWord
+        canvasSocket.send({ data: msg })
+        that.whenFinish();
+      }
 
       //回答者通过socket接收从绘画者传来的正确答案并予以展示
     });
@@ -689,7 +686,7 @@ Page({
     }
 
     this.setData({
-      modalHidden:false,
+      flag_show5:true,
       ranks: this.data.ranks
     })
   },

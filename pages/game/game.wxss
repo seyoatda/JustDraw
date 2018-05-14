@@ -522,22 +522,76 @@ page{
   opacity: 0.8;
 }
 
-
-.rk_modal{
-  background:#fff;
+.vw_gameover{
+  width: 80%;
+  text-align: center;
+  top:25%;
+  left: 10%;
+  background-color: white;
+  opacity: 0.8;
+  border-radius: 20rpx;
+  position: absolute; 
+  display: flex;
+  flex-direction: column;
+  justify-content:center;
 }
 
-.rk_modal view{
-  width:100%;
+.vw_goHeader{
+  margin-top: 30rpx;
+  text-align: center;
+  font-weight: bold;
+}
+
+.vw_rank{
+  align-self:center;
+  margin-top:40rpx;
+  margin-bottom:40rpx;
+  padding-top:20rpx;
+  padding-bottom:20rpx;
+  width:80%;
+  background:#fff;
+  display:flex;
+  flex-direction: column;
+  border: 3rpx solid crimson;
+  box-shadow: 0 0 20rpx 20rpx #ffffcc;
+  border-radius: 10rpx;
+}
+
+.vw_rank cover-view{
+  margin-top:10rpx;
+  margin-bottom:10rpx;
+  align-self:center;
+  text-align: center;
+  white-space:pre-line;
+  word-wrap:break-word;
+  width:80%;
   height:50rpx;
-  text-align:center;
-  font-size:50rpx;
   line-height:50rpx;
-  margin:5rpx;
-  background:#ffffcc;
+  background:#CCDDFF;
   border:1rpx solid #000;
   border-radius: 10rpx;
 }
+
+.vw_goBtn{
+  align-self:center;
+  height: 70rpx;
+  width: 90%;
+  margin-bottom: 30rpx;
+  display: flex;
+  flex-direction: row;
+}
+
+.vw_goBtn cover-view{
+  display:inline-block;
+  text-align: center;
+  height:60rpx;
+  width: 40%;
+  border:3rpx solid cadetblue;
+  border-radius:10rpx;
+  line-height:60rpx;
+  color: #000;
+}
+
 .show {
    display: block;
 }

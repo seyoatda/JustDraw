@@ -240,7 +240,7 @@ Page({
     if (options.isOwner == "true") {
       isOwner=true;
       that.setData({
-        ["flags[1]"]:true
+        ["flags[1]"]:false
       });
     } else {
       //如果不是房主，隐藏开始游戏按钮

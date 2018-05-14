@@ -84,8 +84,8 @@
     
   </view>
   
-  <!--结算-->
-  <view id="vw_account" class='vw_winCtnr' catchtap="hideWin(5)"  wx:if='{{flag_show5}}'> 
+  
+  <!--view class='vw_winCtnr' catchtap="hideWin(5)"  wx:if='{{flag_show5}}'> 
     <view class='vw_hide' catchtap='stop'>
       <view class='vw_account'>
         <text class='user_times'>游戏局数：</text>
@@ -100,23 +100,34 @@
         <text class='user_name'>aaaaaa</text>
       </view>
     </view>
-  </view>
+  </view-->
+
+  <!--游戏结束汇总-->
+  <cover-view class='vw_winCtnr'  wx:if='{{flag_show5}}'> 
+    <cover-view class='vw_gameover'>
+      <cover-view class='vw_goHeader'>得分排行：</cover-view>
+      <cover-view class='vw_rank'>
+        <block wx:for="{{ranks}}" wx:for-item="item" wx:for-index="index" wx:key="index" >
+          <cover-view style="{{index == 0 ?'background:gold':''}} {{index == 1 ?'background:ghostwhite':''}}{{index == 2 ?'background:burlywood':''}}"
+          >{{item.name}}：{{item.score}}分</cover-view>
+        </block>
+      </cover-view>
+      <cover-view class='vw_goBtn'>
+        <cover-view style="background:#1aad19;">再来一局</cover-view>
+        <cover-view style="opacity:0;width:20%;"></cover-view>
+        <cover-view style="background:#d2d2d2;" bindtap="btnBack">返回主页</cover-view>
+      </cover-view>
+    </cover-view>
+  </cover-view>
 
   <!--输入答案控件-->
-    <cover-view class="btn_answer" wx:if='{{flag_show3}}'  bindtap='btnAnsClicked'>回\n答</cover-view>
-
-  <!--游戏结束弹窗-->
-  <modal class="rk_modal" hidden="{{modalHidden}}" title="游戏结束" confirm-text="继续游戏" cancel-text="返回主页" bindcancel="backToHome" bindconfirm="backToRoom">
-    <block wx:for="{{ranks}}" wx:for-item="item" wx:for-index="index" wx:key="index" >
-        <view>{{item.name}}：{{item.score}}分</view>
-    </block>
-  </modal>
+  <cover-view class="btn_answer" wx:if='{{flag_show3}}'  bindtap='btnAnsClicked'>回\n答</cover-view>
   
 
 </view>
 
 <!--选择界面-->
-  <cover-view id='vw_1' class='vw_winCtnr' catchtap='hideWin(1)' wx:if='{{flag_show1}}'>
+  <cover-view class='vw_winCtnr' wx:if='{{flag_show1}}'>
     <cover-view class="vw_win vw_choose" catchtap='stop' wx:if='{{currentId == globalData.id}}'>
       <cover-view class='txt_header'>请选择要画的词：</cover-view>
       <cover-view class='txt_timer'>(剩余 {{time2}} 秒)</cover-view>
@@ -133,7 +144,7 @@
   </cover-view>
 
   <!--绘画结束，正确回答界面-->
-  <cover-view id="vw_2" class='vw_winCtnr' catchtap='hideWin(2)' wx:if='{{flag_show2}}'>
+  <cover-view class='vw_winCtnr' wx:if='{{flag_show2}}'>
     <cover-view class='vw_win vw_answer' catchtap='stop'>
       <cover-view class='txt_rightAnsIs'>正确答案：</cover-view>
       <cover-view class='txt_rightAns'>{{currentWord}}</cover-view>
