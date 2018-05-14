@@ -8,6 +8,7 @@ var countdown = 1;  //倒计时单位时间1s
 var moved = 0 //绘画是否进行移动，未移动则画点
 var canvasSocket  //画布socket接口
 var roomId  //房间号
+var maxNum  //房间用户最大数量
 var userIndex = 0 //本机用户索引
 var userNum = 0 //房间用户数量
 var popoverTime = 5 //聊天弹框弹出的时间
@@ -70,11 +71,10 @@ Page({
 
     var u = JSON.parse(options.users);
     roomId = options.roomId;
-
+    maxNum=options.maxNum;
     //设置本机玩家的index和玩家数量
     var index = 0;
-    while (index < 6) {
-      console.log(u);
+    while (index < maxNum) {
       if (app.globalData.id == u[index].id) {
         userIndex = index;
       }
@@ -152,7 +152,7 @@ Page({
     that.setData({
       currentIndex: that.data.currentIndex + 1
     })
-    while (that.data.users[that.data.currentIndex % 6].id == 0) {
+    while (that.data.users[that.data.currentIndex % maxNum].id == 0) {
       that.setData({
         currentIndex: that.data.currentIndex + 1
       })
@@ -166,7 +166,7 @@ Page({
 
       //只循环一轮
 
-      if (that.data.currentIndex >= 6) {
+      if (that.data.currentIndex >= maxNum) {
         wx.redirectTo({
           url: '../home/home',
           success: function (res) { },
@@ -200,7 +200,7 @@ Page({
 
     //设置当前画画用户id,设置index
     that.setData({
-      currentId: that.data.users[that.data.currentIndex % 6].id,
+      currentId: that.data.users[that.data.currentIndex % maxNum].id,
     })
 
     //重置画布和画笔

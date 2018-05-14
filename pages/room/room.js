@@ -2,7 +2,7 @@
 var util = require('../../utils/util.js');
 const gData = getApp().globalData;
 var roomId = 0;
-var ownerId = 0;
+var isOwner=false;
 var userNum = 0;
 var maxNum=0;
 
@@ -65,7 +65,7 @@ Page({
     var dest = '/topic/roomId/' + roomId;
     client.send(dest, { priority: 9 }, JSON.stringify({ type: "START" }))
     wx.navigateTo({
-      url: '../game/game?roomId=' + roomId + '&users=' + JSON.stringify(this.data.users)
+      url: '../game/game?roomId=' + roomId +"&maxNum="+maxNum + '&users=' + JSON.stringify(this.data.users)
     })
   },
 
@@ -178,13 +178,12 @@ Page({
         var data = JSON.parse(body.body);
         //收到开始游戏的广播，开始游戏
         if (data.type == "START") {
-          // if (gData.id != ownerId) {
-            
-          // }
-          console.log("startGame:", data.type);
-          wx.navigateTo({
-            url: '../game/game?roomId=' + roomId + '&users=' + JSON.stringify(that.data.users)
-          });
+          if (!isOwner) {
+            console.log("startGame:", data.type);
+            wx.navigateTo({
+              url: '../game/game?roomId=' + roomId +"&maxNum="+maxNum + '&users=' + JSON.stringify(that.data.users)
+            });
+          }
         } else if (data.type == "ENTER") {
           //查询房间内所有用户的id,并加入玩家池
           that.getUserInfoInRoom(roomId, (res) => {
@@ -213,6 +212,7 @@ Page({
     util.req_findRoom({
       roomId: roomId
     }, (res) => {
+      console.log("POST----room/find:",res);
       var players = res.data.info.players;
       var userIds = [];
       userIds.push(res.data.info.userId);
@@ -238,7 +238,7 @@ Page({
     console.log("button:", options);
     //将自己的信息广播给其他已经进入房间的用户
     if (options.isOwner == "true") {
-      ownerId = user.id;
+      isOwner=true;
       that.setData({
         ["flags[1]"]:true
       });
@@ -284,34 +284,12 @@ Page({
       console.log("stomp disconnected success");
     });
     console.log("unload",userNum);
-    //如果用户是房主，则退出时，解散房间，否则调用退出接口
-    // if (ownerId != 0) {
-    //   wx: wx.request({
-    //     url: 'http://liuyifan.club:8080/room/dismiss',
-    //     data: {
-    //       roomId: roomId,
-    //       userId: gData.id
-    //     },
-    //     header: { "content-Type": "application/x-www-form-urlencoded" },
-    //     method: 'POST',
-    //     dataType: 'json',
-    //     responseType: 'text',
-    //     success: function (res) {
-    //       console.log("POST--room/dismiss", res);
-    //     },
-    //     fail: function (res) { },
-    //     complete: function (res) { },
-    //   })
-    // } else {
-      util.req_quitRoom({
-        roomId: roomId,
-        userId: gData.id
-      },(res)=>{
-        console.log('POST--room/quit',res);
-      })
-    // }
-
-
+    util.req_quitRoom({
+      roomId: roomId,
+      userId: gData.id
+    },(res)=>{
+      console.log('POST--room/quit',res);
+    });
   },
 
   /**
