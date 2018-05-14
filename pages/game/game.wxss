@@ -51,7 +51,7 @@ page{
   border-radius: 20rpx;
 }
 .canvas_style{
-  height:92%;
+  height:80%;
   width: 100%;
   border:2rpx solid #d3d3d3;
   border-radius: 20rpx;
@@ -272,7 +272,7 @@ page{
   background: gainsboro;
   position: absolute;
   right:10rpx;
-  top:70%;
+  top:77%; 
   font-size:30rpx;
   line-height:40rpx;
   margin-right: 20rpx;
@@ -289,7 +289,7 @@ page{
   background: gainsboro;
   position: absolute;
   right:150rpx;
-  top:70%;
+  top:77%;
   box-shadow: 2rpx 2rpx 2rpx 2rpx grey;
   opacity: 0.8;
 }

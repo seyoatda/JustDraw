@@ -43,9 +43,10 @@
       </view>
     </view>
     <canvas canvas-id="myCanvas" class="canvas_style"
+    disable-scroll='true'
     bindtouchstart="start"
     bindtouchmove="move"
-    bindtouchend="end">
+    bindtouchend="end">     
     <cover-view class="vw_toolkit">
       <cover-view class="vw_toolkit_wrp">
       <block wx:for="{{itemWidth}}" wx:for-index="index" wx:key="item">
@@ -87,7 +88,7 @@
       <cover-view>本轮得分{{time2}}</cover-view>
     </cover-view>
   </cover-view>
-    </canvas>
+    </canvas> 
     
   </view>
 

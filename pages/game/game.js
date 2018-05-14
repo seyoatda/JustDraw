@@ -74,6 +74,7 @@ Page({
     //设置本机玩家的index和玩家数量
     var index = 0;
     while (index < 6) {
+      console.log(u);
       if (app.globalData.id == u[index].id) {
         userIndex = index;
       }
