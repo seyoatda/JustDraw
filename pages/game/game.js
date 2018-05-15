@@ -72,6 +72,7 @@ Page({
   onLoad: function (options) {
     console.log("进入绘画页面")
     var that = this;
+    closeAllCountDown = false;//开启倒计时
 
     var u = JSON.parse(options.users);
     roomId = options.roomId;
@@ -216,11 +217,7 @@ Page({
     //显示选词框，绘画者和回答者看到不同界面
     that.showWin(1);
     //判断当前用户为绘画用户或回答用户
-    if (that.data.currentId != app.globalData.id) {
-      //如果是回答者，显示回答按钮
-      that.showWin(3);
-    } else {
-      //如果是绘画者，设置待选词
+    if (that.data.currentId == app.globalData.id) {
       that.setWords();
     }
 
@@ -260,8 +257,12 @@ Page({
       })
     }
     
+    //显示回答和工具按钮
+    that.showWin(3);
+
     //开始画图
     that.count(drawingTime, 1, function () {
+      
       //绘画者
       if(that.data.currentId == app.globalData.id){
         var msg = "canvas:7," + that.data.currentWord
@@ -330,7 +331,7 @@ Page({
               that.setData({
                 score: that.data.score
               })
-              var msg = "canvas:5," + userIndex + ":" + that.data.score;
+              var msg = "canvas:5," + userIndex + ":" + that.data.score[userIndex];
               canvasSocket.send({ data: msg })
             }
           }
@@ -341,6 +342,11 @@ Page({
             that.setPopoverMsg(userIndex, that.data.inputVal)
             that.setPopoverTimer(userIndex, popoverTime)
           }
+
+          //inputVal还原默认空值
+          that.setData({
+            inputVal: ""
+          })
         }
       })
 
@@ -636,10 +642,10 @@ Page({
         }
         //5,回答正确
         else if (nums[0] == 5) {
-          var index_score = parseInt(nums[1]).split(":")
-          that.data.score[index_score[0]] += parseInt(index_score[1])
+          var index_score = nums[1].split(":")
+          //that.data.score[index_score[0]] += parseInt(index_score[1])
           that.setData({
-            score: that.data.score
+            ['score['+index_score[0]+']']: parseInt(index_score[1])
           })
         }
         //6,回答错误
@@ -651,7 +657,6 @@ Page({
         }
         //7,正确答案
         else if(nums[0] == 7){
-          console.log("收到服务器"+nums)
           var msg = nums[1];
           that.setData({
             currentWord:msg

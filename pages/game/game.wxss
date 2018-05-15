@@ -59,13 +59,15 @@ page{
 }
 
 .vw_toolkit{
+  top:0;
+  position: absolute;
   z-index:1999;
   width:100%;
   color: #1aad19;
   flex-direction: row;
-  height: 20%;
-  background-color: #ffffcc;
-  border-bottom:1rpx solid #d3d3d3;
+  height: 200rpx;
+  background-color: #ffffdd;
+  border-bottom:1rpx solid #000;
 }
 
 .vw_toolkit_wrp{
@@ -288,7 +290,7 @@ page{
   height: 90rpx;
   width: 100%;
   border-radius: 10rpx;
-  border-bottom: 1rpx solid #000;
+  border-bottom: 3rpx solid #66FFCC;
   background: gainsboro;
   position: absolute;
   /*right:150rpx;

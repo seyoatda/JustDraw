@@ -30,41 +30,7 @@
     disable-scroll='true'
     bindtouchstart="start"
     bindtouchmove="move"
-    bindtouchend="end">     
-    <cover-view class="vw_toolkit">
-      <cover-view class="vw_toolkit_wrp">
-      <block wx:for="{{itemWidth}}" wx:for-index="index" wx:key="item">
-        <cover-view class="width-item {{activeWidthIndex == index ?'active-item':''}}" data-index="{{index}}" bindtap="setItemWidth" style="width:{{item}}rpx;height:{{item}}rpx;"></cover-view>
-      </block>
-      
-      <cover-image class="eraser-item" bindtap="erase" src="../images/eraser.png"></cover-image>
-      <cover-image class="clear-item" bindtap="clearAll" src="../images/clear.png"></cover-image>
-      </cover-view>
-      <cover-view class="vw_toolkit_wrp">
-      <block wx:for="{{itemColor}}" wx:for-index="index" wx:key="item">
-        <cover-view class="color-item {{activeColorIndex == index ?'active-item':''}}" data-index="{{index}}" bindtap="setItemColor" style="background:{{item}};"></cover-view>
-      </block>
-     <dl class="menu">
-      <dt data-index="0" class="graph" bindtap="tapMainMenu" >Graph</dt>
-        <dd class="{{subMenuDisplay[0]}}">
-          <ul>
-            <li class="{{subMenuHighLight[0][0]}}" data-index="0-0" bindtap="tapSubMenu">三角形</li>
-            <li class="{{subMenuHighLight[0][1]}}" data-index="0-1" bindtap="tapSubMenu">矩形</li>
-            <li class="{{subMenuHighLight[0][2]}}" data-index="0-2" bindtap="tapSubMenu">圆形</li>
-            <li class="{{subMenuHighLight[0][3]}}" data-index="0-3" bindtap="tapSubMenu">多边形</li>
-          </ul>
-        </dd>
-      <dt data-index="1" class="rank" bindtap="tapMainMenu">Rank</dt>
-        <dd class="{{subMenuDisplay[1]}}">
-          <ul>
-            <li class="{{subMenuHighLight[1][0]}}" data-index="1-0" bindtap="tapSubMenu">level1</li>
-            <li class="{{subMenuHighLight[1][1]}}" data-index="1-1" bindtap="tapSubMenu">level2</li>
-            <li class="{{subMenuHighLight[1][2]}}" data-index="1-2" bindtap="tapSubMenu">level3</li>
-          </ul>
-        </dd>
-    </dl>
-      </cover-view>
-    </cover-view>
+    bindtouchend="end">
 
     </canvas> 
     
@@ -120,8 +86,8 @@
     </cover-view>
   </cover-view>
 
-  <!--输入答案控件-->
-  <cover-view class="btn_answer" wx:if='{{flag_show3}}'  bindtap='btnAnsClicked'>回\n答</cover-view>
+  <!--工具和输入框激活按钮-->
+  <cover-view class="btn_answer" wx:if='{{flag_show3}}'  bindtap='btnAnsClicked'>{{currentId == globalData.id ? '工\n具' : '回\n答'}}</cover-view>
   
 
 </view>
@@ -153,5 +119,42 @@
   </cover-view>
 
   <!--输入框-->
-  <input class='ipt_answer' style="top:0;width:100%;" bindinput="listenerInputVal" wx:if='{{flag_show4}}'></input>
-  <cover-view class='vw_winCtnr' bindtap='btnAnsClicked' wx:if='{{flag_show4}}' style="top:90rpx;"></cover-view>
+  <input class='ipt_answer' style="top:0;width:100%;" bindinput="listenerInputVal" wx:if='{{flag_show4 && currentId != globalData.id}}'></input>
+
+  <!--工具箱-->
+  <cover-view class="vw_toolkit" wx:if='{{flag_show4 && currentId == globalData.id}}'>
+      <cover-view class="vw_toolkit_wrp">
+      <block wx:for="{{itemWidth}}" wx:for-index="index" wx:key="item">
+        <cover-view class="width-item {{activeWidthIndex == index ?'active-item':''}}" data-index="{{index}}" bindtap="setItemWidth" style="width:{{item}}rpx;height:{{item}}rpx;"></cover-view>
+      </block>
+      
+      <cover-image class="eraser-item" bindtap="erase" src="../images/eraser.png"></cover-image>
+      <cover-image class="clear-item" bindtap="clearAll" src="../images/clear.png"></cover-image>
+      </cover-view>
+      <cover-view class="vw_toolkit_wrp">
+      <block wx:for="{{itemColor}}" wx:for-index="index" wx:key="item">
+        <cover-view class="color-item {{activeColorIndex == index ?'active-item':''}}" data-index="{{index}}" bindtap="setItemColor" style="background:{{item}};"></cover-view>
+      </block>
+     <!--dl class="menu">
+      <dt data-index="0" class="graph" bindtap="tapMainMenu" >Graph</dt>
+        <dd class="{{subMenuDisplay[0]}}">
+          <ul>
+            <li class="{{subMenuHighLight[0][0]}}" data-index="0-0" bindtap="tapSubMenu">三角形</li>
+            <li class="{{subMenuHighLight[0][1]}}" data-index="0-1" bindtap="tapSubMenu">矩形</li>
+            <li class="{{subMenuHighLight[0][2]}}" data-index="0-2" bindtap="tapSubMenu">圆形</li>
+            <li class="{{subMenuHighLight[0][3]}}" data-index="0-3" bindtap="tapSubMenu">多边形</li>
+          </ul>
+        </dd>
+      <dt data-index="1" class="rank" bindtap="tapMainMenu">Rank</dt>
+        <dd class="{{subMenuDisplay[1]}}">
+          <ul>
+            <li class="{{subMenuHighLight[1][0]}}" data-index="1-0" bindtap="tapSubMenu">level1</li>
+            <li class="{{subMenuHighLight[1][1]}}" data-index="1-1" bindtap="tapSubMenu">level2</li>
+            <li class="{{subMenuHighLight[1][2]}}" data-index="1-2" bindtap="tapSubMenu">level3</li>
+          </ul>
+        </dd>
+    </dl-->
+      </cover-view>
+    </cover-view>
+
+    <cover-view class='vw_winCtnr' bindtap='btnAnsClicked' wx:if='{{flag_show4}}' style="top:{{currentId == globalData.id ? '200rpx' : '90rpx'}};"></cover-view>
