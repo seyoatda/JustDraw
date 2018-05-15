@@ -55,7 +55,7 @@ Page({
     btn_style: "border-radius:60rpx;border:none;color: rgb(240,220,200);background-color: gray;opacity:0.9;",
     flags:[
       true,//开始按钮是否显示
-      true //开始游戏按钮是否可用
+      false //开始游戏按钮是否可用
       ],
     users: []
   },

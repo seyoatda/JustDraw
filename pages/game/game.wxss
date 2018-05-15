@@ -226,7 +226,7 @@ page{
 
 .btn_choose0{
   margin-top: 20rpx;
-  background: gainsboro;
+  background: GhostWhite;
   border-radius: 10rpx;
   width: 85%;
   height: 100rpx;
@@ -238,7 +238,7 @@ page{
 }
 .btn_choose1{
   margin-top: 20rpx;
-  background: wheat;
+  background: LightCyan;
   border-radius: 10rpx;
   width: 85%;
   height: 100rpx;

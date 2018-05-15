@@ -45,6 +45,7 @@ Page({
     words: ["", "", "", ""],
     hints: ["", "", "", ""],
     hint: '',
+    wordLength: 0,
     users: [],
     popovers: [
       { show: false, timer: 0, msg: "" },
@@ -212,9 +213,10 @@ Page({
       //选词默认选择第一项
       that.setData({
         "currentWord": that.data.words[0],
-        "hint": that.data.hints[0]
+        "hint": that.data.hints[0],
+        "wordLength": that.data.words[0].length
       });
-      var msg = "canvas:4," + that.data.hint
+      var msg = "canvas:4," + that.data.hint + ":" + that.data.wordLength
       canvasSocket.send({ data: msg })
       that.hideWin(1);
       that.startDrawing();
@@ -278,10 +280,11 @@ Page({
     var id = e.target.id.substring(4, 5);
     this.setData({
       "currentWord": this.data.words[id],
-      "hint": this.data.hints[id]
+      "hint": this.data.hints[id],
+      "wordLength": this.data.words[id].length
     });
     //var msg = "canvas:4," + this.data.words[id]
-    var msg = "canvas:4," + this.data.hint
+    var msg = "canvas:4," + this.data.hint + ":" + this.data.wordLength
     canvasSocket.send({ data: msg })
     this.hideWin(1);
     this.startDrawing();
@@ -663,8 +666,10 @@ Page({
         }
         //4，选词信息
         else if (nums[0] == 4) {
+          var hint_length = nums[1].split(":");
           that.setData({
-            "hint": nums[1]
+            "hint": hint_length[0],
+            "wordLength": hint_length[1]
           });
           that.hideWin(1);
           that.startDrawing();

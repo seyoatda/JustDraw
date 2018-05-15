@@ -26,7 +26,7 @@
         提示:{{hint}}
       </view>
       <view class='vw_wordLength'>
-        字数:{{hint.length}}
+        字数:{{wordLength}}
       </view>
     </view>
     <canvas canvas-id="myCanvas" class="canvas_style"
