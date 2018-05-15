@@ -20,10 +20,13 @@
   <view class='vw_mid'>
     <view class='vw_widget'>
       <view class='vw_countdown'>
-        <text>时间：{{time1}}</text>
+        <text>时间:{{time[1]}}</text>
       </view>
       <view class='vw_wordHint'>
-        提示：{{hint}}
+        提示:{{hint}}
+      </view>
+      <view class='vw_wordLength'>
+        字数:{{wordLength}}
       </view>
     </view>
     <canvas canvas-id="myCanvas" class="canvas_style"
@@ -96,7 +99,7 @@
   <cover-view class='vw_winCtnr' wx:if='{{flag_show1}}'>
     <cover-view class="vw_choose" wx:if='{{currentId == globalData.id}}'>
       <cover-view class='txt_header'>请选择要画的词：</cover-view>
-      <cover-view class='txt_timer'>(剩余 {{time2}} 秒)</cover-view>
+      <cover-view class='txt_timer'>(剩余 {{time[2]}} 秒)</cover-view>
       <block wx:for="{{words}}" wx:key="word" wx:for-item="word">
         <cover-view id="btn_{{index}}" class="btn_choose{{index}}" bindtap='btnCWClicked'>{{word}}</cover-view>
       </block>
@@ -105,7 +108,7 @@
     <cover-view class="vw_answer" wx:if='{{currentId != globalData.id}}'>
       <cover-view class='txt_rightAnsIs'>提示：</cover-view>
       <cover-view class='txt_rightAns'>{{users[currentIndex % 6].name}}选词中......</cover-view>
-      <cover-view class='txt_getScore'>剩余时间： {{time2}} 秒</cover-view>
+      <cover-view class='txt_getScore'>剩余时间： {{time[2]}} 秒</cover-view>
     </cover-view>
   </cover-view>
 
@@ -114,7 +117,7 @@
     <cover-view class='vw_answer'>
       <cover-view class='txt_rightAnsIs'>正确答案：</cover-view>
       <cover-view class='txt_rightAns'>{{currentWord}}</cover-view>
-      <cover-view class='txt_getScore'>剩余时间：{{time2}}</cover-view>
+      <cover-view class='txt_getScore'>剩余时间：{{time[2]}}</cover-view>
     </cover-view>
   </cover-view>
 

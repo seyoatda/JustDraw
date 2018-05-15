@@ -38,7 +38,12 @@ page{
   margin-left: 2%;
 }
 .vw_wordHint{
-  margin-right: 20%;
+  left:45%;
+}
+
+.vw_wordLength{
+  float:right;
+  margin-right:2%;
 }
 
 .vw_bot{
@@ -221,7 +226,7 @@ page{
 
 .btn_choose0{
   margin-top: 20rpx;
-  background: gainsboro;
+  background: GhostWhite;
   border-radius: 10rpx;
   width: 85%;
   height: 100rpx;
@@ -233,7 +238,7 @@ page{
 }
 .btn_choose1{
   margin-top: 20rpx;
-  background: wheat;
+  background: LightCyan;
   border-radius: 10rpx;
   width: 85%;
   height: 100rpx;
@@ -277,7 +282,7 @@ page{
   background: gainsboro;
   position: absolute;
   right:10rpx;
-  top:75%; 
+  top:61%; 
   font-size:30rpx;
   line-height:40rpx;
   margin-right: 20rpx;

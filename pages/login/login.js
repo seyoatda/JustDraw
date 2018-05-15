@@ -2,7 +2,17 @@ const app = getApp()
 var util = require('../../utils/util.js');
 var code = null;
 Page({
+  data:{
+    enterRoom: false,
+    roomId: null,
+    maxNum: null,
+    visitNum: 0
+  },
   onShow: function () {
+    var that = this;
+    that.setData({
+      visitNum: that.data.visitNum + 1
+    })
     if (code == null) {
       wx.login({
         success: res => {
@@ -16,7 +26,16 @@ Page({
       })
     }
   },
-  onLoad: function () {
+  onLoad: function (options) {
+    var that = this;
+    if(options.enterRoom)
+    {
+      that.setData({
+        enterRoom: true
+      })
+    }
+    this.data.roomId = options.roomId;
+    this.data.maxNum = options.maxNum;
     wx.login({
       success: res => {
         if (res.code) {
@@ -67,9 +86,15 @@ Page({
           app.globalData.name = u.nickName;
           that.register();
           code = null;
-          wx.navigateTo({
-            url: '/pages/index/index'
-          })
+          if(that.data.enterRoom){
+            //如果是从链接跳转过来的，先加入房间，然后跳入房间页面
+            that.enterRoom(app.globalData);
+          }else{
+            //否则跳到主页面
+            wx.navigateTo({
+              url: '/pages/index/index'
+            })
+          }
         } else {
           console.log('解密失败');
         }
@@ -146,7 +171,56 @@ Page({
       }
     })
   },
+  enterRoom: function (gData) {
+    var that = this;
+    var no = that.data.roomId;
+    //request 查询用户是否在房间
+    util.req_getPlayer({
+      userId: gData.id
+    }, (res) => {
+      console.log("POST--player/get", res);
+      if (res.data.status == "SUCCESS") {
+        //request 将用户退出房间
+        util.req_quitRoom({
+          roomId: res.data.info.roomId,
+          userId: res.data.info.userId
+        }, (res) => {
+          console.log("POST--room/quit", res);
+          that.cbEnterRoom(no,gData);
+        });
+      } else {
+        that.cbEnterRoom(no,gData);
+      }
+    });
+  },
+  cbEnterRoom: function (no,gData) {
+    var that = this;
+    //request 向后台请求加入房间
+    util.req_enterRoom({
+      roomId: no,
+      userId: gData.id
+    }, (res) => {
+      console.log("POST--room/enter:", res);
+      if ("ERROR" == res.data.status) {
+        console.log("用户无法进入房间！错误代码：", res.data.info);
+        return;
+      }
+      wx.navigateTo({
+        url: '/pages/room/room?isOwner=false&roomId=' + no + '&user=' + JSON.stringify(gData.user) + '&maxNum=' + that.data.maxNum,
+      })
+    });
+  },
   onUnload: function () {
 
+  },
+  toIndex: function() {
+    wx.navigateTo({
+      url: '/pages/index/index'
+    })
+  },
+  onHide: function(){
+    // if(this.data.enterRoom){
+    //     console.log('do something');
+    // }
   }
 })

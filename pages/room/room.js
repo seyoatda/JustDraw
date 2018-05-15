@@ -55,11 +55,10 @@ Page({
     btn_style: "border-radius:60rpx;border:none;color: rgb(240,220,200);background-color: gray;opacity:0.9;",
     flags:[
       true,//开始按钮是否显示
-      true //开始游戏按钮是否可用
+      false //开始游戏按钮是否可用
       ],
     users: []
   },
-
   startGame: function () {
     var dest = '/topic/roomId/' + roomId;
     //房主向其他用户广播消息，并且申请开始游戏
@@ -336,7 +335,20 @@ Page({
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {
-
+  onShareAppMessage: function (res) {
+    if (res.from === 'button') {
+      // 来自页面内转发按钮
+      console.log(res.target)
+    }
+    return {
+      title: '房间已开好，就等你了。房间号：'+ roomId,
+      path: '/pages/login/login?enterRoom=true&roomId='+roomId+'&maxNum='+maxNum,
+      success: function (res) {
+        // 转发成功
+      },
+      fail: function (res) {
+        // 转发失败
+      }
+    }
   }
 })
