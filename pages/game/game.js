@@ -43,7 +43,7 @@ Page({
     itemWidth: [15, 20, 25, 30, 35, 40, 45],
     itemColor: ['#000000', '#ff0000', '#00ff00', '#0000ff', '#00ffff', '#ff00ff', '#ffff00', '#C0C0C0', '#ffffff'],
     words: ["", "", "", ""],
-    users: null,
+    users: [],
     popovers: [
       { show: false, timer: 0, msg: "" },
       { show: false, timer: 0, msg: "" },
@@ -73,19 +73,23 @@ Page({
     console.log("进入绘画页面")
     var that = this;
     closeAllCountDown = false;//开启倒计时
-
+    //清除空位置
     var u = JSON.parse(options.users);
+    var u1=[];
+    for(var i=0;i<u.length ;i++){
+      if(u[i].id!=0){
+        u1.push(u[i]);
+      }
+    }
     roomId = options.roomId;
-    maxNum = parseInt(options.maxNum);
+    maxNum = u1.length;
     //设置本机玩家的index和玩家数量
     var index = 0;
-    while (index < maxNum) {
+    while (index < u1.length) {
       if (app.globalData.id == u[index].id) {
         userIndex = index;
       }
-      if (u[index].id != 0) {
-        userNum++;
-      }
+      userNum++;
       index++;
     }
     if (userNum == 0) {
@@ -95,10 +99,8 @@ Page({
       })
       return;
     }
-
-
     that.setData({
-      users: u,
+      users: u1,
       currentId: u[0].id
     });
 
@@ -175,22 +177,7 @@ Page({
 
   },
 
-  //返回主界面按钮
-  btnBack: function () {
-    //退出房间
-    util.req_quitRoom({
-      roomId: roomId,
-      userId: app.globalData.id
-    }, (res) => {
-      console.log('POST--room/quit', res);
-    })
-    wx.redirectTo({
-      url: '../home/home',
-      success: function (res) { },
-      fail: function (res) { },
-      complete: function (res) { },
-    })
-  },
+  
 
   whenStart: function () {
     var that = this;
@@ -273,6 +260,7 @@ Page({
       //回答者通过socket接收从绘画者传来的正确答案并予以展示
     });
   },
+//按钮函数
 
   /**
    * 点击选词后修改当前的词，并且关闭选词窗口
@@ -356,6 +344,30 @@ Page({
       });
     }
   },
+  //返回主界面按钮
+  btnBack: function () {
+    //退出房间
+    util.req_quitRoom({
+      roomId: roomId,
+      userId: app.globalData.id
+    }, (res) => {
+      console.log('POST--room/quit', res);
+    })
+    wx.redirectTo({
+      url: '../home/home',
+      success: function (res) { },
+      fail: function (res) { },
+      complete: function (res) { },
+    })
+  },
+  //
+  btnOneMoreTime:function(){
+    //重新回到之前的房间
+    wx.navigateBack({
+      
+    });
+  },
+//计时函数
 
   /**
    * 设定倒计时时间
@@ -390,7 +402,8 @@ Page({
     }
       , 1000)
   },
-
+//计时函数结束
+//显示窗口函数
   showWin: function (id) {
     this.setData({
       ['flag_show' + id]: true

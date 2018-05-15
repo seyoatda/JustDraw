@@ -54,16 +54,21 @@ Page({
     roomNo: 0,
     btn_style: "border-radius:60rpx;border:none;color: rgb(240,220,200);background-color: gray;opacity:0.9;",
     flags:[
-      true,//加入房间弹窗是否显示
-      true,//开始游戏按钮是否可用
-      true //创建房间弹窗是否显示
+      true,//开始按钮是否显示
+      true //开始游戏按钮是否可用
       ],
     users: []
   },
 
   startGame: function () {
     var dest = '/topic/roomId/' + roomId;
-    client.send(dest, { priority: 9 }, JSON.stringify({ type: "START" }))
+    //房主向其他用户广播消息，并且申请开始游戏
+    client.send(dest, { priority: 9 }, JSON.stringify({ type: "START" }));
+    util.req_startGame({
+      roomId:roomId
+    },res=>{
+      console.log("GET----startGame:",res);
+    });
     wx.navigateTo({
       url: '../game/game?roomId=' + roomId +"&maxNum="+maxNum + '&users=' + JSON.stringify(this.data.users)
     })
@@ -103,7 +108,6 @@ Page({
         ["flags[1]"]: false
       })
     }
-    console.log("当前房间内用户：", this.data.users);
   },
 
   updateUser: function (users) {
@@ -116,6 +120,11 @@ Page({
         ["users[" + i + "]"]: new util.user(0, "空位", "")
       });
     }
+    //先把开始按钮disable掉
+    this.setData({
+      btn_style: "border-radius:60rpx;border:none;color: rgb(240,220,200);background-color: dodgerblue;opacity:0.9;",
+      ["flags[1]"]: false
+    })
     for(var i = 0;i < users.length; i++)
     {
       that.addUser(new util.user(users[i].userId, users[i].nickName, users[i].photo));
@@ -206,13 +215,34 @@ Page({
       client.send(destination, { priority: 9 }, JSON.stringify({ type: "ENTER", content: gData.id }));
     })
   },
-
+  //如果不是房主，隐藏开始游戏按钮
+  setStartBtn:function(){
+    var that=this;
+    console.log("-----isOwner",isOwner)
+    if (isOwner) {
+      that.setData({
+        ["flags[0]"]: true
+      });
+    } else {    
+      that.setData({
+        ["flags[0]"]: false
+      })
+    }
+  },
   getUserInfoInRoom: function (roomId, callback) {
+    var that = this;
     //request 查询房间内所有用户的id
     util.req_findRoom({
       roomId: roomId
     }, (res) => {
       console.log("POST----room/find:",res);
+      //更新信息时，更新房主的归属
+      if (gData.id == res.data.info.userId){
+        isOwner=true;
+      }else{
+        isOwner=false;
+      }
+      that.setStartBtn();
       var players = res.data.info.players;
       var userIds = [];
       userIds.push(res.data.info.userId);
@@ -236,18 +266,9 @@ Page({
       roomNo: roomId
     })
     console.log("button:", options);
+    isOwner = options.isOwner;
     //将自己的信息广播给其他已经进入房间的用户
-    if (options.isOwner == "true") {
-      isOwner=true;
-      that.setData({
-        ["flags[1]"]:false
-      });
-    } else {
-      //如果不是房主，隐藏开始游戏按钮
-      that.setData({
-        ["flags[0]"]: false
-      })
-    }
+    that.setStartBtn();
     that.initData();
     console.log("roomId:", options.maxNum);
   },

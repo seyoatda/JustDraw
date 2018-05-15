@@ -79,7 +79,7 @@
         </block>
       </cover-view>
       <cover-view class='vw_goBtn'>
-        <cover-view style="background:#1aad19;">再来一局</cover-view>
+        <cover-view style="background:#1aad19;" bindtap='btnOneMoreTime'>再来一局</cover-view>
         <cover-view style="opacity:0;width:20%;"></cover-view>
         <cover-view style="background:#d2d2d2;" bindtap="btnBack">返回主页</cover-view>
       </cover-view>

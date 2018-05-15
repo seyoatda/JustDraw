@@ -16,8 +16,8 @@ Page({
     setShow: false,
     display: false,//是否弹出
     flags:[
-      false,
-      false
+      false,//加入房间弹窗是否显示
+      false //创建房间弹窗是否显示
     ],
     
     styles:[
