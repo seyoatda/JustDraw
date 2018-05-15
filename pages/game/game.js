@@ -43,6 +43,8 @@ Page({
     itemWidth: [15, 20, 25, 30, 35, 40, 45],
     itemColor: ['#000000', '#ff0000', '#00ff00', '#0000ff', '#00ffff', '#ff00ff', '#ffff00', '#C0C0C0', '#ffffff'],
     words: ["", "", "", ""],
+    hints: ["", "", "", ""],
+    hint: '',
     users: [],
     popovers: [
       { show: false, timer: 0, msg: "" },
@@ -195,10 +197,7 @@ Page({
     ctx.draw()
     that.resetPencil()
 
-    //选词默认选择第一项
-    that.setData({
-      "currentWord": that.data.words[0]
-    });
+   
     answered = false
 
     //显示选词框，绘画者和回答者看到不同界面
@@ -207,6 +206,11 @@ Page({
     if (that.data.currentId == app.globalData.id) {
       that.setWords();
     }
+    //选词默认选择第一项
+    that.setData({
+      "currentWord": that.data.words[0],
+      "hint": that.data.hints[0] + "(" + that.data.words[0].length + "个字" + ")"
+    });
 
     //如果倒计时结束仍未选择词，则默认选择第一个
     that.count(selectingTime, 2, function () {
@@ -271,7 +275,8 @@ Page({
     
     var id = e.target.id.substring(4, 5);
     this.setData({
-      "currentWord": this.data.words[id]
+      "currentWord": this.data.words[id],
+      "hint": this.data.hint[id] + "(" + that.data.words[id].length + "个字" + ")"
     });
     //var msg = "canvas:4," + this.data.words[id]
     var msg = "canvas:4,选词"
@@ -730,7 +735,8 @@ Page({
         var wordsarray = res.data.info
         for (var i = 0; i < 4; i++) {
           that.setData({
-            ["words[" + i + "]"]: wordsarray[i].name
+            ["words[" + i + "]"]: wordsarray[i].name,
+            ["hints[" + i + "]"]: wordsarray[i].hint
           })
         }
       },
