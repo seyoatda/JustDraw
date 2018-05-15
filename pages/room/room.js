@@ -60,7 +60,6 @@ Page({
       ],
     users: []
   },
-
   startGame: function () {
     var dest = '/topic/roomId/' + roomId;
     client.send(dest, { priority: 9 }, JSON.stringify({ type: "START" }))
@@ -331,7 +330,20 @@ Page({
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {
-
+  onShareAppMessage: function (res) {
+    if (res.from === 'button') {
+      // 来自页面内转发按钮
+      console.log(res.target)
+    }
+    return {
+      title: '房间已开好，就等你了。房间号：'+ roomId,
+      path: '/pages/login/login?enterRoom=true&roomId='+roomId+'&maxNum='+maxNum,
+      success: function (res) {
+        // 转发成功
+      },
+      fail: function (res) {
+        // 转发失败
+      }
+    }
   }
 })
