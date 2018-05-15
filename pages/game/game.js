@@ -11,6 +11,7 @@ var roomId  //房间号
 var maxNum  //房间用户最大数量
 var userIndex = 0 //本机用户索引
 var userNum = 0 //房间用户数量
+var answeredNum = 0 //已回答正确人数
 var popoverTime = 5 //聊天弹框弹出的时间
 var answered = false //本机玩家是否已做出回答
 var drawingTime = 30 //绘画时长
@@ -31,8 +32,7 @@ Page({
     activeColorIndex: 0,
     globalData: app.globalData,
 
-    time1: '',
-    time2: '',
+    time: [0,0],
 
     flag_show1: false,
     flag_show2: false,
@@ -121,8 +121,7 @@ Page({
     closeAllCountDown = true
     this.clearWin();
     //关闭canvasSocket，并且退出房间（此处无需解散房间，后台会处理）
-    //canvasSocket.close();
-    wx.closeSocket()
+    canvasSocket.close();
 
   },
 
@@ -199,6 +198,7 @@ Page({
 
    
     answered = false
+    answeredNum = 0
 
     //显示选词框，绘画者和回答者看到不同界面
     that.showWin(1);
@@ -206,14 +206,16 @@ Page({
     if (that.data.currentId == app.globalData.id) {
       that.setWords();
     }
-    //选词默认选择第一项
-    that.setData({
-      "currentWord": that.data.words[0],
-      "hint": that.data.hints[0] + "(" + that.data.words[0].length + "个字" + ")"
-    });
 
     //如果倒计时结束仍未选择词，则默认选择第一个
     that.count(selectingTime, 2, function () {
+      //选词默认选择第一项
+      that.setData({
+        "currentWord": that.data.words[0],
+        "hint": that.data.hints[0]
+      });
+      var msg = "canvas:4," + that.data.hint
+      canvasSocket.send({ data: msg })
       that.hideWin(1);
       that.startDrawing();
     }, function () {
@@ -276,10 +278,10 @@ Page({
     var id = e.target.id.substring(4, 5);
     this.setData({
       "currentWord": this.data.words[id],
-      "hint": this.data.hint[id] + "(" + that.data.words[id].length + "个字" + ")"
+      "hint": this.data.hints[id]
     });
     //var msg = "canvas:4," + this.data.words[id]
-    var msg = "canvas:4,选词"
+    var msg = "canvas:4," + this.data.hint
     canvasSocket.send({ data: msg })
     this.hideWin(1);
     this.startDrawing();
@@ -317,7 +319,6 @@ Page({
           }
           //回答正确
           else if (scoreAdded != 0) {
-            console.log("加分")
             if (answered == false) {
               answered = true
               that.data.score[userIndex] += scoreAdded
@@ -326,6 +327,13 @@ Page({
               })
               var msg = "canvas:5," + userIndex + ":" + that.data.score[userIndex];
               canvasSocket.send({ data: msg })
+
+              answeredNum++;
+              if (answeredNum == userNum - 1 && that.data.time[1]>3) {
+                that.setData({
+                  ["time[1]"]: 3
+                })
+              }
             }
           }
           //回答错误
@@ -379,30 +387,33 @@ Page({
    */
   count: function (time, id, func, func2 = function () { return false; }) {
     var that = this;
-    var countdown = time;
-    that.minus1s(that, func, countdown, id, func2);
+    that.setData({
+      ["time[" + id + "]"]: time+1
+    })
+    that.minus1s(that, func, id, func2);
   },
 
   /**
    * 倒计时-1s,倒计时为0时执行函数
    */
-  minus1s: function (that, func, countdown, id, func2 = function () { return false; }) {
+  minus1s: function (that, func, id, func2 = function () { return false; }) {
     //设置函数使倒计时中途停止
     if (func2()) return;
     //倒计时为0时执行指定函数
+    var countdown = that.data.time[id]
+    countdown--;
     if (countdown == 0) {
       func();
       return;
     } else {
       that.setData({
-        ["time" + id]: countdown
+        ["time[" + id+"]"]: countdown
       })
-      countdown--;
 
     }
     setTimeout(function () {
       if (closeAllCountDown == false){
-        that.minus1s(that, func, countdown, id, func2);
+        that.minus1s(that, func, id, func2);
       }
     }
       , 1000)
@@ -652,9 +663,9 @@ Page({
         }
         //4，选词信息
         else if (nums[0] == 4) {
-          // that.setData({
-          //   "currentWord": nums[1]
-          // });
+          that.setData({
+            "hint": nums[1]
+          });
           that.hideWin(1);
           that.startDrawing();
         }
@@ -665,6 +676,12 @@ Page({
           that.setData({
             ['score['+index_score[0]+']']: parseInt(index_score[1])
           })
+          answeredNum++;
+          if (answeredNum == userNum - 1 && that.data.time[1] > 3){
+            that.setData({
+              ["time[1]"]:3
+            })
+          }
         }
         //6,回答错误
         else if (nums[0] == 6) {
