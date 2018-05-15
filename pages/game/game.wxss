@@ -61,7 +61,7 @@ page{
 .vw_toolkit{
   top:0;
   position: absolute;
-  z-index:1999;
+  z-index:2000;
   width:100%;
   color: #1aad19;
   flex-direction: row;
@@ -165,7 +165,7 @@ page{
 }
 .vw_answer {
   width: 60%;
-  top: 40%;
+  top: 30%;
   left: 20%;
   background-color: white;
   border-radius: 20rpx;
@@ -208,7 +208,7 @@ page{
 .vw_choose{
   width: 60%;
   height: 600rpx;
-  top: 30%;
+  top: 25%;
   left: 20%;
   background-color: white;
   opacity: 0.8;
@@ -462,7 +462,6 @@ page{
 
 
 .vw_popover_top{
-  z-index: 2000;
   width: 150rpx; 
   background: #eee;
   position: absolute;
@@ -488,7 +487,6 @@ page{
 }
 
 .vw_popover_bottom{
-  z-index: 2000;
   width: 150rpx; 
   background: #eee;
   position: absolute;
@@ -569,7 +567,7 @@ page{
   width:80%;
   height:50rpx;
   line-height:50rpx;
-  background:#CCDDFF;
+  background:#CCFFFF;
   border:1rpx solid #000;
   border-radius: 10rpx;
 }

@@ -119,14 +119,7 @@ Page({
     //关闭canvasSocket，并且退出房间（此处无需解散房间，后台会处理）
     //canvasSocket.close();
     wx.closeSocket()
-    if (userIndex == 0) {
-      util.req_quitRoom({
-        roomId: roomId,
-        userId: app.globalData.id
-      }, (res) => {
-        console.log('POST--room/quit', res);
-      })
-    }
+
   },
 
   /**
@@ -184,6 +177,13 @@ Page({
 
   //返回主界面按钮
   btnBack: function () {
+    //退出房间
+    util.req_quitRoom({
+      roomId: roomId,
+      userId: app.globalData.id
+    }, (res) => {
+      console.log('POST--room/quit', res);
+    })
     wx.redirectTo({
       url: '../home/home',
       success: function (res) { },
@@ -650,10 +650,13 @@ Page({
         }
         //6,回答错误
         else if (nums[0] == 6) {
-          var index_msg = nums[1].split(":")
-          var i = parseInt(index_msg[0])
-          that.setPopoverMsg(i, index_msg[1])
-          that.setPopoverTimer(i, popoverTime)
+          if(that.data.flag_show4 == false){
+            var index_msg = nums[1].split(":")
+            var i = parseInt(index_msg[0])
+            that.setPopoverMsg(i, index_msg[1])
+            that.setPopoverTimer(i, popoverTime)
+          }
+          
         }
         //7,正确答案
         else if(nums[0] == 7){
