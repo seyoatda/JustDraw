@@ -16,8 +16,8 @@ Page({
     setShow: false,
     display: false,//是否弹出
     flags:[
-      false,
-      false
+      false,//加入房间弹窗是否显示
+      false //创建房间弹窗是否显示
     ],
     
     styles:[
@@ -278,14 +278,19 @@ Page({
     util.req_enterRoom({
       roomId: no,
       userId: gData.id
-    }, (res) => {
+    }, res => {
       console.log("POST--room/enter:", res);
       if ("ERROR" == res.data.status) {
         console.log("用户无法进入房间！错误代码：", res.data.info);
         return;
       }
-      wx.navigateTo({
-        url: '../room/room?isOwner=false&roomId=' + no + '&user=' + JSON.stringify(gData.user)+'&maxNum='+this.data.maxNum,
+      util.req_findRoom({
+        roomId:no
+      },res=>{
+        console.log("POST-----room/find:",res); 
+        wx.navigateTo({
+            url: '../room/room?isOwner=false&roomId=' + no + '&user=' + "&maxNum=" + res.data.info.maxSize,
+        })
       })
     });
   },

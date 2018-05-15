@@ -65,6 +65,34 @@ var req_quitRoom = (data, callback) => {
     }
   })
 }
+//开始游戏请求
+var req_startGame=(data,callback)=>{
+  wx.request({
+    url: 'http://liuyifan.club:8080/room/startGame',
+    data: data,
+    header: { "content-Type": "application/x-www-form-urlencoded" },
+    method: 'GET',
+    dataType: 'json',
+    responseType: 'text',
+    success: function (res) {
+      callback(res);
+    }
+  })
+}
+//退出游戏
+var req_endGame = (data, callback) => {
+  wx.request({
+    url: 'http://liuyifan.club:8080/endGame',
+    data: data,
+    header: { "content-Type": "application/x-www-form-urlencoded" },
+    method: 'GET',
+    dataType: 'json',
+    responseType: 'text',
+    success: function (res) {
+      callback(res);
+    }
+  })
+}
 //查询用户是否在房间
 var req_getPlayer=(data,callback)=>{
   wx.request({
@@ -131,6 +159,7 @@ module.exports = {
   req_findUser:req_findUser,
   req_dismissRoom:req_dismissRoom,
   req_getPlayer:req_getPlayer,
-  req_quitRoom:req_quitRoom
+  req_quitRoom:req_quitRoom,
+  req_startGame:req_startGame
 }
 

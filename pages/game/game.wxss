@@ -59,13 +59,15 @@ page{
 }
 
 .vw_toolkit{
-  z-index:1999;
+  top:0;
+  position: absolute;
+  z-index:2000;
   width:100%;
   color: #1aad19;
   flex-direction: row;
-  height: 20%;
-  background-color: #ffffcc;
-  border-bottom:1rpx solid #d3d3d3;
+  height: 200rpx;
+  background-color: #ffffdd;
+  border-bottom:1rpx solid #000;
 }
 
 .vw_toolkit_wrp{
@@ -142,6 +144,7 @@ page{
   font-size: 10pt;
   white-space: nowrap;
   text-overflow:ellipsis;
+  text-align: center;
 }
 .txt_score{
   height: 50rpx;
@@ -162,7 +165,7 @@ page{
 }
 .vw_answer {
   width: 60%;
-  top: 40%;
+  top: 30%;
   left: 20%;
   background-color: white;
   border-radius: 20rpx;
@@ -205,7 +208,7 @@ page{
 .vw_choose{
   width: 60%;
   height: 600rpx;
-  top: 30%;
+  top: 25%;
   left: 20%;
   background-color: white;
   opacity: 0.8;
@@ -267,12 +270,14 @@ page{
   height: 90rpx;
   width: 90rpx;
   border-radius: 80rpx;
-  padding-left:20rpx;
-  padding-right:20rpx;
+  white-space:pre-line; 
+  padding-top:5rpx;
+  /*padding-left:20rpx;
+  padding-right:20rpx;*/
   background: gainsboro;
   position: absolute;
   right:10rpx;
-  top:70%;
+  top:75%; 
   font-size:30rpx;
   line-height:40rpx;
   margin-right: 20rpx;
@@ -283,13 +288,14 @@ page{
 }
 .ipt_answer{
   height: 90rpx;
-  width: 200rpx;
+  width: 100%;
   border-radius: 10rpx;
-  border-bottom: 1rpx solid #000;
+  border-bottom: 3rpx solid #66FFCC;
   background: gainsboro;
   position: absolute;
-  right:150rpx;
-  top:70%;
+  /*right:150rpx;
+  top:77%;*/
+  top:0;
   box-shadow: 2rpx 2rpx 2rpx 2rpx grey;
   opacity: 0.8;
 }
@@ -456,8 +462,6 @@ page{
 
 
 .vw_popover_top{
-  z-index: 2000;
-  word-wrap:break-word;
   width: 150rpx; 
   background: #eee;
   position: absolute;
@@ -466,23 +470,23 @@ page{
   -webkit-border-radius: 10rpx; 
   border-radius:         10rpx;
   border:1rpx solid #d3d3d3;
+  opacity: 0.8;
 }
 
 .vw_popover_top::before {
    content:"";
    position: absolute;
-   left:26rpx;
+   left:75rpx;
    bottom: 100%;
    width: 0;
    height: 0;
    border-left: 13rpx solid transparent;
    border-right: 13rpx solid transparent;
    border-bottom: 26rpx solid #eee;
+   opacity: 0.8;
 }
 
 .vw_popover_bottom{
-  z-index: 2000;
-  word-wrap:break-word;
   width: 150rpx; 
   background: #eee;
   position: absolute;
@@ -491,36 +495,103 @@ page{
   -webkit-border-radius: 10rpx; 
   border-radius:         10rpx;
   border:1rpx solid #d3d3d3;
+  opacity: 0.8;
 }
 
 .vw_popover_bottom::before {
    content:"";
    position: absolute;
-   left:26rpx;
+   left:75rpx;
    top: 100%;
    width: 0;
    height: 0;
    border-left: 13rpx solid transparent;
    border-right: 13rpx solid transparent;
    border-top: 26rpx solid #eee;
+   opacity: 0.8;
 }
 
+.ppr_cover{
+  background: #eee;
+  -moz-border-radius:    10rpx; 
+  -webkit-border-radius: 10rpx; 
+  border-radius:         10rpx;
+  border:1rpx solid #d3d3d3;
+  word-wrap:break-word;
+  white-space:pre-line;
+  opacity: 0.8;
+}
 
-.rk_modal{
+.vw_gameover{
+  width: 80%;
+  text-align: center;
+  top:25%;
+  left: 10%;
+  background-color: white;
+  opacity: 0.8;
+  border-radius: 20rpx;
+  position: absolute; 
+  display: flex;
+  flex-direction: column;
+  justify-content:center;
+}
+
+.vw_goHeader{
+  margin-top: 30rpx;
+  text-align: center;
+  font-weight: bold;
+}
+
+.vw_rank{
+  align-self:center;
+  margin-top:40rpx;
+  margin-bottom:40rpx;
+  padding-top:20rpx;
+  padding-bottom:20rpx;
+  width:80%;
   background:#fff;
+  display:flex;
+  flex-direction: column;
+  border: 3rpx solid crimson;
+  box-shadow: 0 0 20rpx 20rpx #ffffcc;
+  border-radius: 10rpx;
 }
 
-.rk_modal view{
-  width:100%;
+.vw_rank cover-view{
+  margin-top:10rpx;
+  margin-bottom:10rpx;
+  align-self:center;
+  text-align: center;
+  white-space:pre-line;
+  word-wrap:break-word;
+  width:80%;
   height:50rpx;
-  text-align:center;
-  font-size:50rpx;
   line-height:50rpx;
-  margin:5rpx;
-  background:#ffffcc;
+  background:#CCFFFF;
   border:1rpx solid #000;
   border-radius: 10rpx;
 }
+
+.vw_goBtn{
+  align-self:center;
+  height: 70rpx;
+  width: 90%;
+  margin-bottom: 30rpx;
+  display: flex;
+  flex-direction: row;
+}
+
+.vw_goBtn cover-view{
+  display:inline-block;
+  text-align: center;
+  height:60rpx;
+  width: 40%;
+  border:3rpx solid cadetblue;
+  border-radius:10rpx;
+  line-height:60rpx;
+  color: #000;
+}
+
 .show {
    display: block;
 }

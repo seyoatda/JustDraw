@@ -2,34 +2,18 @@
 <!--顶部组件，放置用户信息-->
 <view class='vw_ctnr'>
   <view class='vw_top'>
-      <view class='vw_userInfo'>
-        <view class='vw_userCtnr'>
-          <image class='img_user' src='{{users[0].icon}}'></image>
-          <text class='txt_user'>{{users[0].name}}</text>
-          <view class='vw_popover_top' wx:if='{{popovers[0].show}}'>
-            {{popovers[0].msg}}
-            
-          </view>
+      <view class='vw_userInfo' wx:for='{{users}}' wx:if="{{index<3}}">
+        <view class='vw_userCtnr' >
+          <image class='img_user' src='{{users[index].icon}}'></image>
+          <text class='txt_user'>{{users[index].name}}</text>
         </view>
-        <text class='txt_score'>{{score[0]}}</text>
-        <view class='vw_userCtnr'>
-          <image class='img_user' src='{{users[1].icon}}'></image>
-          <text class='txt_user'>{{users[1].name}}</text>
-          <view class='vw_popover_top' wx:if='{{popovers[1].show}}'>
-            {{popovers[1].msg}}
-          </view>
+        <text class='txt_score' >{{score[index]}}</text>
+        <view class='vw_popover_top'  wx:if='{{popovers[index].show}}'>
+          <cover-view class="ppr_cover">{{popovers[index].msg}}</cover-view>
         </view>
-        <text class='txt_score'>{{score[1]}}</text>
-        <view class='vw_userCtnr'>
-          <image class='img_user' src='{{users[2].icon}}'></image>
-          <text class='txt_user'>{{users[2].name}}</text>
-          <view class='vw_popover_top' wx:if='{{popovers[2].show}}'>
-            {{popovers[2].msg}}
-          </view>
-        </view>
-        <text class='txt_score'>{{score[2]}}</text>
-        
       </view>
+        
+      
   </view>
 
   <!--中间组件，放置画板，计时器，提示-->
@@ -43,10 +27,102 @@
       </view>
     </view>
     <canvas canvas-id="myCanvas" class="canvas_style"
+    disable-scroll='true'
     bindtouchstart="start"
     bindtouchmove="move"
     bindtouchend="end">
-    <cover-view class="vw_toolkit">
+
+    </canvas> 
+    
+  </view>
+
+  <view class='vw_bot'>
+  <view class='vw_userInfo' wx:for='{{users}}' wx:if='{{index>=3}}'>
+        <view class='vw_userCtnr' >
+          <image class='img_user' src='{{users[index].icon}}'></image>
+          <text class='txt_user'>{{users[index].name}}</text>
+        </view>
+        <text class='txt_score' >{{score[index]}}</text>
+        <view class='vw_popover_bottom'  wx:if='{{popovers[index].show}}'>
+          <cover-view class="ppr_cover">{{popovers[index].msg}}</cover-view>
+        </view>
+      </view>
+    
+  </view>
+  
+  
+  <!--view class='vw_winCtnr' catchtap="hideWin(5)"  wx:if='{{flag_show5}}'> 
+    <view class='vw_hide' catchtap='stop'>
+      <view class='vw_account'>
+        <text class='user_times'>游戏局数：</text>
+        <text class='user_score'>共获分数：</text>
+        <view class='btn_container'>
+          <button class='btn_again'>再来一局</button>
+          <button class='btn_back' bindtap='btnBack'>返回主页</button>
+        </view>
+      </view>
+      <view class='vw_userCtn'>
+        <image class='user_image'></image>
+        <text class='user_name'>aaaaaa</text>
+      </view>
+    </view>
+  </view-->
+
+  <!--游戏结束汇总-->
+  <cover-view class='vw_winCtnr'  wx:if='{{flag_show5}}'> 
+    <cover-view class='vw_gameover'>
+      <cover-view class='vw_goHeader'>得分排行：</cover-view>
+      <cover-view class='vw_rank'>
+        <block wx:for="{{ranks}}" wx:for-item="item" wx:for-index="index" wx:key="index" >
+          <cover-view style="{{index == 0 ?'background:gold':''}} {{index == 1 ?'background:silver':''}}{{index == 2 ?'background:burlywood':''}}"
+          >{{item.name}}：{{item.score}}分</cover-view>
+        </block>
+      </cover-view>
+      <cover-view class='vw_goBtn'>
+        <cover-view style="background:#1aad19;" bindtap='btnOneMoreTime'>再来一局</cover-view>
+        <cover-view style="opacity:0;width:20%;"></cover-view>
+        <cover-view style="background:#d2d2d2;" bindtap="btnBack">返回主页</cover-view>
+      </cover-view>
+    </cover-view>
+  </cover-view>
+
+  <!--工具和输入框激活按钮-->
+  <cover-view class="btn_answer" wx:if='{{flag_show3}}'  bindtap='btnAnsClicked'>{{currentId == globalData.id ? '工\n具' : '回\n答'}}</cover-view>
+  
+
+</view>
+
+<!--选择界面-->
+  <cover-view class='vw_winCtnr' wx:if='{{flag_show1}}'>
+    <cover-view class="vw_choose" wx:if='{{currentId == globalData.id}}'>
+      <cover-view class='txt_header'>请选择要画的词：</cover-view>
+      <cover-view class='txt_timer'>(剩余 {{time2}} 秒)</cover-view>
+      <block wx:for="{{words}}" wx:key="word" wx:for-item="word">
+        <cover-view id="btn_{{index}}" class="btn_choose{{index}}" bindtap='btnCWClicked'>{{word}}</cover-view>
+      </block>
+    </cover-view>
+
+    <cover-view class="vw_answer" wx:if='{{currentId != globalData.id}}'>
+      <cover-view class='txt_rightAnsIs'>提示：</cover-view>
+      <cover-view class='txt_rightAns'>{{users[currentIndex % 6].name}}选词中......</cover-view>
+      <cover-view class='txt_getScore'>剩余时间： {{time2}} 秒</cover-view>
+    </cover-view>
+  </cover-view>
+
+  <!--绘画结束，正确回答界面-->
+  <cover-view class='vw_winCtnr' wx:if='{{flag_show2}}'>
+    <cover-view class='vw_answer'>
+      <cover-view class='txt_rightAnsIs'>正确答案：</cover-view>
+      <cover-view class='txt_rightAns'>{{currentWord}}</cover-view>
+      <cover-view class='txt_getScore'>剩余时间：{{time2}}</cover-view>
+    </cover-view>
+  </cover-view>
+
+  <!--输入框-->
+  <input class='ipt_answer' style="top:0;width:100%;" bindinput="listenerInputVal" wx:if='{{flag_show4 && currentId != globalData.id}}'></input>
+
+  <!--工具箱-->
+  <cover-view class="vw_toolkit" wx:if='{{flag_show4 && currentId == globalData.id}}'>
       <cover-view class="vw_toolkit_wrp">
       <block wx:for="{{itemWidth}}" wx:for-index="index" wx:key="item">
         <cover-view class="width-item {{activeWidthIndex == index ?'active-item':''}}" data-index="{{index}}" bindtap="setItemWidth" style="width:{{item}}rpx;height:{{item}}rpx;"></cover-view>
@@ -59,7 +135,7 @@
       <block wx:for="{{itemColor}}" wx:for-index="index" wx:key="item">
         <cover-view class="color-item {{activeColorIndex == index ?'active-item':''}}" data-index="{{index}}" bindtap="setItemColor" style="background:{{item}};"></cover-view>
       </block>
-     <dl class="menu">
+     <!--dl class="menu">
       <dt data-index="0" class="graph" bindtap="tapMainMenu" >Graph</dt>
         <dd class="{{subMenuDisplay[0]}}">
           <ul>
@@ -77,159 +153,8 @@
             <li class="{{subMenuHighLight[1][2]}}" data-index="1-2" bindtap="tapSubMenu">level3</li>
           </ul>
         </dd>
-    </dl>
+    </dl-->
       </cover-view>
     </cover-view>
-    <!--绘画结束，正确回答界面-->
-  <cover-view id="vw_2" class='vw_winCtnr'  wx:if='{{flag_show2}}'>
-    <cover-view class='vw_win vw_answer'>
-      <cover-view>正确答案：{{currentWord}}</cover-view>
-      <cover-view>本轮得分{{time2}}</cover-view>
-    </cover-view>
-  </cover-view>
-    </canvas>
-    
-  </view>
 
-  <view class='vw_bot'>
-    <view class='vw_userInfo'>
-        <view class='vw_userCtnr'>
-          <image class='img_user' src='{{users[3].icon}}'></image>
-          <text class='txt_user'>{{users[3].name}}</text>
-          <view class='vw_popover_bottom' wx:if='{{popovers[3].show}}'>
-            {{popovers[3].msg}}
-          </view>
-        </view>
-        <text class='txt_score'>{{score[3]}}</text>
-        <view class='vw_userCtnr'>
-          <image class='img_user' src='{{users[4].icon}}'></image>
-          <text class='txt_user'>{{users[4].name}}</text>
-          <view class='vw_popover_bottom' wx:if='{{popovers[4].show}}'>
-            {{popovers[4].msg}}
-          </view>
-        </view>
-        <text class='txt_score'>{{score[4]}}</text>
-        <view class='vw_userCtnr'>
-          <image class='img_user' src='{{users[5].icon}}'></image>
-          <text class='txt_user'>{{users[5].name}}</text>
-          <view class='vw_popover_bottom'  wx:if='{{popovers[5].show}}'>
-            {{popovers[5].msg}}
-          </view>
-        </view>
-        <text class='txt_score'>{{score[5]}}</text>
-    </view>
-  </view>
-  <!--选择界面-->
-  <cover-view id='vw_1' class='vw_winCtnr' catchtap='hideWin(1)' wx:if='{{flag_show1}}'>
-    <cover-view class="vw_win vw_choose" catchtap='stop' wx:if='{{currentId == globalData.id}}'>
-      <cover-view class='txt_header'>请选择要画的词：</cover-view>
-      <cover-view class='txt_timer'>(剩余 {{time2}} 秒)</cover-view>
-      <block wx:for="{{words}}" wx:key="word" wx:for-item="word">
-        <cover-view id="btn_{{index}}" class="btn_choose{{index}}" bindtap='btnCWClicked'>{{word}}</cover-view>
-      </block>
-    </cover-view>
-
-    <cover-view class="vw_win vw_answer" catchtap='stop' wx:if='{{currentId != globalData.id}}'>
-      <cover-view class='txt_rightAnsIs'>提示：</cover-view>
-      <cover-view class='txt_rightAns'>{{users[currentIndex % 6].name}}选词中......</cover-view>
-      <cover-view class='txt_getScore'>剩余时间： {{time2}} 秒</cover-view>
-    </cover-view>
-  </cover-view>
-
-  <cover-view id="vw_2" class='vw_winCtnr' catchtap='hideWin(2)' wx:if='{{flag_show2}}'>
-    <cover-view class='vw_win vw_answer' catchtap='stop'>
-      <cover-view class='txt_rightAnsIs'>正确答案：</cover-view>
-      <cover-view class='txt_rightAns'>{{currentWord}}</cover-view>
-      <cover-view class='txt_getScore'>剩余时间：{{time2}}</cover-view>
-    </cover-view>
-  </cover-view>
-  <!--结算窗口-->
-  <!--
-  <view id="vw_account" class='vw_winCtnr' catchtap='hideWin(2)' wx:if='{{flag_show5}}'> 
-    <view class='vw_account' catchtap='stop'>
-      <text class='txt_title'>本局结算</text>
-      <view class='vw_row1'>
-        <view class='vw_scoreCtn'>
-          <view class='vw_userCtn'>
-            <image class='user_image'></image>
-            <text class='user_name'>aaaaaa</text>
-          </view>
-          <text class='user_score'>100000</text>
-        </view>
-        <view class='vw_scoreCtn'>
-          <view class='vw_userCtn'>
-            <image class='user_image'></image>
-            <text class='user_name'>aaaaaa</text>
-          </view>
-          <text class='user_score'>100000</text>
-        </view>
-      </view>
-      <view class='vw_row2'>
-        <view class='vw_scoreCtn'>
-          <view class='vw_userCtn'>
-            <image class='user_image'></image>
-            <text class='user_name'>aaaaaa</text>
-          </view>
-          <text class='user_score'>100000</text>
-        </view>
-        <view class='vw_scoreCtn'>
-          <view class='vw_userCtn'>
-            <image class='user_image'></image>
-            <text class='user_name'>aaaaaa</text>
-          </view>
-          <text class='user_score'>100000</text>
-        </view>
-      </view>
-      <view class='vw_row3'>
-        <view class='vw_scoreCtn'>
-          <view class='vw_userCtn'>
-            <image class='user_image'></image>
-            <text class='user_name'>aaaaaa</text>
-          </view>
-          <text class='user_score'>100000</text>
-        </view>
-        <view class='vw_scoreCtn'>
-          <view class='vw_userCtn'>
-            <image class='user_image'></image>
-            <text class='user_name'>aaaaaa</text>
-          </view>
-          <text class='user_score'>100000</text>
-        </view>
-      </view>
-      
-      <view class='btn_container'>
-        <button class='btn_again'>再来一局</button>
-        <button class='btn_back' bindtap='btnBack'>返回主页</button>
-      </view>
-    </view>
-  </view>
-  -->
-  <view id="vw_account" class='vw_winCtnr' catchtap='hideWin(2)' wx:if='{{flag_show5}}'> 
-    <view class='vw_hide' catchtap='stop'>
-      <view class='vw_account'>
-        <text class='user_times'>游戏局数：</text>
-        <text class='user_score'>共获分数：</text>
-        <view class='btn_container'>
-          <button class='btn_again'>再来一局</button>
-          <button class='btn_back' bindtap='btnBack'>返回主页</button>
-        </view>
-      </view>
-      <view class='vw_userCtn'>
-        <image class='user_image'></image>
-        <text class='user_name'>aaaaaa</text>
-      </view>
-    </view>
-  </view>
-  <!--输入答案控件-->
-    <button class="btn_answer"  bindtap='btnAnsClicked'>回答</button>
-    <input class='ipt_answer' wx:if="{{flag_show4}}" bindinput="listenerInputVal"></input>
-
-  <!--游戏结束弹窗-->
-  <modal class="rk_modal" hidden="{{modalHidden}}" title="游戏结束" confirm-text="继续游戏" cancel-text="返回主页" bindcancel="backToHome" bindconfirm="backToRoom">
-    <block wx:for="{{ranks}}" wx:for-item="item" wx:for-index="index" wx:key="index" >
-        <view>{{item.name}}：{{item.score}}分</view>
-    </block>
-  </modal>
-  
-
-</view>
+    <cover-view class='vw_winCtnr' bindtap='btnAnsClicked' wx:if='{{flag_show4}}' style="top:{{currentId == globalData.id ? '200rpx' : '90rpx'}};"></cover-view>
