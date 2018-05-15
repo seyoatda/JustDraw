@@ -17,7 +17,8 @@ Page({
     display: false,//是否弹出
     flags:[
       false,//加入房间弹窗是否显示
-      false //创建房间弹窗是否显示
+      false,//创建房间弹窗是否显示
+      false //正在匹配弹窗是否显示
     ],
     
     styles:[
@@ -226,6 +227,7 @@ Page({
   },
 
   jump2Ran: function () {
+    var that=this;
     var animation = wx.createAnimation({
       duration: 100,
       timingFunction: "linear",
@@ -235,6 +237,24 @@ Page({
     animation.opacity(0.7).step()
     this.setData({
       btnAnimationRan: animation.export(),
+    });
+    that.setData({
+      "flags[2]":true
+    });
+    util.req_match({
+      userId:gData.id
+    },res=>{
+      console.log("POST----room/match:", res);
+      //关闭“正在加载”弹窗
+      that.setData({
+        "flags[2]": false
+      });
+      if(res.data.status=="SUCCESS"){
+        
+        wx.navigateTo({
+          url: '../room/room?isOwner=false&roomId=' + res.data.info.roomId + "&maxNum=" + res.data.info.maxSize,
+        });
+      }
     })
   },
 

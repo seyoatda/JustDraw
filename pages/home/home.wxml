@@ -95,5 +95,8 @@
       </view>
     </view>
   </view>
+  <loading class='vw_matching' wx:if='{{flags[2]}}'>
+    匹配中
+  </loading>
 </view>
 <!-- </view> -->

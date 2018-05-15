@@ -121,9 +121,9 @@ Page({
       });
     }
     //先把开始按钮disable掉
-    this.setData({
-      btn_style: "border-radius:60rpx;border:none;color: rgb(240,220,200);background-color: dodgerblue;opacity:0.9;",
-      ["flags[1]"]: false
+    that.setData({
+      btn_style: "border-radius:60rpx;border:none;color: rgb(240,220,200);background-color: gray;opacity:0.9;",
+      ["flags[1]"]: true
     })
     for(var i = 0;i < users.length; i++)
     {
@@ -284,7 +284,13 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    
+    var that=this;
+    //查询房间内所有用户的id,并从玩家池中删除
+    that.getUserInfoInRoom(roomId, (res) => {
+      console.log("GET--user/find:", res);
+      var users = res.data;
+      that.updateUser(users);
+    });
   },
 
   /**

@@ -149,6 +149,21 @@ var req_findUser=(data,callback)=>{
     }
   });
 }
+//随机匹配房间
+var req_match=(data,callback)=>{
+  wx.request({
+    url: 'http://liuyifan.club:8080/room/match',
+    data: data,
+    header: { "content-Type": "application/x-wwww-formencoded" },
+    method: 'GET',
+    dataType: 'json',
+    responseType: 'text',
+    success: function (res) {
+      
+      callback(res);
+    }
+  });
+}
 
 module.exports = {
   formatTime: formatTime,
@@ -160,6 +175,7 @@ module.exports = {
   req_dismissRoom:req_dismissRoom,
   req_getPlayer:req_getPlayer,
   req_quitRoom:req_quitRoom,
-  req_startGame:req_startGame
+  req_startGame:req_startGame,
+  req_match:req_match
 }
 
