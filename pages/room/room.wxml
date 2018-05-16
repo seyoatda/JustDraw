@@ -6,29 +6,6 @@
       <text class='txt_user'>{{user.name}}</text>
     </view>
 </view>
-  <!-- <view class='v_userInfo'>
-    <image class='img_user' src='{{users[1].icon}}'></image>
-    <text class='txt_user'>{{users[1].name}}</text>
-  </view>
-  <view class='v_userInfo'>
-    <image class='img_user' src='{{users[2].icon}}'></image>
-    <text class='txt_user'>{{users[2].name}}</text>
-  </view>
-
-<view class='v_midCtnr' style='opacity:0.8'>
-  <view class='v_userInfo'>
-    <image class='img_user' src='{{users[3].icon}}'></image>
-    <text class='txt_user'>{{users[3].name}}</text>
-  </view>
-  <view class='v_userInfo'>
-    <image class='img_user' src='{{users[4].icon}}'></image>
-    <text class='txt_user'>{{users[4].name}}</text>
-  </view>
-  <view class='v_userInfo'>
-    <image class='img_user' src='{{users[5].icon}}'></image>
-    <text class='txt_user'>{{users[5].name}}</text>
-  </view>
-</view> -->
 <view class='v_botCtnr'>
   <text class="txt_roomNo">房间号：{{roomNo}}</text>
   <button class='btn_start' bindtap='startGame' wx:if="{{flags[0]}}" disabled='{{flags[1]}}' style='{{btn_style}}'>开始游戏</button>

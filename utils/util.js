@@ -19,6 +19,13 @@ function user(id, name, icon) {
   this.name = name;
   this.icon = icon;
 }
+
+function rankUser(index,photo,name,score){
+  this.index=index;
+  this.photo=photo;
+  this.name=name;
+  this.score=score;
+}
 /**
  * http请求封装
  */
@@ -164,10 +171,24 @@ var req_match=(data,callback)=>{
     }
   });
 }
+//获取排行榜
+var req_ranking=(NULL,callback)=>{
+  wx.request({
+    url: 'http://liuyifan.club:8080/user/getRank',
+    header: { "content-Type": "application/x-wwww-formencoded" },
+    method: 'GET',
+    dataType: 'json',
+    responseType: 'text',
+    success: function (res) {
+      callback(res);
+    }
+  });
+}
 
 module.exports = {
   formatTime: formatTime,
   user: user,
+  rankUser: rankUser,
   req_enterRoom: req_enterRoom,
   req_createRoom: req_createRoom,
   req_findRoom:req_findRoom,
@@ -176,6 +197,7 @@ module.exports = {
   req_getPlayer:req_getPlayer,
   req_quitRoom:req_quitRoom,
   req_startGame:req_startGame,
-  req_match:req_match
+  req_match:req_match,
+  req_ranking: req_ranking
 }
 

@@ -27,6 +27,17 @@ page{
   width:400rpx;
   height:180rpx;
 }
+.v_bottxtCtn{
+  margin-top: 80rpx;
+  display: flex;  
+  flex-direction: row;  
+  justify-content: center;
+}
+.bottext{
+  text-align: center;
+  font-size: 17px;
+  color: rgb(240,220,200);
+}
 .swiper{
   background-color: red;
 }

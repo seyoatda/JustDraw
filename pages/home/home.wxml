@@ -10,46 +10,14 @@
       </view>  
     </view>
     <scroll-view class='.page_content' scroll-y='true'>
-      <view class='v_item'>
-        <text class='t_number'>1</text>
+      <view class='v_item' wx:for='{{users}}' wx:key="name" wx:for-item="rankUser">
+        <text class='t_number'>{{rankUser.index}}</text>
         <view class='v_info'>
-          <image class='i_userimage'></image>
-          <text class='t_username'>明贤大佬</text>
+          <image class='i_userimage' src='{{rankUser.photo}}'></image>
+          <text class='t_username'>{{rankUser.name}}</text>
         </view>
-        <text class='t_score'>666</text>
+        <text class='t_score'>{{rankUser.score}}</text>
       </view>
-    <view class='v_item'>
-      <text class='t_number'>2</text>
-      <view class='v_info'>
-        <image class='i_userimage'></image>
-        <text class='t_username'>明贤大佬</text>
-      </view>
-      <text class='t_score'>776</text>
-    </view>
-    <view class='v_item'>
-      <text class='t_number'>3</text>
-      <view class='v_info'>
-        <image class='i_userimage'></image>
-        <text class='t_username'>明贤大佬</text>
-      </view>
-      <text class='t_score'>666</text>
-    </view>
-    <view class='v_item'>
-      <text class='t_number'>4</text>
-      <view class='v_info'>
-        <image class='i_userimage'></image>
-        <text class='t_username'>明贤大佬</text>
-      </view>
-      <text class='t_score'>666</text>
-    </view>
-      <view class='v_item'>
-        <text class='t_number'>5</text>
-        <view class='v_info'>
-          <image class='i_userimage'></image>
-          <text class='t_username'>明贤大佬</text>
-        </view>
-        <text class='t_score'>666</text>
-      </view> 
     </scroll-view>
   </view>
   <!--主界面-->
@@ -60,6 +28,9 @@
       <view class="btntoroom"><image animaiton="{{btnAnimationRan}}" class="btn" src='https://upload-images.jianshu.io/upload_images/9653454-34bd41b8171501df.png?imageMogr2/auto-orient/' bindtap='jump2Ran'></image></view>
       <view class='btntoroom'><image animaiton="{{btnAnimatioJoi}}" class='btn' src='https://upload-images.jianshu.io/upload_images/9653454-4c89f6165a748430.png?imageMogr2/auto-orient/' bindtap='btnJoinClicked'></image></view>
     </view>
+  </view>
+  <view class='v_bottxtCtn' animation="{{animationRoll}}">
+    <text class='bottext'>-上滑唤出排行榜-</text>
   </view>
   <view class='v_roll' catchtap='showWin'></view>
   <!--加入房间弹出的窗口-->

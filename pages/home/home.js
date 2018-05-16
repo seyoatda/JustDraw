@@ -7,6 +7,8 @@ var end_c;
 var style1= "color:rgb(240,220,200);border:2px solid rgb(240,220,200);border-radius:5px;opacity:0.8;font-family: fantasy;";
 var style2 ="color:rgb(0,0,0);border:2px solid rgb(240,220,200);border-radius:5px;opacity:0.8;font-family: fantasy;background:rgb(240,220,200);";
 var gData = getApp().globalData;
+var intervals;
+var n = 1;
 Page({
 
   /**
@@ -35,6 +37,8 @@ Page({
     plain: true,
     animationP: {},//item位移,透明度  
     focus: true,
+
+    users: []//排行榜用户数据
   },
   // 滑动开始  
   touchstart: function (e) {
@@ -69,7 +73,6 @@ Page({
   //关闭弹窗
   closePage: function(){
     this.closeIt();
-
   },
   closeIt: function () {
     var ani = wx.createAnimation({
@@ -338,8 +341,41 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    
+    //提示文字
+    var animation = wx.createAnimation({
+      duration: 1500,
+      timingFunction: 'linear',
+    })
+    this.animation=animation
+    this.setData({
+      animationRoll:this.animation.export()
+    })
+    intervals = setInterval(function () {
+      n = 1.3 - n;
+      this.animation.opacity(n).step()
+      this.setData({
+        animationRoll: this.animation.export()
+      })
+    }.bind(this), 1500)
+
+    var that = this;
+    util.req_ranking(null,(res) => {
+      console.log("GET----user/getRank:", res);
+      var users=res.data.info;
+      for (var i = 0; i < users.length; i++) {
+        that.addUser(new util.rankUser(i+1, users[i].photo, users[i].nickName,users[i].totalScore),i);
+      }
+    })
   },
+
+  //添加排行榜用户
+  addUser: function (rankUser,i) {
+    var u = this.data.users;
+      this.setData({
+        ["users[" + i + "]"]: rankUser
+      });
+  },
+
 
   /**
    * 生命周期函数--监听页面隐藏
