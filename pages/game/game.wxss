@@ -41,6 +41,11 @@ page{
   left:45%;
 }
 
+.vw_currentWord{
+  float:right;
+  margin-right:2%;
+}
+
 .vw_wordLength{
   float:right;
   margin-right:2%;
@@ -226,7 +231,7 @@ page{
 
 .btn_choose0{
   margin-top: 20rpx;
-  background: GhostWhite;
+  background: #E0E0E0;
   border-radius: 10rpx;
   width: 85%;
   height: 100rpx;
@@ -304,6 +309,7 @@ page{
   box-shadow: 2rpx 2rpx 2rpx 2rpx grey;
   opacity: 0.8;
 }
+
 /*
 .vw_account{
   width: 70%;

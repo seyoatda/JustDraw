@@ -22,10 +22,13 @@
       <view class='vw_countdown'>
         <text>时间:{{time[1]}}</text>
       </view>
-      <view class='vw_wordHint'>
+      <view class='vw_wordHint' wx:if='{{currentId != globalData.id}}'>
         提示:{{hint}}
       </view>
-      <view class='vw_wordLength'>
+      <view class='vw_currentWord' wx:if='{{currentId == globalData.id}}'>
+        答案:{{currentWord}}
+      </view>
+      <view class='vw_wordLength' wx:if='{{currentId != globalData.id}}'>
         字数:{{wordLength}}
       </view>
     </view>
@@ -122,7 +125,7 @@
   </cover-view>
 
   <!--输入框-->
-  <input class='ipt_answer' style="top:0;width:100%;" bindinput="listenerInputVal" wx:if='{{flag_show4 && currentId != globalData.id}}'></input>
+  <input class='ipt_answer' bindinput="listenerInputVal" wx:if='{{flag_show4 && currentId != globalData.id}}'></input>
 
   <!--工具箱-->
   <cover-view class="vw_toolkit" wx:if='{{flag_show4 && currentId == globalData.id}}'>
